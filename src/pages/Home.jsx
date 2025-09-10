@@ -77,10 +77,10 @@ export default function Home() {
   });
   // Static demo data
   const statsData = [
-    { title: "Total Products", value: demoProducts?.length, icon: <FaBox /> },
-    { title: "Total Categories", value: categories?.length, icon: <FaLayerGroup /> },
-    { title: "Total Brands", value: demoBrands?.length, icon: <FaTrademark /> },
-    { title: "Active Products", value: demoProducts?.length, icon: <FaChartLine /> },
+    { title: "Total Products", value: demoProducts?.length || 0, icon: <FaBox /> },
+    { title: "Total Categories", value: categories?.length || 0, icon: <FaLayerGroup /> },
+    { title: "Total Brands", value: demoBrands?.length || 0, icon: <FaTrademark /> },
+    { title: "Active Products", value: demoProducts?.length || 0, icon: <FaChartLine /> },
   ];
 
   const productTrends = [
@@ -115,30 +115,30 @@ export default function Home() {
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-br from-[#1e4b6b]/5 via-[#8B6B43]/5 to-[#634927]/5"
+      className="min-h-screen bg-[#068DF1]/5"
       dir="ltr"
     >
       {/* Luxurious Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#1e4b6b] via-[#8B6B43] to-[#634927] rounded-b-[2rem] shadow-xl">
+      <div className="relative overflow-hidden bg-[#068DF1] rounded-b-[2rem] shadow-xl">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-15"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(191,148,93,0.4),rgba(135,206,235,0.2))]"></div>
+          <div className="absolute inset-0 bg-[#1FA0FF]/20"></div>
         </div>
 
         <div className="relative py-12 px-6">
           <div className="flex items-center gap-5 mb-8">
             <motion.div
               whileHover={{ scale: 1.1, rotate: [0, 5, -5, 0] }}
-              className="p-4 bg-gradient-to-br from-[#ECB774]/10 to-[#87CEEB]/10 rounded-2xl backdrop-blur-xl border border-[#ECB774]/20"
+              className="p-4 bg-white/10 rounded-2xl backdrop-blur-xl border border-white/20"
             >
-              <Sparkles className="h-8 w-8 text-[#ECB774]" />
+              <Sparkles className="h-8 w-8 text-white" />
             </motion.div>
             <div>
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 1, ease: "easeOut" }}
-                className="text-4xl font-bold py-2 bg-gradient-to-r from-[#ECB774] via-[#87CEEB] to-[#ECB774] bg-clip-text text-transparent"
+                className="text-4xl font-bold py-2 text-white"
               >
                 Dashboard Overview
               </motion.h1>
@@ -146,7 +146,7 @@ export default function Home() {
                 initial={{ width: 0 }}
                 animate={{ width: "12rem" }}
                 transition={{ delay: 0.5, duration: 1, ease: "easeInOut" }}
-                className="h-1 bg-gradient-to-r from-[#ECB774] to-[#87CEEB] rounded-full mt-3"
+                className="h-1 bg-white rounded-full mt-3"
               ></motion.div>
             </div>
           </div>
@@ -158,13 +158,13 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="flex flex-col justify-between p-6 bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-xl shadow-lg rounded-2xl text-[#1e4b6b] hover:shadow-xl transition-all duration-300 border border-[#ECB774]/20 hover:border-[#ECB774]/40 hover:scale-105"
+                className="flex flex-col justify-between p-6 bg-[#06487C]/80 backdrop-blur-xl shadow-lg rounded-2xl text-[#068DF1] hover:shadow-xl transition-all duration-300 border border-[#068DF1]/20 hover:border-[#068DF1]/40 hover:scale-105"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold">{stat.title}</span>
-                  <span className="text-[#ECB774] text-xl">{stat.icon}</span>
+                  <span className="text-sm font-semibold text-white">{stat.title}</span>
+                  <span className="text-[#1FA0FF] text-xl">{stat.icon}</span>
                 </div>
-                <div className="text-3xl font-bold mt-2 bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] bg-clip-text text-transparent">
+                <div className="text-3xl font-bold mt-2 text-white">
                   {stat.value}
                 </div>
               </motion.div>
@@ -179,10 +179,10 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-[#ECB774]/20 hover:shadow-xl transition-all duration-300"
+          className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-[#068DF1]/20 hover:shadow-xl transition-all duration-300"
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] bg-clip-text text-transparent">
+            <h2 className="text-lg font-semibold text-[#068DF1]">
               Product and Category Trends
             </h2>
             <div className="flex gap-2">
@@ -190,10 +190,10 @@ export default function Home() {
                 <button
                   key={filter}
                   onClick={() => setTimeFilter(filter)}
-                  className={`px-3 py-1 text-sm rounded-full transition-all duration-300 ${
+                    className={`px-3 py-1 text-sm rounded-full transition-all duration-300 ${
                     timeFilter === filter
-                      ? "bg-gradient-to-r from-[#ECB774] to-[#87CEEB] text-white shadow-md"
-                      : "bg-[#1e4b6b]/5 text-[#1e4b6b] hover:bg-[#1e4b6b]/10"
+                      ? "bg-[#068DF1] text-white shadow-md"
+                      : "bg-[#068DF1]/5 text-[#068DF1] hover:bg-[#068DF1]/10"
                   }`}
                 >
                   {filter}
@@ -206,25 +206,25 @@ export default function Home() {
               <CartesianGrid
                 strokeDasharray="3 3"
                 vertical={false}
-                stroke="#ECB774"
+                stroke="#068DF1"
                 opacity={0.1}
               />
               <XAxis
                 dataKey="month"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#1e4b6b" }}
+                tick={{ fill: "#068DF1" }}
               />
               <YAxis
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#1e4b6b" }}
+                tick={{ fill: "#068DF1" }}
               />
               <Tooltip
                 contentStyle={{
                   background: "rgba(255, 255, 255, 0.9)",
                   borderRadius: "0.5rem",
-                  border: "1px solid rgba(236, 183, 116, 0.2)",
+                  border: "1px solid rgba(6, 141, 241, 0.2)",
                 }}
               />
               <Legend />
@@ -232,21 +232,21 @@ export default function Home() {
                 type="monotone"
                 dataKey="products"
                 name="Products"
-                stroke="#ECB774"
+                stroke="#068DF1"
                 strokeWidth={2}
               />
               <Line
                 type="monotone"
                 dataKey="categories"
                 name="Categories"
-                stroke="#87CEEB"
+                stroke="#1FA0FF"
                 strokeWidth={2}
               />
               <Line
                 type="monotone"
                 dataKey="brands"
                 name="Brands"
-                stroke="#1e4b6b"
+                stroke="#06487C"
                 strokeWidth={2}
               />
             </LineChart>
@@ -257,13 +257,13 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-[#ECB774]/20 hover:shadow-xl transition-all duration-300"
+          className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-[#068DF1]/20 hover:shadow-xl transition-all duration-300"
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] bg-clip-text text-transparent">
+            <h2 className="text-lg font-semibold text-[#068DF1]">
               Brand Performance
             </h2>
-            <button className="px-3 py-1 text-sm rounded-full bg-[#1e4b6b]/5 text-[#1e4b6b] hover:bg-[#1e4b6b]/10 transition-all duration-300 flex items-center gap-2">
+            <button className="px-3 py-1 text-sm rounded-full bg-[#068DF1]/5 text-[#068DF1] hover:bg-[#068DF1]/10 transition-all duration-300 flex items-center gap-2">
               <FaFilter className="text-sm" />
               Filter
             </button>
@@ -273,38 +273,38 @@ export default function Home() {
               <CartesianGrid
                 strokeDasharray="3 3"
                 vertical={false}
-                stroke="#ECB774"
+                stroke="#068DF1"
                 opacity={0.1}
               />
               <XAxis
                 dataKey="name"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#1e4b6b" }}
+                tick={{ fill: "#068DF1" }}
               />
               <YAxis
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#1e4b6b" }}
+                tick={{ fill: "#068DF1" }}
               />
               <Tooltip
                 contentStyle={{
                   background: "rgba(255, 255, 255, 0.9)",
                   borderRadius: "0.5rem",
-                  border: "1px solid rgba(236, 183, 116, 0.2)",
+                  border: "1px solid rgba(6, 141, 241, 0.2)",
                 }}
               />
               <Legend />
               <Bar
                 dataKey="sales"
                 name="Sales"
-                fill="#ECB774"
+                fill="#068DF1"
                 radius={[5, 5, 0, 0]}
               />
               <Bar
                 dataKey="revenue"
                 name="Revenue"
-                fill="#87CEEB"
+                fill="#1FA0FF"
                 radius={[5, 5, 0, 0]}
               />
             </BarChart>
@@ -315,7 +315,7 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-[#ECB774]/20 hover:shadow-xl transition-all duration-300"
+          className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-[#068DF1]/20 hover:shadow-xl transition-all duration-300"
         >
           <h2 className="text-lg font-semibold bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] bg-clip-text text-transparent mb-4">
             Category Distribution
@@ -336,7 +336,7 @@ export default function Home() {
                 contentStyle={{
                   background: "rgba(255, 255, 255, 0.9)",
                   borderRadius: "0.5rem",
-                  border: "1px solid rgba(236, 183, 116, 0.2)",
+                  border: "1px solid rgba(6, 141, 241, 0.2)",
                 }}
               />
               <Legend />
@@ -348,10 +348,10 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-[#ECB774]/20 hover:shadow-xl transition-all duration-300"
+          className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-[#068DF1]/20 hover:shadow-xl transition-all duration-300"
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] bg-clip-text text-transparent">
+            <h2 className="text-lg font-semibold text-[#068DF1]">
               Sales Growth
             </h2>
             <div className="flex gap-2">
@@ -361,8 +361,8 @@ export default function Home() {
                   onClick={() => setChartFilter(filter)}
                   className={`px-3 py-1 text-sm rounded-full transition-all duration-300 ${
                     chartFilter === filter
-                      ? "bg-gradient-to-r from-[#ECB774] to-[#87CEEB] text-white shadow-md"
-                      : "bg-[#1e4b6b]/5 text-[#1e4b6b] hover:bg-[#1e4b6b]/10"
+                      ? "bg-[#068DF1] text-white shadow-md"
+                      : "bg-[#068DF1]/5 text-[#068DF1] hover:bg-[#068DF1]/10"
                   }`}
                 >
                   {filter}
@@ -375,25 +375,25 @@ export default function Home() {
               <CartesianGrid
                 strokeDasharray="3 3"
                 vertical={false}
-                stroke="#ECB774"
+                stroke="#068DF1"
                 opacity={0.1}
               />
               <XAxis
                 dataKey="month"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#1e4b6b" }}
+                tick={{ fill: "#068DF1" }}
               />
               <YAxis
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#1e4b6b" }}
+                tick={{ fill: "#068DF1" }}
               />
               <Tooltip
                 contentStyle={{
                   background: "rgba(255, 255, 255, 0.9)",
                   borderRadius: "0.5rem",
-                  border: "1px solid rgba(236, 183, 116, 0.2)",
+                  border: "1px solid rgba(6, 141, 241, 0.2)",
                 }}
               />
               <Legend />
@@ -401,14 +401,14 @@ export default function Home() {
                 type="monotone"
                 dataKey={chartFilter === "Sales" ? "sales" : "growth"}
                 name={chartFilter === "Sales" ? "Sales" : "Growth Rate"}
-                stroke="#ECB774"
+                stroke="#068DF1"
                 fill="url(#colorGradient)"
                 fillOpacity={0.3}
               />
               <defs>
                 <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#ECB774" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="#87CEEB" stopOpacity={0.2} />
+                  <stop offset="5%" stopColor="#068DF1" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#1FA0FF" stopOpacity={0.2} />
                 </linearGradient>
               </defs>
             </AreaChart>

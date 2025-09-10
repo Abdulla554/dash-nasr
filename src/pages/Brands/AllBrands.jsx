@@ -100,8 +100,8 @@ export default function AllBrands() {
   if (isLoading) {
     return (
       <div className="flex h-screen flex-col items-center justify-center min-h-[120px]">
-        <ClipLoader color={"#87CEEB"} size={48} speedMultiplier={1.2} />
-        <span className="text-[#87CEEB] font-bold text-lg mt-3">
+        <ClipLoader color={"#068DF1"} size={48} speedMultiplier={1.2} />
+        <span className="text-[#068DF1] font-bold text-lg mt-3">
           جاري التحميل...
         </span>
       </div>
@@ -150,7 +150,7 @@ export default function AllBrands() {
         message="Are you sure you want to delete this brand? This action cannot be undone."
       />
       {/* Luxurious Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#1e4b6b] via-[#8B6B43] to-[#634927]">
+      <div className="relative overflow-hidden bg-[#068DF1]">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-15"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(191,148,93,0.4),rgba(135,206,235,0.2))]"></div>
@@ -168,16 +168,16 @@ export default function AllBrands() {
                 <div className="flex items-center gap-5">
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: [0, 5, -5, 0] }}
-                    className="p-4 bg-gradient-to-br from-[#ECB774]/10 to-[#87CEEB]/10 rounded-2xl backdrop-blur-xl border border-[#ECB774]/20"
+                    className="p-4 bg-[#1FA0FF]/10 rounded-2xl backdrop-blur-xl border border-[#1FA0FF]/20"
                   >
-                    <Sparkles className="h-8 w-8 text-[#ECB774]" />
+                    <Sparkles className="h-8 w-8 text-[#1FA0FF]" />
                   </motion.div>
                   <div>
                     <motion.h1
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2, duration: 1, ease: "easeOut" }}
-                      className="text-6xl font-bold py-2 bg-gradient-to-r from-[#ECB774] via-[#87CEEB] to-[#ECB774] bg-clip-text text-transparent"
+                      className="text-6xl font-bold py-2 text-[#1FA0FF]"
                     >
                       Brands
                     </motion.h1>
@@ -189,7 +189,7 @@ export default function AllBrands() {
                         duration: 1,
                         ease: "easeInOut",
                       }}
-                      className="h-1 bg-gradient-to-r from-[#ECB774] to-[#87CEEB] rounded-full mt-3"
+                      className="h-1 bg-[#068DF1] rounded-full mt-3"
                     ></motion.div>
                   </div>
                 </div>
@@ -204,9 +204,9 @@ export default function AllBrands() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="relative group/btn overflow-hidden rounded-2xl bg-gradient-to-r from-[#ECB774] to-[#87CEEB] px-8 py-4 text-white shadow-lg shadow-[#ECB774]/20"
+                    className="relative group/btn overflow-hidden rounded-2xl bg-[#068DF1] px-8 py-4 text-white shadow-lg shadow-[#068DF1]/20"
                   >
-                    <span className="absolute inset-0 bg-gradient-to-r from-[#87CEEB] to-[#ECB774] translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500"></span>
+                    <span className="absolute inset-0 bg-[#1FA0FF] translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500"></span>
                     <div className="relative z-10 flex items-center gap-3">
                       <Plus className="h-6 w-6 transition-all duration-500 group-hover/btn:rotate-180" />
                       <span className="font-semibold text-lg">Add Brand</span>
@@ -227,12 +227,12 @@ export default function AllBrands() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="text-center py-20 bg-gradient-to-br from-[#1A1A1A] to-[#0F0F0F] backdrop-blur-lg rounded-3xl border border-[#ECB774]/10"
+              className="text-center py-20 bg-[#068DF1] backdrop-blur-lg rounded-3xl border border-[#068DF1]/10"
             >
-              <h3 className="text-2xl font-bold text-[#ECB774] mb-3">
+              <h3 className="text-2xl font-bold text-[#1FA0FF] mb-3">
                 No Brands Found
               </h3>
-              <p className="text-[#87CEEB]">
+              <p className="text-white">
                 Add your first Brand to get started
               </p>
             </motion.div>

@@ -180,16 +180,16 @@ export default function AddProduct() {
 
   };
   return (
-    <div className="min-h-screen pb-10 bg-gradient-to-br from-[#1e4b6b]/5 via-[#8B6B43]/5 to-[#634927]/5">
+    <div className="min-h-screen pb-10 bg-[#068DF1]/5">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="py-8 flex pt-10 justify-between items-center">
-          <h1 className="text-3xl font-bold font-serif bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold font-serif text-[#068DF1]">
             Add New Product
           </h1>
           <div className="hover:scale-105 active:scale-95 transition-transform">
             <Link to="/products">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/80 border-2 border-[#ECB774] text-[#1e4b6b] hover:bg-[#1e4b6b]/5 transition-all duration-300 shadow-sm hover:shadow-md group">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/80 border-2 border-[#068DF1] text-[#068DF1] hover:bg-[#068DF1]/5 transition-all duration-300 shadow-sm hover:shadow-md group">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 transform transition-transform group-hover:translate-x-1"
@@ -211,18 +211,18 @@ export default function AddProduct() {
         </div>
 
         {/* Form */}
-        <div className="bg-white/80 backdrop-blur-lg rounded-xl shadow-lg p-8 mt-5 mb-14 border border-[#ECB774]/20">
+        <div className="bg-white/80 backdrop-blur-lg rounded-xl shadow-lg p-8 mt-5 mb-14 border border-[#068DF1]/20">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Information Section */}
             <div>
-              <h2 className="text-xl font-semibold bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] bg-clip-text text-transparent mb-6">
+              <h2 className="text-xl font-semibold text-[#068DF1] mb-6">
                 Basic Information
               </h2>
               <div className="space-y-6">
                 <div>
                   <label
                     htmlFor="title"
-                    className="block text-sm font-medium text-[#1e4b6b] mb-3"
+                    className="block text-sm font-medium text-[#068DF1] mb-3"
                   >
                     Product Name
                   </label>
@@ -232,7 +232,7 @@ export default function AddProduct() {
                     value={formData.title}
                     onChange={handleInputChange}
                     name="title"
-                    className="w-full px-4 py-2 border border-[#ECB774]/20 rounded-lg focus:ring-2 focus:ring-[#8B6B43] focus:border-transparent transition-all duration-300 bg-white/50"
+                    className="w-full px-4 py-2 border border-[#068DF1]/20 rounded-lg focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all duration-300 bg-white/50"
                     placeholder="Enter product name"
                   />
                 </div>
@@ -240,7 +240,7 @@ export default function AddProduct() {
                 <div>
                   <label
                     htmlFor="category"
-                    className="block text-sm font-medium text-[#1e4b6b] mb-3"
+                    className="block text-sm font-medium text-[#068DF1] mb-3"
                   >
                     Category
                   </label>
@@ -249,7 +249,7 @@ export default function AddProduct() {
                     name="category"
                     value={categorieid}
                     onChange={(e) => setCategorieid(parseInt(e.target.value))}
-                    className="w-full px-4 py-2 border border-[#ECB774]/20 rounded-lg focus:ring-2 focus:ring-[#8B6B43] focus:border-transparent transition-all duration-300 bg-white/50"
+                    className="w-full px-4 py-2 border border-[#068DF1]/20 rounded-lg focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all duration-300 bg-white/50"
                   >
                     <option value="">Select a category</option>
                     {categories?.map((category) => (
@@ -263,7 +263,7 @@ export default function AddProduct() {
                 <div>
                   <label
                     htmlFor="description"
-                    className="block text-sm font-medium text-[#1e4b6b] mb-3"
+                    className="block text-sm font-medium text-[#068DF1] mb-3"
                   >
                     Description
                   </label>
@@ -273,7 +273,7 @@ export default function AddProduct() {
                     value={formData.description}
                     onChange={handleInputChange}
                     rows={6}
-                    className="w-full px-4 py-6 border border-[#ECB774]/20 rounded-lg focus:ring-2 focus:ring-[#8B6B43] focus:border-transparent transition-all duration-300 bg-white/50"
+                    className="w-full px-4 py-6 border border-[#068DF1]/20 rounded-lg focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all duration-300 bg-white/50"
                     placeholder="Enter product description"
                   />
                 </div>
@@ -281,7 +281,7 @@ export default function AddProduct() {
                 {/* <div>
                   <label
                     htmlFor="price"
-                    className="block text-sm font-medium text-[#1e4b6b] mb-3"
+                    className="block text-sm font-medium text-[#068DF1] mb-3"
                   >
                     Price
                   </label>
@@ -293,7 +293,7 @@ export default function AddProduct() {
                       setPrice(parseInt(e.target.value))
                     }
                     rows={1}
-                    className="w-full px-4 py-6 border border-[#ECB774]/20 rounded-lg focus:ring-2 focus:ring-[#8B6B43] focus:border-transparent transition-all duration-300 bg-white/50"
+                    className="w-full px-4 py-6 border border-[#068DF1]/20 rounded-lg focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all duration-300 bg-white/50"
                     placeholder="Enter product price"
                   />
                 </div> */}
@@ -305,7 +305,7 @@ export default function AddProduct() {
                   </label>
                   <div>
                     {!imagePreview ? (
-                      <div className="relative border-2 border-dashed rounded-lg py-16 px-6 border-[#ECB774]/40 hover:border-[#8B6B43] transition-all duration-300 flex items-center justify-center cursor-pointer bg-white/50">
+                      <div className="relative border-2 border-dashed rounded-lg py-16 px-6 border-[#068DF1]/40 hover:border-[#1FA0FF] transition-all duration-300 flex items-center justify-center cursor-pointer bg-white/50">
                         <input
                           type="file"
                           id="Categorie-image"
@@ -318,14 +318,14 @@ export default function AddProduct() {
                           className="cursor-pointer"
                         >
                           <div className="text-center">
-                            <Upload className="mx-auto h-12 w-12 text-[#8B6B43]" />
-                            <div className="mt-4 flex text-sm text-[#1e4b6b]">
-                              <span className="text-[#8B6B43] hover:text-[#ECB774]">
+                            <Upload className="mx-auto h-12 w-12 text-[#068DF1]" />
+                            <div className="mt-4 flex text-sm text-[#068DF1]">
+                              <span className="text-[#068DF1] hover:text-[#1FA0FF]">
                                 Upload a file
                               </span>
                               <p className="pl-1">or drag and drop</p>
                             </div>
-                            <p className="text-xs text-[#1e4b6b]/70 mt-2">
+                            <p className="text-xs text-[#068DF1]/70 mt-2">
                               PNG, JPG, GIF up to 10MB
                             </p>
                           </div>
@@ -336,7 +336,7 @@ export default function AddProduct() {
                         <img
                           src={imagePreview}
                           alt="Categorie preview"
-                          className="w-full h-64 object-contain rounded-lg border-2 border-[#ECB774]/40"
+                          className="w-full h-64 object-contain rounded-lg border-2 border-[#068DF1]/40"
                         />
                         <button
                           type="button"
@@ -356,7 +356,7 @@ export default function AddProduct() {
             <div className="flex justify-center md:justify-end">
               <button
                 type="submit"
-                className="bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] text-white px-8 py-3 rounded-lg hover:shadow-lg hover:shadow-[#8B6B43]/25 transition-all duration-300 hover:scale-105"
+                className="bg-[#068DF1] text-white px-8 py-3 rounded-lg hover:shadow-lg hover:shadow-[#068DF1]/25 transition-all duration-300 hover:scale-105"
               >
                 Add Product
               </button>

@@ -126,7 +126,7 @@ export default function Categories() {
         className="relative border-2 border-[#CE8B39] border-dashed  rounded-3xl p-5 w-full backdrop-blur-lg  shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-500 hover:shadow-[0_15px_40px_rgb(139,107,67,0.2)] group overflow-hidden"
       >
         {/* Animated background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#1e4b6b]/5 via-[#8B6B43]/5 to-[#634927]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+        <div className="absolute inset-0 bg-[#068DF1]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
         
         {/* Glowing orb effect */}
         <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#ECB774] rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-700"></div>
@@ -145,7 +145,7 @@ export default function Categories() {
             <h2 className="text-2xl font-bold bg-gradient-to-r from-[#1e4b6b] via-[#8B6B43] to-[#ECB774] bg-clip-text text-transparent group-hover:from-[#ECB774] group-hover:via-[#8B6B43] group-hover:to-[#1e4b6b] transition-all duration-500">
               {Categorie.title || "Untitled Categorie"}
             </h2>
-            <p className="text-[#1e4b6b]/70 line-clamp-2 font-light group-hover:text-[#8B6B43]/90 transition-colors duration-300">
+            <p className="text-[#068DF1]/70 line-clamp-2 font-light group-hover:text-[#8B6B43]/90 transition-colors duration-300">
               {Categorie.description || "No description available"}
             </p>
 
@@ -171,7 +171,7 @@ export default function Categories() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1e4b6b]/5 via-[#8B6B43]/5 to-[#634927]/5">
+    <div className="min-h-screen bg-[#068DF1]/5">
          <ConfirmationModal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
@@ -180,7 +180,7 @@ export default function Categories() {
         message="Are you sure you want to delete this categorie? This action cannot be undone."
       />
       {/* Modern Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#1e4b6b] via-[#8B6B43] to-[#634927]">
+      <div className="relative overflow-hidden bg-[#068DF1]">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-15"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(191,148,93,0.4),rgba(135,206,235,0.2))]"></div>
@@ -200,7 +200,7 @@ export default function Categories() {
                     whileHover={{ scale: 1.1, rotate: [0, 5, -5, 0] }}
                     className="p-4 bg-gradient-to-br from-[#ECB774]/10 to-[#87CEEB]/10 rounded-2xl backdrop-blur-xl border border-[#ECB774]/20"
                   >
-                    <Sparkles className="h-8 w-8 text-[#ECB774]" />
+                    <Sparkles className="h-8 w-8 text-[#1FA0FF]" />
                   </motion.div>
                   <div>
                     <motion.h1
@@ -215,7 +215,7 @@ export default function Categories() {
                       initial={{ width: 0 }}
                       animate={{ width: "6rem" }}
                       transition={{ delay: 0.5, duration: 0.8 }}
-                      className="h-1.5 bg-gradient-to-r from-[#ECB774] to-[#87CEEB] rounded-full mt-3"
+                      className="h-1.5 bg-[#068DF1] rounded-full mt-3"
                     ></motion.div>
                   </div>
                 </div>
@@ -239,7 +239,7 @@ export default function Categories() {
                   <motion.button
                     whileHover={{ scale: 1.05, y: -4 }}
                     whileTap={{ scale: 0.95 }}
-                    className="relative inline-flex items-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-r from-[#ECB774] to-[#87CEEB] px-8 py-4 text-white shadow-lg shadow-[#ECB774]/30 transition-all duration-500 hover:shadow-xl hover:shadow-[#ECB774]/40 group"
+                    className="relative inline-flex items-center gap-3 overflow-hidden rounded-2xl bg-[#068DF1] px-8 py-4 text-white shadow-lg shadow-[#ECB774]/30 transition-all duration-500 hover:shadow-xl hover:shadow-[#ECB774]/40 group"
                   >
                     <span className="absolute inset-0 bg-gradient-to-r from-[#8B6B43] to-[#1e4b6b] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
                     <Plus className="h-6 w-6 transition-all duration-500 group-hover:rotate-180 relative z-10" />
@@ -265,7 +265,7 @@ export default function Categories() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="text-center py-20 bg-gradient-to-br from-[#1A1A1A] to-[#0F0F0F] backdrop-blur-lg rounded-3xl border border-[#ECB774]/10"
             >
-              <h3 className="text-2xl font-bold text-[#ECB774] mb-3">
+              <h3 className="text-2xl font-bold text-[#1FA0FF] mb-3">
                 No Categories Found
               </h3>
               <p className="text-[#87CEEB]">

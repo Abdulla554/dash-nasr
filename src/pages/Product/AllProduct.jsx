@@ -76,8 +76,8 @@ export default function Products() {
   if (isLoading) {
     return (
       <div className="flex h-screen flex-col items-center justify-center min-h-[120px]">
-        <ClipLoader color={"#87CEEB"} size={48} speedMultiplier={1.2} />
-        <span className="text-[#87CEEB] font-bold text-lg mt-3">
+        <ClipLoader color={"#068DF1"} size={48} speedMultiplier={1.2} />
+        <span className="text-[#068DF1] font-bold text-lg mt-3">
           جاري التحميل...
         </span>
       </div>
@@ -125,7 +125,7 @@ export default function Products() {
         variants={itemVariants}
         whileHover={{ y: -8, scale: 1.02 }}
         key={product.id}
-        className="bg-white/80 rounded-3xl p-4 w-full backdrop-blur-lg border-2 border-[#CE8B39] border-dashed shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_8px_40px_rgb(139,107,67,0.15)] group"
+        className="bg-white/80 rounded-3xl p-4 w-full backdrop-blur-lg border-2 border-[#068DF1] border-dashed shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_8px_40px_rgb(6,141,241,0.15)] group"
       >
         <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6">
           <img
@@ -136,10 +136,10 @@ export default function Products() {
         </div>
 
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] bg-clip-text text-transparent group-hover:from-[#8B6B43] group-hover:to-[#ECB774] transition-all duration-300">
+          <h2 className="text-2xl font-bold text-[#068DF1] group-hover:text-[#1FA0FF] transition-all duration-300">
             {product.title || "Untitled Product"}
           </h2>
-          <p className="text-[#1e4b6b]/70 line-clamp-2 font-light">
+          <p className="text-[#068DF1]/70 line-clamp-2 font-light">
             {product.description || "No description available"}
           </p>
 
@@ -163,7 +163,7 @@ export default function Products() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1e4b6b]/5 via-[#8B6B43]/5 to-[#634927]/5">
+    <div className="min-h-screen bg-[#068DF1]/5">
       <ConfirmationModal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
@@ -172,10 +172,10 @@ export default function Products() {
         message="Are you sure you want to delete this categorie? This action cannot be undone."
       />
       {/* Modern Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#1e4b6b] via-[#8B6B43] to-[#634927]">
+      <div className="relative overflow-hidden bg-[#068DF1]">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-15"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(191,148,93,0.4),rgba(135,206,235,0.2))]"></div>
+          <div className="absolute inset-0 bg-[#1FA0FF]/20"></div>
         </div>
 
         <div className="relative py-8">
@@ -190,16 +190,16 @@ export default function Products() {
                 <div className="flex items-center gap-5">
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: [0, 5, -5, 0] }}
-                    className="p-4 bg-gradient-to-br from-[#ECB774]/10 to-[#87CEEB]/10 rounded-2xl backdrop-blur-xl border border-[#ECB774]/20"
+                    className="p-4 bg-[#1FA0FF]/10 rounded-2xl backdrop-blur-xl border border-[#1FA0FF]/20"
                   >
-                    <Sparkles className="h-8 w-8 text-[#ECB774]" />
+                    <Sparkles className="h-8 w-8 text-[#1FA0FF]" />
                   </motion.div>
                   <div>
                     <motion.h1
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.2, duration: 0.8 }}
-                      className="text-5xl py-2 font-bold bg-gradient-to-r from-[#ECB774] via-[#87CEEB] to-[#ECB774] bg-clip-text text-transparent"
+                      className="text-5xl py-2 font-bold text-[#1FA0FF]"
                     >
                       Products
                     </motion.h1>
@@ -207,7 +207,7 @@ export default function Products() {
                       initial={{ width: 0 }}
                       animate={{ width: "6rem" }}
                       transition={{ delay: 0.5, duration: 0.8 }}
-                      className="h-1.5 bg-gradient-to-r from-[#ECB774] to-[#87CEEB] rounded-full mt-3"
+                      className="h-1.5 bg-[#1FA0FF] rounded-full mt-3"
                     ></motion.div>
                   </div>
                 </div>
@@ -222,9 +222,9 @@ export default function Products() {
                   <motion.button
                     whileHover={{ scale: 1.05, y: -4 }}
                     whileTap={{ scale: 0.95 }}
-                    className="relative inline-flex items-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-r from-[#ECB774] to-[#87CEEB] px-8 py-4 text-white shadow-lg shadow-[#ECB774]/30 transition-all duration-500 hover:shadow-xl hover:shadow-[#ECB774]/40 group"
+                    className="relative inline-flex items-center gap-3 overflow-hidden rounded-2xl bg-[#068DF1] px-8 py-4 text-white shadow-lg shadow-[#068DF1]/30 transition-all duration-500 hover:shadow-xl hover:shadow-[#068DF1]/40 group"
                   >
-                    <span className="absolute inset-0 bg-gradient-to-r from-[#8B6B43] to-[#1e4b6b] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
+                    <span className="absolute inset-0 bg-[#1FA0FF] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
                     <Plus className="h-6 w-6 transition-all duration-500 group-hover:rotate-180 relative z-10" />
                     <span className="font-semibold relative z-10 text-lg">
                       Add Product
@@ -246,7 +246,7 @@ export default function Products() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="text-center py-20 bg-gradient-to-r from-[#ECB774] to-[#87CEEB]  rounded-3xl "
+              className="text-center py-20 bg-[#068DF1] rounded-3xl "
             >
               <h3 className="text-2xl font-bold text-white mb-3">
                 No Products Found

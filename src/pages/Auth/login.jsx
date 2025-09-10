@@ -32,7 +32,7 @@ export default function Login() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-      className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-[#1e4b6b]/5 via-[#8B6B43]/5 to-[#634927]/5 p-4"
+      className="min-h-screen w-full flex items-center justify-center bg-[#068DF1]/5 p-4"
     >
       <div className="relative w-full max-w-7xl">
         {/* Background Effects */}
@@ -57,23 +57,23 @@ export default function Login() {
             repeat: Infinity,
             repeatType: "reverse"
           }}
-          className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(191,148,93,0.4),rgba(135,206,235,0.2))] rounded-3xl"
+          className="absolute inset-0 bg-[#1FA0FF]/20 rounded-3xl"
         ></motion.div>
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex w-full items-center bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden border border-[#ECB774]/20"
+          className="flex w-full items-center bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden border border-[#068DF1]/20"
         >
           {/* Left Side - Image */}
           <div className="hidden lg:flex lg:w-1/2 rounded-3xl ml-10 overflow-hidden flex-col items-center justify-center relative">
             <motion.div
               animate={{ 
                 background: [
-                  "linear-gradient(to bottom right, rgba(30,75,107,0.1), rgba(139,107,67,0.1), rgba(99,73,39,0.1))",
-                  "linear-gradient(to bottom right, rgba(139,107,67,0.1), rgba(99,73,39,0.1), rgba(30,75,107,0.1))",
-                  "linear-gradient(to bottom right, rgba(99,73,39,0.1), rgba(30,75,107,0.1), rgba(139,107,67,0.1))"
+                  "rgba(6,141,241,0.1)",
+                  "rgba(31,160,255,0.1)",
+                  "rgba(6,72,124,0.1)"
                 ]
               }}
               transition={{
@@ -134,7 +134,7 @@ export default function Login() {
                     repeat: Infinity,
                     repeatType: "reverse"
                   }}
-                  className="p-3 bg-gradient-to-br from-[#ECB774]/10 to-[#87CEEB]/10 rounded-xl backdrop-blur-xl border border-[#ECB774]/20"
+                  className="p-3 bg-[#068DF1]/10 rounded-xl backdrop-blur-xl border border-[#068DF1]/20"
                 >
                   <motion.div
                     animate={{ 
@@ -146,7 +146,7 @@ export default function Login() {
                       ease: "linear"
                     }}
                   >
-                    <Sparkles className="h-6 w-6 text-[#ECB774]" />
+                    <Sparkles className="h-6 w-6 text-[#068DF1]" />
                   </motion.div>
                 </motion.div>
                 <div>
@@ -154,9 +154,9 @@ export default function Login() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.8 }}
-                    className="text-3xl font-bold bg-gradient-to-r from-[#1e4b6b] via-[#8B6B43] to-[#634927] bg-clip-text text-transparent"
+                    className="text-3xl font-bold text-[#068DF1]"
                   >
-                    Welcome to <span className="text-[#ECB774]">Al-Tabieih</span>
+                    Welcome to <span className="text-[#06487C]">Nsr-Pc</span>
                   </motion.h1>
                   <motion.p 
                     initial={{ opacity: 0 }}
@@ -194,7 +194,7 @@ export default function Login() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
                 >
-                  <label htmlFor="username" className="block text-sm font-medium text-[#1e4b6b] mb-2">
+                  <label htmlFor="username" className="block text-sm font-medium text-[#068DF1] mb-2">
                     Username
                   </label>
                   <motion.input
@@ -203,7 +203,7 @@ export default function Login() {
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-[#ECB774]/20 focus:ring-2 focus:ring-[#ECB774] focus:border-transparent transition-all bg-white/50 backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-[#068DF1]/20 focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all bg-white/50 backdrop-blur-sm"
                     placeholder="Enter your username"
                   />
                 </motion.div>
@@ -213,7 +213,7 @@ export default function Login() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
                 >
-                  <label htmlFor="password" className="block text-sm font-medium text-[#1e4b6b] mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-[#068DF1] mb-2">
                     Password
                   </label>
                   <motion.input
@@ -222,24 +222,24 @@ export default function Login() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-[#ECB774]/20 focus:ring-2 focus:ring-[#ECB774] focus:border-transparent transition-all bg-white/50 backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-[#068DF1]/20 focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all bg-white/50 backdrop-blur-sm"
                     placeholder="Enter your password"
                   />
                 </motion.div>
 
                 <motion.button
-                  whileHover={{ scale: 1.02, boxShadow: "0 5px 15px rgba(0,0,0,0.1)" }}
+                  whileHover={{ scale: 1.022, boxShadow: "0 5px 15px rgba(0,0,0,0.1)" }}
                   whileTap={{ scale: 0.98 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ 
-                    delay: 0.7,
+                
                     type: "spring",
                     stiffness: 500,
                     damping: 25
                   }}
                   type="submit"
-                  className="w-full bg-gradient-to-r from-[#1e4b6b] via-[#8B6B43] to-[#634927] text-white py-3 rounded-xl hover:shadow-lg transition-all duration-300 font-medium mt-8"
+                  className="w-full hover:bg-[#06487C] bg-[#068DF1] text-white py-3 rounded-xl hover:shadow-lg transition-all duration-300 font-medium mt-8"
                 >
                   Sign In
                 </motion.button>

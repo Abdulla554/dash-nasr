@@ -32,7 +32,7 @@ const Sidebar = () => {
 
       {/* Mobile Toggle Button */}
       <button
-        className="fixed top-4 left-4 p-2 text-[#1e4b6b] bg-white rounded-md shadow-lg md:hidden z-30 hover:bg-[#1e4b6b]/5 transition-all duration-300 hover:scale-105"
+        className="fixed top-4 left-4 p-2 text-[#068DF1] bg-white rounded-md shadow-lg md:hidden z-30 hover:bg-[#068DF1]/5 transition-all duration-300 hover:scale-105"
         onClick={() => setIsOpen(!isOpen)}
       >
         <FaBars size={24} />
@@ -40,20 +40,20 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 h-screen bg-gradient-to-br from-[#1e4b6b]/5 via-[#8B6B43]/5 to-[#634927]/5 shadow-xl z-30
+        className={`fixed left-0 top-0 h-screen bg-[#068DF1]/5 shadow-xl z-30
           ${isOpen ? "translate-x-0" : "-translate-x-full"} 
           md:translate-x-0 transition-all duration-300 ease-in-out
-          w-64 p-4 flex flex-col justify-between border-r border-[#ECB774]/20`}
+          w-64 p-4 flex flex-col justify-between border-r border-[#068DF1]/20`}
       >
         <div>
           <div 
-            className="relative overflow-hidden py-4 px-2 mb-6 bg-gradient-to-br from-[#1e4b6b] via-[#8B6B43] to-[#634927] rounded-lg group cursor-default"
+            className="relative overflow-hidden py-4 px-2 mb-6 bg-[#068DF1] rounded-lg group cursor-default"
           >
             <h1 className="text-xl font-serif text-white text-center relative z-10 transition-transform duration-500 group-hover:scale-105">
-              Jawharat AlTabieih
+                Nsr-Pc
             </h1>
-            <div className="absolute inset-0 bg-gradient-to-r from-[#ECB774] to-[#87CEEB] opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
-            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#ECB774] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+            <div className="absolute inset-0 bg-[#1FA0FF] opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#1FA0FF] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
           </div>
 
           {/* Sidebar Links */}
@@ -71,13 +71,13 @@ const Sidebar = () => {
               >
                 <Link
                   to={item.path}
-                  className="flex items-center px-4 py-3 text-[#1e4b6b] rounded-lg hover:bg-[#1e4b6b]/5 hover:text-[#8B6B43] transition-all duration-300 group"
+                  className="flex items-center px-4 py-3 text-[#068DF1] rounded-lg hover:bg-[#068DF1]/5 hover:text-[#1FA0FF] transition-all duration-300 group"
                 >
-                  <span className="transform transition-transform duration-300 group-hover:scale-110 text-[#ECB774]">
+                  <span className="transform transition-transform duration-300 group-hover:scale-110 text-[#1FA0FF]">
                     {item.icon}
                   </span>
                   <span className="ml-3 font-medium">{item.label}</span>
-                  <span className="absolute left-0 w-1 h-8 bg-[#ECB774] rounded-r transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300"></span>
+                  <span className="absolute left-0 w-1 h-8 bg-[#1FA0FF] rounded-r transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300"></span>
                 </Link>
               </li>
             ))}
@@ -87,7 +87,7 @@ const Sidebar = () => {
         {/* Logout Button */}
         <button
           onClick={handleLogout}
-          className="flex items-center justify-center w-full p-3 text-red-500 hover:text-[#1e4b6b] bg-white/80 rounded-lg border border-[#ECB774] hover:border-[#1e4b6b] hover:bg-[#ECB774]/10 transition-all duration-300 group"
+          className="flex items-center justify-center w-full p-3 text-red-500 hover:text-[#068DF1] bg-white/80 rounded-lg border border-[#068DF1] hover:border-[#068DF1] hover:bg-[#068DF1]/10 transition-all duration-300 group"
         >
           <FaSignOutAlt className="mr-2 transform group-hover:rotate-12 transition-transform duration-300" />
           <span>Log out</span>

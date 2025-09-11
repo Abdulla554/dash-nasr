@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { CurrencyContext } from './CurrencyContext';
 
 export const CurrencyProvider = ({ children }) => {
@@ -68,4 +68,13 @@ export const CurrencyProvider = ({ children }) => {
             {children}
         </CurrencyContext.Provider>
     );
+};
+
+// Custom hook to use currency context
+export const useCurrency = () => {
+    const context = useContext(CurrencyContext);
+    if (!context) {
+        throw new Error('useCurrency must be used within a CurrencyProvider');
+    }
+    return context;
 };

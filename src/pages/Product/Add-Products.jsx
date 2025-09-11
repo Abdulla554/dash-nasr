@@ -1,230 +1,203 @@
 import React, { useEffect, useState } from "react";
-import { Upload, X } from "lucide-react";
+import { Upload, X, Plus, Trash, ArrowLeft, Save } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import axiosInstance from "../../lib/axios";
-import imageCompression from "browser-image-compression";
+import { motion as _motion } from "framer-motion";
+import { useTheme } from "../../contexts/ThemeContext.jsx";
+import { useCurrency } from "../../contexts/CurrencyContext.jsx";
 
 export default function AddProduct() {
-  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [productImage, setProductImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [isCompressing, setIsCompressing] = useState(false);
-  const [categorieid, setCategorieid] = useState(0);
+  const { isDark } = useTheme();
+  const { getCurrencySymbol } = useCurrency();
+
+  const [, setProductImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    price: "",
+    originalPrice: "",
+    category: "laptops",
+    brand: "",
+    specifications: {
+      processor: "",
+      ram: "",
+      storage: "",
+      graphics: "",
+      display: "",
+      weight: "",
+      battery: "",
+      os: ""
+    },
+    rating: 4.5,
+    reviews: 0,
+    stock: 0,
+    isNew: true,
+    isBestSeller: false,
+    tags: [],
+    warranty: "",
+    shipping: ""
   });
   useEffect(() => {
     window.scrollTo(0, 0);
-    console.log("Product Image updated:", productImage);
-  }, [productImage]);
-  const { data: categories } = useQuery({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      try {
-        const response = await axiosInstance.get("/categories");
-        return response.data;
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-        throw error;
-      }
-    },
-    refetchInterval: 5000,
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
-  });
-  const compressImage = async (file) => {
-    const options = {
-      maxSizeMB: 0.2,
-      maxWidthOrHeight: 600,
-      useWebWorker: true,
-      initialQuality: 0.5,
-    };
+  }, []);
 
-    try {
-      setIsCompressing(true);
-      const compressedFile = await imageCompression(file, options);
-      console.log("Original file size:", file.size / 1024 / 1024, "MB");
-      console.log(
-        "Compressed file size:",
-        compressedFile.size / 1024 / 1024,
-        "MB"
-      );
-      if (compressedFile.size > 200 * 1024) {
-        // 200 KB
-        toast.error(
-          "Image is still too large after compression. Please choose a smaller image."
-        );
-        return;
-      }
-      return compressedFile;
-    } catch (error) {
-      console.error("Error compressing image:", error);
-      throw error;
-    } finally {
-      setIsCompressing(false);
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length + imagePreviews.length > 5) {
+      toast.error("يمكنك رفع 5 صور كحد أقصى", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
     }
+
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreviews(prev => [...prev, reader.result]);
+        setProductImages(prev => [...prev, file]);
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
-  const handleImageChange = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      try {
-        const compressedFile = await compressImage(file);
-        setProductImage(compressedFile);
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview(reader.result);
-        };
-        reader.readAsDataURL(compressedFile);
-      } catch {
-        toast.error("Error processing image. Please try again.", {
-          position: "top-center",
-          rtl: true,
-          theme: "colored",
-          autoClose: 3000,
-        });
-      }
-    }
+  const handleDeleteImage = (index) => {
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
+    setProductImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleDeleteImage = () => {
-    setProductImage(null);
-    setImagePreview(null);
-  };
+  // const handleAddTag = () => {
+  //   const newTag = prompt("أدخل العلامة الجديدة:");
+  //   if (newTag && newTag.trim()) {
+  //     setFormData(prev => ({
+  //       ...prev,
+  //       tags: [...prev.tags, newTag.trim()]
+  //     }));
+  //   }
+  // };
+
+  // const handleRemoveTag = (index) => {
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     tags: prev.tags.filter((_, i) => i !== index)
+  //   }));
+  // };
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
-  const mutation = useMutation({
-    mutationKey: ["addProducts"],
-    mutationFn: async (requestData) => {
-      try {
-        const response = await axiosInstance.post("/products", requestData);
-        return response.data;
-      } catch (error) {
-        console.error("API Error:", error.response?.data);
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast.success("products add successfully", {
-        position: "top-center",
-        rtl: true,
-        theme: "colored",
-        autoClose: 2000,
-      });
-      console.log("products added successfully");
-      setTimeout(() => {
-        navigate("/products");
-      }, 2000);
-    },
-    onError: (error) => {
-      const errorMessage =
-        error.response?.data?.message || "Failed to add products";
-      toast.error(errorMessage, {
-        position: "top-center",
-        rtl: true,
-        theme: "colored",
-        autoClose: 2000,
-      });
-      console.error("Error details:", error.response?.data);
-    },
-  });
+  const handleSpecificationChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      specifications: {
+        ...prev.specifications,
+        [name]: value,
+      },
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!imagePreview) {
-      toast.error("Please select an image first");
+    if (imagePreviews.length === 0) {
+      toast.error("يرجى رفع صورة واحدة على الأقل", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
-    if (isCompressing) {
-      toast.info("Please wait while the image is being processed...");
+    if (!formData.title || !formData.description || !formData.price) {
+      toast.error("يرجى ملء جميع الحقول المطلوبة", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
-    const requestData = {
-      title: formData.title,
-      description: formData.description,
-      image: imagePreview,
-      categoryId: categorieid,
+    // في التطبيق الحقيقي، هنا ستكون API call
+    const newProduct = {
+      id: Date.now(), // ID مؤقت
+      ...formData,
+      images: imagePreviews,
+      price: parseFloat(formData.price),
+      originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : null,
+      stock: parseInt(formData.stock),
+      reviews: parseInt(formData.reviews),
+      rating: parseFloat(formData.rating)
     };
-    // console.log(requestData);
-    // console.log(typeof requestData.image);
-    // console.log(typeof requestData.description);
-    // console.log(typeof requestData.title);
-    // console.log(typeof requestData.categoryId);
-    // const requestData = new FormData();
-    // requestData.append("title", formData.title);
-    // requestData.append("description", formData.description);
-    // requestData.append("image", imagePreview);
-    // requestData.append("categoryId", categorieid);
-    try {
-      mutation.mutate(requestData);
-    } catch (error) {
-      console.error("Submission error:", error);
-      toast.error("Failed to submit the form. Please try again.");
-    }
 
+    console.log("New Product:", newProduct);
+
+    toast.success("تم إضافة المنتج بنجاح!", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+
+    setTimeout(() => {
+      navigate("/products");
+    }, 2000);
   };
   return (
-    <div className="min-h-screen pb-10 bg-nsr-dark">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-nsr-dark' : 'bg-gray-50'}`} dir="rtl">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         {/* Header */}
-        <div className="py-8 flex pt-10 justify-between items-center">
-          <h1 className="text-3xl font-bold font-serif text-white">
-            Add New Product
-          </h1>
-          <div className="hover:scale-105 active:scale-95 transition-transform">
-            <Link to="/products">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-nsr-secondary/80 border-2 border-nsr-primary text-nsr-primary hover:bg-nsr-primary/5 transition-all duration-300 shadow-sm hover:shadow-md group">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 transform transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+        <div className={`relative backdrop-blur-sm border-b transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/20' : 'bg-white/80 border-gray-200 shadow-sm'}`}>
+          <div className="absolute inset-0 bg-gradient-to-r from-nsr-accent/10 to-transparent"></div>
+          <div className="relative px-8 py-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                <div className="p-4 bg-gradient-to-r from-nsr-accent to-nsr-primary rounded-2xl">
+                  <Plus className="w-8 h-8 text-white" />
+                </div>
+                <div>
+                  <h1 className={`text-4xl font-bold transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-black'}`}>
+                    إضافة منتج جديد
+                  </h1>
+                  <p className={`mt-2 text-lg transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-gray-600'}`}>أضف منتج جديد إلى المخزن</p>
+                </div>
+              </div>
+
+              <Link to="/products">
+                <_motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="group flex items-center gap-3 px-6 py-3 rounded-2xl transition-all duration-300"
+                  style={{
+                    background: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+                    border: isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.1)'
+                  }}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-                Back to Products
-              </button>
-            </Link>
+                  <ArrowLeft className={`w-5 h-5 transition-colors duration-300 ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`} />
+                  <span className={`font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`}>
+                    العودة للمنتجات
+                  </span>
+                </_motion.button>
+              </Link>
+            </div>
           </div>
         </div>
 
         {/* Form */}
-        <div className="bg-white/80 backdrop-blur-lg rounded-xl shadow-lg p-8 mt-5 mb-14 border border-[#068DF1]/20">
+        <div className={`backdrop-blur-sm border rounded-2xl p-8 mt-8 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30 border-nsr-primary/20' : 'bg-white/70 border-gray-200 shadow-sm'}`}>
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Information Section */}
             <div>
-              <h2 className="text-xl font-semibold text-[#068DF1] mb-6">
-                Basic Information
+              <h2 className={`text-2xl font-bold mb-6 transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-gray-900'}`}>
+                المعلومات الأساسية
               </h2>
-              <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label
-                    htmlFor="title"
-                    className="block text-sm font-medium text-[#068DF1] mb-3"
-                  >
-                    Product Name
+                  <label htmlFor="title" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    اسم المنتج *
                   </label>
                   <input
                     type="text"
@@ -232,134 +205,259 @@ export default function AddProduct() {
                     value={formData.title}
                     onChange={handleInputChange}
                     name="title"
-                    className="w-full px-4 py-2 border border-[#068DF1]/20 rounded-lg focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all duration-300 bg-white/50"
-                    placeholder="Enter product name"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل اسم المنتج"
+                    required
                   />
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="category"
-                    className="block text-sm font-medium text-[#068DF1] mb-3"
-                  >
-                    Category
+                  <label htmlFor="brand" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    الماركة *
+                  </label>
+                  <input
+                    type="text"
+                    id="brand"
+                    value={formData.brand}
+                    onChange={handleInputChange}
+                    name="brand"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل الماركة"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="category" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    الفئة *
                   </label>
                   <select
                     id="category"
                     name="category"
-                    value={categorieid}
-                    onChange={(e) => setCategorieid(parseInt(e.target.value))}
-                    className="w-full px-4 py-2 border border-[#068DF1]/20 rounded-lg focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all duration-300 bg-white/50"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    required
                   >
-                    <option value="">Select a category</option>
-                    {categories?.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.title}
-                      </option>
-                    ))}
+                    <option value="laptops">لابتوبات</option>
+                    <option value="accessories">إكسسوارات</option>
                   </select>
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="description"
-                    className="block text-sm font-medium text-[#068DF1] mb-3"
-                  >
-                    Description
+                  <label htmlFor="price" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    السعر ({getCurrencySymbol()}) *
                   </label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    value={formData.description}
+                  <input
+                    type="number"
+                    id="price"
+                    value={formData.price}
                     onChange={handleInputChange}
-                    rows={6}
-                    className="w-full px-4 py-6 border border-[#068DF1]/20 rounded-lg focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all duration-300 bg-white/50"
-                    placeholder="Enter product description"
+                    name="price"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل السعر"
+                    required
                   />
                 </div>
 
-                {/* <div>
-                  <label
-                    htmlFor="price"
-                    className="block text-sm font-medium text-[#068DF1] mb-3"
-                  >
-                    Price
-                  </label>
-                  <textarea
-                    id="price"
-                    name="price"
-                    value={price}
-                    onChange={(e) =>
-                      setPrice(parseInt(e.target.value))
-                    }
-                    rows={1}
-                    className="w-full px-4 py-6 border border-[#068DF1]/20 rounded-lg focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all duration-300 bg-white/50"
-                    placeholder="Enter product price"
-                  />
-                </div> */}
-
-                {/* Image Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-[#1e4b6b] mb-3">
-                    Categorie Image
+                  <label htmlFor="originalPrice" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    السعر الأصلي ({getCurrencySymbol()})
                   </label>
-                  <div>
-                    {!imagePreview ? (
-                      <div className="relative border-2 border-dashed rounded-lg py-16 px-6 border-[#068DF1]/40 hover:border-[#1FA0FF] transition-all duration-300 flex items-center justify-center cursor-pointer bg-white/50">
-                        <input
-                          type="file"
-                          id="Categorie-image"
-                          className="hidden"
-                          accept="image/*"
-                          onChange={handleImageChange}
-                        />
-                        <label
-                          htmlFor="Categorie-image"
-                          className="cursor-pointer"
-                        >
-                          <div className="text-center">
-                            <Upload className="mx-auto h-12 w-12 text-[#068DF1]" />
-                            <div className="mt-4 flex text-sm text-[#068DF1]">
-                              <span className="text-[#068DF1] hover:text-[#1FA0FF]">
-                                Upload a file
-                              </span>
-                              <p className="pl-1">or drag and drop</p>
-                            </div>
-                            <p className="text-xs text-[#068DF1]/70 mt-2">
-                              PNG, JPG, GIF up to 10MB
-                            </p>
-                          </div>
-                        </label>
-                      </div>
-                    ) : (
-                      <div className="relative">
-                        <img
-                          src={imagePreview}
-                          alt="Categorie preview"
-                          className="w-full h-64 object-contain rounded-lg border-2 border-[#068DF1]/40"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleDeleteImage}
-                          className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-                        >
-                          <X size={20} />
-                        </button>
-                      </div>
-                    )}
-                  </div>
+                  <input
+                    type="number"
+                    id="originalPrice"
+                    value={formData.originalPrice}
+                    onChange={handleInputChange}
+                    name="originalPrice"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل السعر الأصلي (اختياري)"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="stock" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    الكمية في المخزن *
+                  </label>
+                  <input
+                    type="number"
+                    id="stock"
+                    value={formData.stock}
+                    onChange={handleInputChange}
+                    name="stock"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل الكمية"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <label htmlFor="description" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                  الوصف *
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  rows={4}
+                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                  placeholder="أدخل وصف المنتج"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Specifications Section */}
+            <div>
+              <h2 className={`text-2xl font-bold mb-6 transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-gray-900'}`}>
+                المواصفات التقنية
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="processor" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    المعالج
+                  </label>
+                  <input
+                    type="text"
+                    id="processor"
+                    value={formData.specifications.processor}
+                    onChange={handleSpecificationChange}
+                    name="processor"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل نوع المعالج"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="ram" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    الذاكرة
+                  </label>
+                  <input
+                    type="text"
+                    id="ram"
+                    value={formData.specifications.ram}
+                    onChange={handleSpecificationChange}
+                    name="ram"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل حجم الذاكرة"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="storage" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    التخزين
+                  </label>
+                  <input
+                    type="text"
+                    id="storage"
+                    value={formData.specifications.storage}
+                    onChange={handleSpecificationChange}
+                    name="storage"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل مساحة التخزين"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="graphics" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    كرت الشاشة
+                  </label>
+                  <input
+                    type="text"
+                    id="graphics"
+                    value={formData.specifications.graphics}
+                    onChange={handleSpecificationChange}
+                    name="graphics"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل نوع كرت الشاشة"
+                  />
                 </div>
               </div>
             </div>
 
+            {/* Images Upload */}
+            <div>
+              <h2 className={`text-2xl font-bold mb-6 transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-gray-900'}`}>
+                صور المنتج (حتى 5 صور)
+              </h2>
+              <div>
+                {imagePreviews.length === 0 ? (
+                  <div className={`relative border-2 border-dashed rounded-xl py-16 px-6 transition-all duration-300 flex items-center justify-center cursor-pointer ${isDark ? 'border-nsr-primary/40 hover:border-nsr-accent bg-nsr-secondary/20' : 'border-gray-300 hover:border-nsr-accent bg-gray-50'}`}>
+                    <input
+                      type="file"
+                      id="product-images"
+                      className="hidden"
+                      accept="image/*"
+                      multiple
+                      onChange={handleImageChange}
+                    />
+                    <label htmlFor="product-images" className="cursor-pointer">
+                      <div className="text-center">
+                        <Upload className={`mx-auto h-12 w-12 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-500'}`} />
+                        <div className={`mt-4 text-sm transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-600'}`}>
+                          <span className="hover:underline">اضغط لرفع الصور</span>
+                          <p className="mt-1">أو اسحب وأفلت الصور هنا</p>
+                        </div>
+                        <p className={`text-xs mt-2 transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-gray-500'}`}>
+                          PNG, JPG, GIF حتى 10MB لكل صورة
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {imagePreviews.map((preview, index) => (
+                      <div key={index} className="relative group">
+                        <img
+                          src={preview}
+                          alt={`Product ${index + 1}`}
+                          className="w-full h-32 object-cover rounded-xl border-2 border-gray-200"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteImage(index)}
+                          className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    ))}
+                    {imagePreviews.length < 5 && (
+                      <div className={`border-2 border-dashed rounded-xl h-32 flex items-center justify-center cursor-pointer transition-all duration-300 ${isDark ? 'border-nsr-primary/40 hover:border-nsr-accent bg-nsr-secondary/20' : 'border-gray-300 hover:border-nsr-accent bg-gray-50'}`}>
+                        <input
+                          type="file"
+                          id="add-more-images"
+                          className="hidden"
+                          accept="image/*"
+                          multiple
+                          onChange={handleImageChange}
+                        />
+                        <label htmlFor="add-more-images" className="cursor-pointer text-center">
+                          <Plus className={`mx-auto h-8 w-8 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-500'}`} />
+                          <p className={`text-xs mt-1 transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-gray-500'}`}>
+                            إضافة المزيد
+                          </p>
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Submit Button */}
-            <div className="flex justify-center md:justify-end">
-              <button
+            <div className="flex justify-center md:justify-end pt-6">
+              <_motion.button
                 type="submit"
-                className="bg-[#068DF1] text-white px-8 py-3 rounded-lg hover:shadow-lg hover:shadow-[#068DF1]/25 transition-all duration-300 hover:scale-105"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 bg-gradient-to-r from-nsr-accent to-nsr-primary text-white shadow-lg shadow-nsr-accent/25 transition-all duration-500 hover:shadow-xl hover:shadow-nsr-accent/40"
               >
-                Add Product
-              </button>
+                <Save className="h-6 w-6 transition-all duration-500 group-hover:rotate-12" />
+                <span className="font-semibold text-lg">إضافة المنتج</span>
+              </_motion.button>
             </div>
           </form>
         </div>

@@ -74,6 +74,7 @@ export default {
       },
       backgroundColor: {
         "nsr-dark": "#121212",
+        "nsr-light": "#ffffff",
         "nsr-primary": "#1A73E8",
         "nsr-secondary": "#1B3C73",
         "nsr-neutral": "#B0BEC5",
@@ -84,6 +85,8 @@ export default {
         "nsr-secondary": "#1B3C73",
         "nsr-neutral": "#B0BEC5",
         "nsr-accent": "#00CFFF",
+        "nsr-dark": "#1e293b",
+        "nsr-light": "#ffffff",
       },
       borderColor: {
         "nsr-primary": "#1A73E8",

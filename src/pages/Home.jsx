@@ -146,9 +146,7 @@ export default function LuxuryDashboard() {
               >
                 {isDark ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
               </button>
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-800 rounded-full flex items-center justify-center">
-                <FaTrophy className="text-white w-6 h-6" />
-              </div>
+            
             </div>
           </div>
         </div>

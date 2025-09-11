@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./pages/Auth/login";
 import AllProduct from "./pages/Product/All-Product";
 import AddProduct from "./pages/Product/Add-Products";
+import ProductDetails from "./pages/Product/Product-Details";
 import AllCategories from "./pages/Categories/All-Categories";
 import AddCategorie from "./pages/Categories/Add-Categories";
 import AllBrands from "./pages/Brands/All-brands";
@@ -68,6 +69,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <AddProduct />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/products/:id"
+              element={
+                <ProtectedRoute>
+                  <ProductDetails />
                 </ProtectedRoute>
               }
             />

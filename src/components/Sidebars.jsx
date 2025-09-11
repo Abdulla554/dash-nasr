@@ -1,11 +1,9 @@
 import {
-  Boxes,
-  ChartBarStacked,
-  Database,
   Home,
-  LayoutGrid,
-  ShoppingBag,
-  Store,
+  Package,
+  Grid3X3,
+  Building2,
+  Image,
 } from "lucide-react";
 import { useState } from "react";
 import { FaBars, FaSignOutAlt } from "react-icons/fa";
@@ -60,10 +58,10 @@ const Sidebar = () => {
           <ul className="space-y-2">
             {[
               { icon: <Home className="w-5 h-5" />, label: "Home", path: "/home" },
-              { icon: <ShoppingBag className="w-5 h-5" />, label: "Products", path: "/products" },
-              { icon: <LayoutGrid className="w-5 h-5" />, label: "Categories", path: "/categories" },
-              { icon: <Store className="w-5 h-5" />, label: "Brands", path: "/brands" },
-              { icon: <Store className="w-5 h-5" />, label: "Banner", path: "/banner" },
+              { icon: <Package className="w-5 h-5" />, label: "Products", path: "/products" },
+              { icon: <Grid3X3 className="w-5 h-5" />, label: "Categories", path: "/categories" },
+              { icon: <Building2 className="w-5 h-5" />, label: "Brands", path: "/brands" },
+              { icon: <Image className="w-5 h-5" />, label: "Banner", path: "/banner" },
             ].map((item, index) => (
               <li
                 key={index}

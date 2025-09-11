@@ -142,7 +142,7 @@ export default function AllCategories() {
           </div>
 
           <div className="space-y-4 relative z-10">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-nsr-primary via-nsr-accent to-nsr-secondary bg-clip-text text-transparent group-hover:from-nsr-accent group-hover:via-nsr-primary group-hover:to-nsr-secondary transition-all duration-500">
+            <h2 className="text-2xl font-bold   text-w group-hover:from-nsr-accent group-hover:via-nsr-primary group-hover:to-nsr-secondary transition-all duration-500">
               {Categorie.title || "Untitled Categorie"}
             </h2>
             <p className="text-nsr-neutral line-clamp-2 font-light group-hover:text-nsr-accent/90 transition-colors duration-300">

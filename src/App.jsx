@@ -17,6 +17,9 @@ import AllBanner from "./pages/Banner/All-Banner";
 import { ThemeProvider } from "./contexts/ThemeContext.jsx";
 import { CurrencyProvider } from "./contexts/CurrencyContext.jsx";
 
+
+
+
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("token");
 

@@ -156,7 +156,7 @@ export default function AddBanner() {
             Add New Banner
           </h1>
           <div className="hover:scale-105 active:scale-95 transition-transform">
-            <Link to="/banners">
+            <Link to="/banner">
               <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-nsr-secondary/80 border-2 border-nsr-accent text-nsr-primary hover:bg-nsr-primary/5 transition-all duration-300 shadow-sm hover:shadow-md group">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

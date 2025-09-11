@@ -9,9 +9,9 @@ import { useQueryClient } from "@tanstack/react-query";
 // هاي المكتبه لتحميل الصور بدون حدود
 import imageCompression from "browser-image-compression";
 
-export default function AddBrand() {
+export default function AddBanner() {
   const queryClient = useQueryClient();
-  const [brandImage, setBrandImage] = useState(null);
+  const [BannerImage, setBannerImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isCompressing, setIsCompressing] = useState(false);
 
@@ -52,7 +52,7 @@ export default function AddBrand() {
 
       try {
         const compressedFile = await compressImage(file);
-        setBrandImage(compressedFile);
+        setBannerImage(compressedFile);
         const reader = new FileReader();
         reader.onloadend = () => {
           setImagePreview(reader.result);
@@ -69,22 +69,22 @@ export default function AddBrand() {
     }
   };
 
-  // Add useEffect to monitor brandImage changes
+  // Add useEffect to monitor BannerImage changes
   useEffect(() => {
-    console.log("Brand Image updated:", brandImage);
-    console.log(typeof brandImage);
-  }, [brandImage]);
+    console.log("Banner Image updated:", BannerImage);
+    console.log(typeof BannerImage);
+  }, [BannerImage]);
 
   const handleDeleteImage = () => {
-    setBrandImage(null);
+    setBannerImage(null);
     setImagePreview(null);
   };
 
   const mutation = useMutation({
-    mutationKey: ["addBrand"],
+    mutationKey: ["addBanner"],
     mutationFn: async (requestData) => {
       try {
-        const response = await axiosInstance.post("/brands", requestData, {
+        const response = await axiosInstance.post("/banners", requestData, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -96,21 +96,21 @@ export default function AddBrand() {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["brands"] });
-      toast.success("Brand added successfully", {
+      queryClient.invalidateQueries({ queryKey: ["Banners"] });
+      toast.success("Banner added successfully", {
         position: "top-center",
         rtl: true,
         theme: "colored",
         autoClose: 2000,
       });
-      console.log("Brand added successfully");
+      console.log("Banner added successfully");
       setTimeout(() => {
-        navigate("/brands");
+        navigate("/banners");
       }, 2000);
     },
     onError: (error) => {
       const errorMessage =
-        error.response?.data?.message || "Failed to add brand";
+        error.response?.data?.message || "Failed to add Banner";
       toast.error(errorMessage, {
         position: "top-center",
         rtl: true,
@@ -153,10 +153,10 @@ export default function AddBrand() {
         {/* Header */}
         <div className="py-8 flex pt-10 justify-between items-center">
           <h1 className="text-3xl font-bold font-serif text-white">
-            Add New Brand
+            Add New Banner
           </h1>
           <div className="hover:scale-105 active:scale-95 transition-transform">
-            <Link to="/brands">
+            <Link to="/banners">
               <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-nsr-secondary/80 border-2 border-nsr-accent text-nsr-primary hover:bg-nsr-primary/5 transition-all duration-300 shadow-sm hover:shadow-md group">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +172,7 @@ export default function AddBrand() {
                     d="M9 5l7 7-7 7"
                   />
                 </svg>
-                Back to Brands
+                Back to Banners
               </button>
             </Link>
           </div>
@@ -190,18 +190,18 @@ export default function AddBrand() {
                 {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-nsr-primary mb-3">
-                    Brand Image
+                    Banner Image
                   </label>
                   {!imagePreview ? (
                     <div className="relative border-2 border-dashed rounded-lg py-16 px-6 border-nsr-accent/40 hover:border-nsr-primary transition-all duration-300 flex items-center justify-center cursor-pointer bg-nsr-secondary/50">
                       <input
                         type="file"
-                        id="Brand-image"
+                        id="Banner-image"
                         className="hidden"
                         accept="image/*"
                         onChange={handleImageChange}
                       />
-                      <label htmlFor="Brand-image" className="cursor-pointer">
+                      <label htmlFor="Banner-image" className="cursor-pointer">
                         <div className="text-center">
                           <Upload className="mx-auto h-12 w-12 text-[#8B6B43]" />
                           <div className="mt-4 flex text-sm text-[#1e4b6b]">
@@ -220,7 +220,7 @@ export default function AddBrand() {
                     <div className="relative">
                       <img
                         src={imagePreview}
-                        alt="Brand preview"
+                        alt="Banner preview"
                         className="w-full h-64 object-contain rounded-lg border-2 border-[#ECB774]/40"
                       />
                       <button
@@ -242,7 +242,7 @@ export default function AddBrand() {
                 type="submit"
                 className="bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] text-white px-8 py-3 rounded-lg hover:shadow-lg hover:shadow-[#8B6B43]/25 transition-all duration-300 hover:scale-105"
               >
-                Add Brand
+                Add Banner
               </button>
             </div>
           </form>

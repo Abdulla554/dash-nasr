@@ -63,6 +63,7 @@ const Sidebar = () => {
               { icon: <ShoppingBag className="w-5 h-5" />, label: "Products", path: "/products" },
               { icon: <LayoutGrid className="w-5 h-5" />, label: "Categories", path: "/categories" },
               { icon: <Store className="w-5 h-5" />, label: "Brands", path: "/brands" },
+              { icon: <Store className="w-5 h-5" />, label: "Banner", path: "/banner" },
             ].map((item, index) => (
               <li
                 key={index}

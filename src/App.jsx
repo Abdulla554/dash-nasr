@@ -2,16 +2,18 @@ import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Sidebar from "./components/Sidebars";
-import AllProduct from "./pages/Product/AllProduct";
-import AddProduct from "./pages/Product/AddProducts";
-import AllCategories from "./pages/Categories/AllCategories";
-import AddCategorie from "./pages/Categories/AddCategories";
-import AllBrands from "./pages/Brands/All-brands";
-import AddBrand from "./pages/Brands/Add-brands";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./pages/Auth/login";
+import AllProduct from "./pages/Product/All-Product";
+import AddProduct from "./pages/Product/Add-Products";
+import AllCategories from "./pages/Categories/All-Categories";
+import AddCategorie from "./pages/Categories/Add-Categories";
+import AllBrands from "./pages/Brands/All-brands";
+import AddBrand from "./pages/Brands/Add-brands";
+import AddBanner from "./pages/Banner/Add-Banner";
+import AllBanner from "./pages/Banner/All-Banner";
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("token");
@@ -90,7 +92,23 @@ export default function App() {
           path="/brands/add"
           element={
             <ProtectedRoute>
-              <AddBrand />
+              <AddBrand/>
+            </ProtectedRoute>
+          }
+        />
+          <Route
+          path="/banner"
+          element={
+            <ProtectedRoute>
+              <AllBanner/>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/banner/add"
+          element={
+            <ProtectedRoute>
+              <AddBanner/>
             </ProtectedRoute>
           }
         />

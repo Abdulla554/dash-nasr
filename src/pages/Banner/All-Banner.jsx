@@ -8,7 +8,7 @@ import axiosInstance from "../../lib/axios";
 import { toast } from "react-toastify";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import ClipLoader from "react-spinners/ClipLoader";
-export default function AllBrands() {
+export default function AllBanner() {
   const queryClient = useQueryClient();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedBrandId, setSelectedBrandId] = useState(null);
@@ -16,11 +16,11 @@ export default function AllBrands() {
     window.scrollTo(0, 0);
   }, []);
   const {
-    data: demoBrands,
+    data: demoBanner,
     isLoading,
    
   } = useQuery({
-    queryKey: ["brands"],
+    queryKey: ["Banner"],
     queryFn: async () => {
       try {
         const response = await axiosInstance.get("/brands");
@@ -44,7 +44,7 @@ export default function AllBrands() {
     },
     onSuccess: () => {
       // Invalidate and refetch certificates query
-      queryClient.invalidateQueries({ queryKey: ["brands"] });
+      queryClient.invalidateQueries({ queryKey: ["Banner"] });
       toast.success("Brand deleted successfully", {
         position: "top-right",
         autoClose: 3000,
@@ -184,7 +184,7 @@ export default function AllBrands() {
             <h2 className="text-5xl md:text-6xl font-bold text-white mb-4 relative z-10 
                      bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent
                      drop-shadow-2xl animate-fadeInUp">
-              Brands List
+              Banner List
             </h2>
 
             {/* Glowing underline */}
@@ -195,13 +195,13 @@ export default function AllBrands() {
             {/* Subtitle */}
             <p className="text-white/80 text-lg mt-6 font-light tracking-wide animate-fadeInUp"
               style={{ animationDelay: '0.3s' }}>
-              Discover and manage your business brands
+              Discover and manage your business Banner
             </p>
           </div>
 
          
            {/* Premium Action Button */}
-           <Link to="/brands/add">
+           <Link to="/banner/add">
             <button className="group relative px-12 py-5 bg-nsr-primary backdrop-blur-lg
                          text-white hover:text-nsr-primary font-bold text-xl rounded-none border-2 border-white/40
                          transform transition-all duration-700 hover:scale-105 hover:-rotate-1
@@ -237,7 +237,7 @@ export default function AllBrands() {
 
                 {/* Button Text */}
                 <span className="tracking-wide relative">
-                  Add New brands
+                  Add New Banner
                   <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white/80 
                             group-hover:w-full transition-all duration-500" />
                 </span>
@@ -256,10 +256,10 @@ export default function AllBrands() {
         </div>
       </div>
 
-      {/* Luxurious Brands Grid */}
+      {/* Luxurious Banner Grid */}
       <div className="py-16 px-6">
         <div className="mx-auto max-w-7xl">
-          {demoBrands?.length === 0 ? (
+          {demoBanner?.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -267,7 +267,7 @@ export default function AllBrands() {
               className="text-center py-20 bg-[#068DF1] backdrop-blur-lg rounded-3xl border border-[#068DF1]/10"
             >
               <h3 className="text-2xl font-bold text-[#1FA0FF] mb-3">
-                No Brands Found
+                No Banner Found
               </h3>
               <p className="text-white">
                 Add your first Brand to get started
@@ -280,7 +280,7 @@ export default function AllBrands() {
               animate="visible"
               className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             >
-              {demoBrands?.map(renderBrand)}
+              {demoBanner?.map(renderBrand)}
             </motion.div>
           )}
         </div>

@@ -180,16 +180,16 @@ export default function AddProduct() {
 
   };
   return (
-    <div className="min-h-screen pb-10 bg-[#068DF1]/5">
+    <div className="min-h-screen pb-10 bg-nsr-dark">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="py-8 flex pt-10 justify-between items-center">
-          <h1 className="text-3xl font-bold font-serif text-[#068DF1]">
+          <h1 className="text-3xl font-bold font-serif text-nsr-primary">
             Add New Product
           </h1>
           <div className="hover:scale-105 active:scale-95 transition-transform">
             <Link to="/products">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/80 border-2 border-[#068DF1] text-[#068DF1] hover:bg-[#068DF1]/5 transition-all duration-300 shadow-sm hover:shadow-md group">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-nsr-secondary/80 border-2 border-nsr-primary text-nsr-primary hover:bg-nsr-primary/5 transition-all duration-300 shadow-sm hover:shadow-md group">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 transform transition-transform group-hover:translate-x-1"

@@ -71,9 +71,9 @@ export default function Categories() {
  
   if (isLoading) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center min-h-[120px]">
-        <ClipLoader color={"#87CEEB"} size={48} speedMultiplier={1.2} />
-        <span className="text-[#87CEEB] font-bold text-lg mt-3">
+      <div className="flex h-screen flex-col items-center justify-center min-h-[120px] bg-nsr-dark">
+        <ClipLoader color={"#1A73E8"} size={48} speedMultiplier={1.2} />
+        <span className="text-nsr-primary font-bold text-lg mt-3">
           جاري التحميل...
         </span>
       </div>
@@ -123,17 +123,17 @@ export default function Categories() {
         variants={itemVariants}
         whileHover={{ y: -8, scale: 1.02 }}
         key={Categorie.id}
-        className="relative border-2 border-[#CE8B39] border-dashed  rounded-3xl p-5 w-full backdrop-blur-lg  shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-500 hover:shadow-[0_15px_40px_rgb(139,107,67,0.2)] group overflow-hidden"
+        className="card-nsr relative border-2 border-nsr-primary border-dashed  rounded-3xl p-5 w-full backdrop-blur-lg  shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-500 hover:shadow-[0_15px_40px_rgb(26,115,232,0.2)] group overflow-hidden"
       >
         {/* Animated background gradient */}
-        <div className="absolute inset-0 bg-[#068DF1]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+        <div className="absolute inset-0 bg-nsr-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
         
         {/* Glowing orb effect */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#ECB774] rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-700"></div>
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-nsr-accent rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-700"></div>
         
         <div className="relative">
-          <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 border border-[#ECB774]/10">
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1e4b6b]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+          <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 border border-nsr-accent/10">
+            <div className="absolute inset-0 bg-gradient-to-t from-nsr-secondary/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
             <img
               src={Categorie.image}
               alt={Categorie.title || "Categorie"}
@@ -142,10 +142,10 @@ export default function Categories() {
           </div>
 
           <div className="space-y-4 relative z-10">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-[#1e4b6b] via-[#8B6B43] to-[#ECB774] bg-clip-text text-transparent group-hover:from-[#ECB774] group-hover:via-[#8B6B43] group-hover:to-[#1e4b6b] transition-all duration-500">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-nsr-primary via-nsr-accent to-nsr-secondary bg-clip-text text-transparent group-hover:from-nsr-accent group-hover:via-nsr-primary group-hover:to-nsr-secondary transition-all duration-500">
               {Categorie.title || "Untitled Categorie"}
             </h2>
-            <p className="text-[#068DF1]/70 line-clamp-2 font-light group-hover:text-[#8B6B43]/90 transition-colors duration-300">
+            <p className="text-nsr-neutral line-clamp-2 font-light group-hover:text-nsr-accent/90 transition-colors duration-300">
               {Categorie.description || "No description available"}
             </p>
 

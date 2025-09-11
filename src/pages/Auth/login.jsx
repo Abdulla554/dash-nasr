@@ -32,50 +32,19 @@ export default function Login() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-      className="min-h-screen w-full flex items-center justify-center bg-[#068DF1]/5 p-4"
+      className="min-h-screen w-full flex items-center justify-center bg-nsr-dark p-4"
     >
       <div className="relative w-full max-w-7xl">
-        {/* Background Effects */}
-        <motion.div 
-          animate={{ 
-            opacity: [0.1, 0.15, 0.1],
-            scale: [1, 1.02, 1]
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
-          className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-15 rounded-3xl"
-        ></motion.div>
-        <motion.div 
-          animate={{ 
-            opacity: [0.2, 0.3, 0.2],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            repeatType: "reverse"
-          }}
-          className="absolute inset-0 bg-[#1FA0FF]/20 rounded-3xl"
-        ></motion.div>
-
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex w-full items-center bg-white/80 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden border border-[#068DF1]/20"
+          className="flex w-full items-center bg-[#1B3C73]/10 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden border border-nsr-primary/60"
         >
           {/* Left Side - Image */}
           <div className="hidden lg:flex lg:w-1/2 rounded-3xl ml-10 overflow-hidden flex-col items-center justify-center relative">
             <motion.div
-              animate={{ 
-                background: [
-                  "rgba(6,141,241,0.1)",
-                  "rgba(31,160,255,0.1)",
-                  "rgba(6,72,124,0.1)"
-                ]
-              }}
+             
               transition={{
                 duration: 10,
                 repeat: Infinity,
@@ -94,7 +63,7 @@ export default function Login() {
               className="relative z-10"
             >
               <motion.img 
-                src="/logo.png" 
+                src="/logo-removebg.png" 
                 alt="Login" 
                 className="w-full h-full object-contain"
                 animate={{ 
@@ -134,7 +103,7 @@ export default function Login() {
                     repeat: Infinity,
                     repeatType: "reverse"
                   }}
-                  className="p-3 bg-[#068DF1]/10 rounded-xl backdrop-blur-xl border border-[#068DF1]/20"
+                  className="p-3 bg-nsr-primary/10 rounded-xl backdrop-blur-xl border border-nsr-primary/20"
                 >
                   <motion.div
                     animate={{ 
@@ -146,7 +115,7 @@ export default function Login() {
                       ease: "linear"
                     }}
                   >
-                    <Sparkles className="h-6 w-6 text-[#068DF1]" />
+                    <Sparkles className="h-6 w-6 text-nsr-primary" />
                   </motion.div>
                 </motion.div>
                 <div>
@@ -154,15 +123,15 @@ export default function Login() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.8 }}
-                    className="text-3xl font-bold text-[#068DF1]"
+                    className="text-3xl font-bold text-nsr-primary"
                   >
-                    Welcome to <span className="text-[#06487C]">Nsr-Pc</span>
+                    Welcome to <span className="text-nsr-accent">NSR-PC</span>
                   </motion.h1>
                   <motion.p 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="text-gray-600 mt-2"
+                    className="text-nsr-neutral mt-2"
                   >
                     Sign in to your admin dashboard
                   </motion.p>
@@ -194,7 +163,7 @@ export default function Login() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
                 >
-                  <label htmlFor="username" className="block text-sm font-medium text-[#068DF1] mb-2">
+                  <label htmlFor="username" className="block text-sm font-medium text-nsr-primary mb-2">
                     Username
                   </label>
                   <motion.input
@@ -203,7 +172,7 @@ export default function Login() {
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-[#068DF1]/20 focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all bg-white/50 backdrop-blur-sm"
+                    className="input-nsr w-full px-4 py-3 rounded-xl border border-nsr-primary/20 focus:ring-2 focus:ring-nsr-accent focus:border-transparent transition-all bg-nsr-secondary/50 backdrop-blur-sm"
                     placeholder="Enter your username"
                   />
                 </motion.div>
@@ -213,7 +182,7 @@ export default function Login() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
                 >
-                  <label htmlFor="password" className="block text-sm font-medium text-[#068DF1] mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-nsr-primary mb-2">
                     Password
                   </label>
                   <motion.input
@@ -222,24 +191,24 @@ export default function Login() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-[#068DF1]/20 focus:ring-2 focus:ring-[#068DF1] focus:border-transparent transition-all bg-white/50 backdrop-blur-sm"
+                    className="input-nsr w-full px-4 py-3 rounded-xl border border-nsr-primary/20 focus:ring-2 focus:ring-nsr-accent focus:border-transparent transition-all bg-nsr-secondary/50 backdrop-blur-sm"
                     placeholder="Enter your password"
                   />
                 </motion.div>
 
                 <motion.button
-                  whileHover={{ scale: 1.022, boxShadow: "0 5px 15px rgba(0,0,0,0.1)" }}
+                  whileHover={{ scale: 1.022, boxShadow: "0 5px 15px rgba(0,207,255,0.3)" }}
                   whileTap={{ scale: 0.98 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ 
-                
+                    delay: 0.7,
                     type: "spring",
                     stiffness: 500,
                     damping: 25
                   }}
                   type="submit"
-                  className="w-full hover:bg-[#06487C] bg-[#068DF1] text-white py-3 rounded-xl hover:shadow-lg transition-all duration-300 font-medium mt-8"
+                  className="btn-primary w-full text-white py-3 rounded-xl hover:shadow-lg transition-all duration-300 font-medium mt-8"
                 >
                   Sign In
                 </motion.button>

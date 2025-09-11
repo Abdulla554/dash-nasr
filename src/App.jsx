@@ -6,8 +6,8 @@ import AllProduct from "./pages/Product/AllProduct";
 import AddProduct from "./pages/Product/AddProducts";
 import AllCategories from "./pages/Categories/AllCategories";
 import AddCategorie from "./pages/Categories/AddCategories";
-import AllBrands from "./pages/Brands/AllBrands";
-import AddBrand from "./pages/Brands/AddBrands";
+import AllBrands from "./pages/Brands/All-brands";
+import AddBrand from "./pages/Brands/Add-brands";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,9 +21,9 @@ const ProtectedRoute = ({ children }) => {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-nsr-dark">
       <Sidebar />
-      <main className="flex-1 md:ml-64">
+      <main className="flex-1 md:ml-64 bg-nsr-dark">
         {children}
       </main>
     </div>

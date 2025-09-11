@@ -91,11 +91,11 @@ export default function Home() {
   ];
 
   const categoryDistribution = [
-    { name: "Electronics", value: 320, fill: "#ECB774" },
-    { name: "Clothing", value: 280, fill: "#87CEEB" },
-    { name: "Furniture", value: 220, fill: "#1e4b6b" },
-    { name: "Home Essentials", value: 180, fill: "#8B6B43" },
-    { name: "Others", value: 250, fill: "#634927" },
+    { name: "Electronics", value: 320, fill: "#1A73E8" },
+    { name: "Clothing", value: 280, fill: "#00CFFF" },
+    { name: "Furniture", value: 220, fill: "#1B3C73" },
+    { name: "Home Essentials", value: 180, fill: "#B0BEC5" },
+    { name: "Others", value: 250, fill: "#121212" },
   ];
 
   const brandPerformance = [
@@ -115,21 +115,21 @@ export default function Home() {
 
   return (
     <div
-      className="min-h-screen bg-[#068DF1]/5"
+      className="min-h-screen bg-nsr-dark"
       dir="ltr"
     >
       {/* Luxurious Header */}
-      <div className="relative overflow-hidden bg-[#068DF1] rounded-b-[2rem] shadow-xl">
+      <div className="relative overflow-hidden bg-gradient-to-r from-nsr-primary to-nsr-secondary rounded-b-[2rem] shadow-xl">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-15"></div>
-          <div className="absolute inset-0 bg-[#1FA0FF]/20"></div>
+          <div className="absolute inset-0 bg-nsr-accent/20"></div>
         </div>
 
         <div className="relative py-12 px-6">
           <div className="flex items-center gap-5 mb-8">
             <motion.div
               whileHover={{ scale: 1.1, rotate: [0, 5, -5, 0] }}
-              className="p-4 bg-white/10 rounded-2xl backdrop-blur-xl border border-white/20"
+              className="p-4 bg-white/10 rounded-2xl backdrop-blur-xl border border-white/20 neon-glow-primary"
             >
               <Sparkles className="h-8 w-8 text-white" />
             </motion.div>
@@ -140,13 +140,13 @@ export default function Home() {
                 transition={{ delay: 0.2, duration: 1, ease: "easeOut" }}
                 className="text-4xl font-bold py-2 text-white"
               >
-                Dashboard Overview
+                NSR-PC Dashboard
               </motion.h1>
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: "12rem" }}
                 transition={{ delay: 0.5, duration: 1, ease: "easeInOut" }}
-                className="h-1 bg-white rounded-full mt-3"
+                className="h-1 bg-nsr-accent rounded-full mt-3"
               ></motion.div>
             </div>
           </div>
@@ -158,11 +158,11 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="flex flex-col justify-between p-6 bg-[#06487C]/80 backdrop-blur-xl shadow-lg rounded-2xl text-[#068DF1] hover:shadow-xl transition-all duration-300 border border-[#068DF1]/20 hover:border-[#068DF1]/40 hover:scale-105"
+                className="card-nsr flex flex-col justify-between p-6 bg-nsr-secondary/80 backdrop-blur-xl shadow-lg rounded-2xl text-nsr-primary hover:shadow-xl transition-all duration-300 border border-nsr-primary/20 hover:border-nsr-accent/40 hover:scale-105"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-white">{stat.title}</span>
-                  <span className="text-[#1FA0FF] text-xl">{stat.icon}</span>
+                  <span className="text-nsr-accent text-xl">{stat.icon}</span>
                 </div>
                 <div className="text-3xl font-bold mt-2 text-white">
                   {stat.value}
@@ -179,10 +179,10 @@ export default function Home() {
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-white/80 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-[#068DF1]/20 hover:shadow-xl transition-all duration-300"
+          className="card-nsr bg-nsr-secondary/80 backdrop-blur-xl p-6 rounded-2xl shadow-lg border border-nsr-primary/20 hover:shadow-xl transition-all duration-300"
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-[#068DF1]">
+            <h2 className="text-lg font-semibold text-nsr-primary">
               Product and Category Trends
             </h2>
             <div className="flex gap-2">
@@ -192,8 +192,8 @@ export default function Home() {
                   onClick={() => setTimeFilter(filter)}
                     className={`px-3 py-1 text-sm rounded-full transition-all duration-300 ${
                     timeFilter === filter
-                      ? "bg-[#068DF1] text-white shadow-md"
-                      : "bg-[#068DF1]/5 text-[#068DF1] hover:bg-[#068DF1]/10"
+                      ? "bg-nsr-primary text-white shadow-md"
+                      : "bg-nsr-primary/5 text-nsr-primary hover:bg-nsr-primary/10"
                   }`}
                 >
                   {filter}
@@ -206,25 +206,26 @@ export default function Home() {
               <CartesianGrid
                 strokeDasharray="3 3"
                 vertical={false}
-                stroke="#068DF1"
+                stroke="#1A73E8"
                 opacity={0.1}
               />
               <XAxis
                 dataKey="month"
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#068DF1" }}
+                tick={{ fill: "#1A73E8" }}
               />
               <YAxis
                 axisLine={false}
                 tickLine={false}
-                tick={{ fill: "#068DF1" }}
+                tick={{ fill: "#1A73E8" }}
               />
               <Tooltip
                 contentStyle={{
-                  background: "rgba(255, 255, 255, 0.9)",
+                  background: "rgba(27, 60, 115, 0.9)",
                   borderRadius: "0.5rem",
-                  border: "1px solid rgba(6, 141, 241, 0.2)",
+                  border: "1px solid rgba(26, 115, 232, 0.2)",
+                  color: "#B0BEC5"
                 }}
               />
               <Legend />
@@ -232,21 +233,21 @@ export default function Home() {
                 type="monotone"
                 dataKey="products"
                 name="Products"
-                stroke="#068DF1"
+                stroke="#1A73E8"
                 strokeWidth={2}
               />
               <Line
                 type="monotone"
                 dataKey="categories"
                 name="Categories"
-                stroke="#1FA0FF"
+                stroke="#00CFFF"
                 strokeWidth={2}
               />
               <Line
                 type="monotone"
                 dataKey="brands"
                 name="Brands"
-                stroke="#06487C"
+                stroke="#1B3C73"
                 strokeWidth={2}
               />
             </LineChart>

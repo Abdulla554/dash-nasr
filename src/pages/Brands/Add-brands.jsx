@@ -148,16 +148,16 @@ export default function AddBrand() {
   };
 
   return (
-    <div className="min-h-screen pb-10 bg-gradient-to-br from-[#1e4b6b]/5 via-[#8B6B43]/5 to-[#634927]/5">
+    <div className="min-h-screen pb-10 bg-nsr-dark">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="py-8 flex pt-10 justify-between items-center">
-          <h1 className="text-3xl font-bold font-serif bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold font-serif bg-gradient-to-r from-nsr-primary to-nsr-accent bg-clip-text text-transparent">
             Add New Brand
           </h1>
           <div className="hover:scale-105 active:scale-95 transition-transform">
             <Link to="/brands">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/80 border-2 border-[#ECB774] text-[#1e4b6b] hover:bg-[#1e4b6b]/5 transition-all duration-300 shadow-sm hover:shadow-md group">
+              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-nsr-secondary/80 border-2 border-nsr-accent text-nsr-primary hover:bg-nsr-primary/5 transition-all duration-300 shadow-sm hover:shadow-md group">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5 transform transition-transform group-hover:translate-x-1"
@@ -179,21 +179,21 @@ export default function AddBrand() {
         </div>
 
         {/* Form */}
-        <div className="bg-white/80 backdrop-blur-lg rounded-xl shadow-lg p-8 mt-5 mb-14 border border-[#ECB774]/20">
+        <div className="card-nsr bg-nsr-secondary/80 backdrop-blur-lg rounded-xl shadow-lg p-8 mt-5 mb-14 border border-nsr-accent/20">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Information Section */}
             <div>
-              <h2 className="text-xl font-semibold bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] bg-clip-text text-transparent mb-6">
+              <h2 className="text-xl font-semibold bg-gradient-to-r from-nsr-primary to-nsr-accent bg-clip-text text-transparent mb-6">
                 Basic Information
               </h2>
               <div className="space-y-6">
                 {/* Image Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-[#1e4b6b] mb-3">
+                  <label className="block text-sm font-medium text-nsr-primary mb-3">
                     Brand Image
                   </label>
                   {!imagePreview ? (
-                    <div className="relative border-2 border-dashed rounded-lg py-16 px-6 border-[#ECB774]/40 hover:border-[#8B6B43] transition-all duration-300 flex items-center justify-center cursor-pointer bg-white/50">
+                    <div className="relative border-2 border-dashed rounded-lg py-16 px-6 border-nsr-accent/40 hover:border-nsr-primary transition-all duration-300 flex items-center justify-center cursor-pointer bg-nsr-secondary/50">
                       <input
                         type="file"
                         id="Brand-image"

@@ -27,6 +27,7 @@ import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../lib/axios";
+import Tilt from "react-parallax-tilt";
 
 export default function Home() {
   const [timeFilter, setTimeFilter] = useState("monthly");
@@ -153,11 +154,13 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {statsData.map((stat, index) => (
-              <motion.div
+              <Tilt
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                glareEnable={true}
+                glareMaxOpacity={0.2}
+                scale={1.05}
+                transitionSpeed={250}
+               
                 className="card-nsr flex flex-col justify-between p-6 bg-nsr-secondary/80 backdrop-blur-xl shadow-lg rounded-2xl text-nsr-primary hover:shadow-xl transition-all duration-300 border border-nsr-primary/20 hover:border-nsr-accent/40 hover:scale-105"
               >
                 <div className="flex items-center justify-between">
@@ -167,7 +170,7 @@ export default function Home() {
                 <div className="text-3xl font-bold mt-2 text-white">
                   {stat.value}
                 </div>
-              </motion.div>
+              </Tilt>
             ))}
           </div>
         </div>
@@ -190,11 +193,10 @@ export default function Home() {
                 <button
                   key={filter}
                   onClick={() => setTimeFilter(filter)}
-                    className={`px-3 py-1 text-sm rounded-full transition-all duration-300 ${
-                    timeFilter === filter
+                  className={`px-3 py-1 text-sm rounded-full transition-all duration-300 ${timeFilter === filter
                       ? "bg-nsr-primary text-white shadow-md"
                       : "bg-nsr-primary/5 text-nsr-primary hover:bg-nsr-primary/10"
-                  }`}
+                    }`}
                 >
                   {filter}
                 </button>
@@ -360,11 +362,10 @@ export default function Home() {
                 <button
                   key={filter}
                   onClick={() => setChartFilter(filter)}
-                  className={`px-3 py-1 text-sm rounded-full transition-all duration-300 ${
-                    chartFilter === filter
+                  className={`px-3 py-1 text-sm rounded-full transition-all duration-300 ${chartFilter === filter
                       ? "bg-[#068DF1] text-white shadow-md"
                       : "bg-[#068DF1]/5 text-[#068DF1] hover:bg-[#068DF1]/10"
-                  }`}
+                    }`}
                 >
                   {filter}
                 </button>

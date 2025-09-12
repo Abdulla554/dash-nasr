@@ -1,296 +1,325 @@
-import React, { useEffect, useState } from "react";
-import { Upload, X } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axiosInstance from "../../lib/axios";
-import imageCompression from "browser-image-compression";
+import React, { useState } from "react";
+import {
+  Upload,
+  X,
+  ArrowRight,
+  Save,
+  Sparkles,
+  Image,
+  CheckCircle,
+  Sun,
+  Moon,
+  Plus,
+  AlertCircle,
+  Star
+} from "lucide-react";
 
-export default function AddCategorie() {
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  const [categorieImage, setCategorieImage] = useState(null);
+export default function LuxuryAddCategoryPage() {
+  const [isDark, setIsDark] = useState(true);
+  const [, setCategorieImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isCompressing, setIsCompressing] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
-    description: "",
   });
 
-  const compressImage = async (file) => {
-    const options = {
-      maxSizeMB: 0.5,
-      maxWidthOrHeight: 800,
-      useWebWorker: true,
-      initialQuality: 0.7,
-    };
+  const [errors, setErrors] = useState({});
 
-    try {
-      setIsCompressing(true);
-      const compressedFile = await imageCompression(file, options);
-      console.log("Original file size:", file.size / 1024 / 1024, "MB");
-      console.log(
-        "Compressed file size:",
-        compressedFile.size / 1024 / 1024,
-        "MB"
-      );
-      return compressedFile;
-    } catch (error) {
-      console.error("Error compressing image:", error);
-      throw error;
-    } finally {
-      setIsCompressing(false);
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.title.trim()) {
+      newErrors.title = "اسم الفئة مطلوب";
     }
+
+    if (!imagePreview) {
+      newErrors.image = "صورة الفئة مطلوبة";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      try {
-        const compressedFile = await compressImage(file);
-        setCategorieImage(compressedFile);
+      // Clear image error when user selects an image
+      setErrors(prev => ({ ...prev, image: null }));
 
+      setIsCompressing(true);
+
+      // Simulate compression delay
+      setTimeout(() => {
+        setCategorieImage(file);
         const reader = new FileReader();
         reader.onloadend = () => {
           setImagePreview(reader.result);
+          setIsCompressing(false);
         };
-        reader.readAsDataURL(compressedFile);
-      } catch {
-        toast.error("Error processing image. Please try again.", {
-          position: "top-center",
-          rtl: true,
-          theme: "colored",
-          autoClose: 3000,
-        });
-      }
+        reader.readAsDataURL(file);
+      }, 1500);
     }
   };
-  useEffect(() => {
-    console.log("Categorie Image updated:", categorieImage);
-    console.log(typeof categorieImage);
-  }, [categorieImage]);
 
   const handleDeleteImage = () => {
     setCategorieImage(null);
     setImagePreview(null);
+    setErrors(prev => ({ ...prev, image: "صورة الفئة مطلوبة" }));
   };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: null }));
+    }
   };
-  const mutation = useMutation({
-    mutationKey: ["addCategories"],
-    mutationFn: async (requestData) => {
-      try {
-        const response = await axiosInstance.post("/categories", requestData, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        return response.data;
-      } catch (error) {
-        console.error("API Error:", error.response?.data);
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
-      toast.success("categories added successfully", {
-        position: "top-center",
-        rtl: true,
-        theme: "colored",
-        autoClose: 2000,
-      });
-      console.log("categories added successfully");
-      setTimeout(() => {
-        navigate("/categories");
-      }, 2000);
-    },
-    onError: (error) => {
-      const errorMessage =
-        error.response?.data?.message || "Failed to add categories";
-      toast.error(errorMessage, {
-        position: "top-center",
-        rtl: true,
-        theme: "colored",
-        autoClose: 2000,
-      });
-      console.error("Error details:", error.response?.data);
-    },
-  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!imagePreview) {
-      toast.error("Please select an image first");
+    if (!validateForm()) {
       return;
     }
 
-    if (isCompressing) {
-      toast.info("Please wait while the image is being processed...");
-      return;
-    }
+    setIsSubmitting(true);
 
-    // Create a simple object with the image string
-    const requestData = {
-      title: formData.title,
-      description: formData.description,
-      image: imagePreview,
-    };
-
-    try {
-      mutation.mutate(requestData);
-    } catch (error) {
-      console.error("Submission error:", error);
-      toast.error("Failed to submit the form. Please try again.");
-    }
+    // Simulate submission
+    setTimeout(() => {
+      setIsSubmitting(false);
+      alert("تم إضافة الفئة بنجاح!");
+    }, 2500);
   };
 
+  const toggleTheme = () => setIsDark(!isDark);
+
   return (
-    <div className="min-h-screen pb-10 bg-nsr-dark">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="py-8 flex pt-10 justify-between items-center">
-          <h1 className="text-3xl font-bold font-serif text-white">
-            Add New Categorie
-          </h1>
-          <div className="hover:scale-105 active:scale-95 transition-transform">
-            <Link to="/Categories">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-nsr-secondary/80 border-2 border-nsr-accent text-nsr-primary hover:bg-nsr-primary/5 transition-all duration-300 shadow-sm hover:shadow-md group">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 transform transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-                Back to Categories
-              </button>
-            </Link>
-          </div>
-        </div>
-
-        {/* Form */}
-        <div className="card-nsr bg-nsr-secondary/80 backdrop-blur-lg rounded-xl shadow-lg p-8 mt-5 mb-14 border border-nsr-accent/20">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Basic Information Section */}
-            <div>
-              <h2 className="text-xl font-semibold bg-gradient-to-r from-nsr-primary to-nsr-accent bg-clip-text text-transparent mb-6">
-                Basic Information
-              </h2>
-              <div className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="title"
-                    className="block text-sm font-medium text-nsr-primary mb-3"
-                  >
-                    Categorie Name
-                  </label>
-                  <input
-                    type="text"
-                    id="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    name="title"
-                    className="w-full px-4 py-2 border-2 border-[#ECB774]/20 rounded-lg focus:ring-2 focus:ring-[#8B6B43] focus:border-transparent transition-all duration-300 bg-white/50"
-                    placeholder="Enter Categorie name"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="description"
-                    className="block text-sm font-medium text-[#1e4b6b] mb-3"
-                  >
-                    Description
-                  </label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    rows={6}
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-6 border-2 border-[#ECB774]/20 rounded-lg focus:ring-2 focus:ring-[#8B6B43] focus:border-transparent transition-all duration-300 bg-white/50"
-                    placeholder="Enter Categorie description"
-                  />
-                </div>
-
-                {/* Image Upload */}
-                <div>
-                  <label className="block text-sm font-medium text-[#1e4b6b] mb-3">
-                    Categorie Image
-                  </label>
-                  <div>
-                    {!imagePreview ? (
-                      <div className="relative border-2 border-dashed rounded-lg py-16 px-6 border-[#ECB774]/40 hover:border-[#8B6B43] transition-all duration-300 flex items-center justify-center cursor-pointer bg-white/50">
-                        <input
-                          type="file"
-                          id="Categorie-image"
-                          className="hidden"
-                          accept="image/*"
-                          onChange={handleImageChange}
-                        />
-                        <label
-                          htmlFor="Categorie-image"
-                          className="cursor-pointer"
-                        >
-                          <div className="text-center">
-                            <Upload className="mx-auto h-12 w-12 text-[#8B6B43]" />
-                            <div className="mt-4 flex text-sm text-[#1e4b6b]">
-                              <span className="text-[#8B6B43] hover:text-[#ECB774]">
-                                Upload a file
-                              </span>
-                              <p className="pl-1">or drag and drop</p>
-                            </div>
-                            <p className="text-xs text-[#1e4b6b]/70 mt-2">
-                              PNG, JPG, GIF up to 10MB
-                            </p>
-                          </div>
-                        </label>
-                      </div>
-                    ) : (
-                      <div className="relative">
-                        <img
-                          src={imagePreview}
-                          alt="Categorie preview"
-                          className="w-full h-64 object-contain rounded-lg border-2 border-[#ECB774]/40"
-                        />
-                        <button
-                          type="button"
-                          onClick={handleDeleteImage}
-                          className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-                        >
-                          <X size={20} />
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black" dir="rtl">
+      {/* Header */}
+      <div className="relative bg-gradient-to-r from-slate-900/95 via-slate-800/95 to-black/95 backdrop-blur-sm border-b border-slate-700/50">
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10"></div>
+        <div className="relative px-8 py-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <div className="p-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-lg shadow-indigo-500/25">
+                <Plus className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-300 bg-clip-text text-transparent">
+                  إضافة فئة جديدة
+                </h1>
+                <p className="text-slate-400 mt-2 text-lg">أضف اسم الفئة وصورة جذابة</p>
+                <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full mt-3"></div>
               </div>
             </div>
 
-            {/* Submit Button */}
-            <div className="flex justify-center md:justify-end">
+            <div className="flex items-center gap-4">
+              {/* Theme Toggle */}
               <button
-                type="submit"
-                className="bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] text-white px-8 py-3 rounded-lg hover:shadow-lg hover:shadow-[#8B6B43]/25 transition-all duration-300 hover:scale-105"
+                onClick={toggleTheme}
+                className="group p-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl hover:border-indigo-500/30 transition-all duration-300 hover:bg-white/10"
               >
-                Add Categorie
+                {isDark ? (
+                  <Sun className="h-6 w-6 text-indigo-400 group-hover:text-white transition-colors" />
+                ) : (
+                  <Moon className="h-6 w-6 text-indigo-400 group-hover:text-white transition-colors" />
+                )}
+              </button>
+
+              {/* Back Button */}
+              <button className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:border-indigo-500/30 transition-all duration-500 hover:bg-white/20 hover:scale-105">
+                <ArrowRight className="h-6 w-6 transition-all duration-300 group-hover:-translate-x-1" />
+                <span className="font-semibold text-lg">العودة للفئات</span>
               </button>
             </div>
-          </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Form */}
+      <div className="px-8 py-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+
+            {/* Form Container */}
+            <div className="p-8 space-y-10">
+
+              {/* Basic Information Section */}
+              <div className="space-y-8">
+                <div className="flex items-center gap-4 pb-4 border-b border-white/10">
+                  <div className="p-3 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-2xl border border-indigo-500/30">
+                    <Save className="h-6 w-6 text-indigo-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">اسم الفئة</h2>
+                    <p className="text-slate-400 mt-1">أدخل اسم الفئة الجديدة</p>
+                  </div>
+                </div>
+
+                {/* Category Name */}
+                <div className="space-y-4">
+                  <label className="text-lg font-semibold text-slate-300 flex items-center gap-2">
+                    اسم الفئة
+                    <Star className="w-4 h-4 text-red-400" />
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    className={`w-full px-6 py-5 bg-slate-800/50 border rounded-2xl text-white placeholder-slate-400 focus:outline-none transition-all duration-300 text-xl ${errors.title
+                        ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
+                        : 'border-slate-700/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20'
+                      }`}
+                    placeholder="مثال: أجهزة الكمبيوتر المكتبية"
+                  />
+                  {errors.title && (
+                    <div className="flex items-center gap-2 text-red-400 text-sm">
+                      <AlertCircle className="w-4 h-4" />
+                      {errors.title}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Image Upload Section */}
+              <div className="space-y-8">
+                <div className="flex items-center gap-4 pb-4 border-b border-white/10">
+                  <div className="p-3 bg-gradient-to-r from-pink-500/20 to-rose-500/20 rounded-2xl border border-pink-500/30">
+                    <Image className="h-6 w-6 text-pink-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">صورة الفئة</h2>
+                    <p className="text-slate-400 mt-1">ارفع صورة جذابة وعالية الجودة</p>
+                  </div>
+                </div>
+
+                <div>
+                  {!imagePreview ? (
+                    <div className={`relative border-2 border-dashed rounded-3xl py-20 px-6 transition-all duration-300 bg-slate-800/20 hover:bg-slate-800/40 cursor-pointer group ${errors.image
+                        ? 'border-red-500/50'
+                        : 'border-slate-700/50 hover:border-indigo-500/50'
+                      }`}>
+                      <input
+                        type="file"
+                        id="category-image"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                      />
+                      <label htmlFor="category-image" className="cursor-pointer w-full">
+                        <div className="text-center space-y-6">
+                          <div className="mx-auto w-24 h-24 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-3xl flex items-center justify-center group-hover:from-indigo-500/30 group-hover:to-purple-500/30 transition-all duration-300 group-hover:scale-110 border border-indigo-500/20">
+                            <Upload className="h-12 w-12 text-indigo-400 group-hover:text-indigo-300 transition-colors" />
+                          </div>
+                          <div className="space-y-3">
+                            <p className="text-2xl font-bold text-white group-hover:text-indigo-400 transition-colors">
+                              انقر لرفع صورة أو اسحبها هنا
+                            </p>
+                            <p className="text-slate-400 text-lg">
+                              PNG, JPG, GIF حتى 10 ميجابايت
+                            </p>
+                            <p className="text-slate-500 text-sm">
+                              الحد الأدنى للدقة: 800x600 بكسل
+                            </p>
+                          </div>
+                        </div>
+                      </label>
+
+                      {errors.image && (
+                        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+                          <div className="flex items-center gap-2 text-red-400 text-sm bg-red-500/10 px-4 py-2 rounded-xl border border-red-500/20">
+                            <AlertCircle className="w-4 h-4" />
+                            {errors.image}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="relative group">
+                      <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-500/30 shadow-2xl shadow-indigo-500/10">
+                        <img
+                          src={imagePreview}
+                          alt="معاينة صورة الفئة"
+                          className="w-full h-96 object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+                        {/* Success Badge */}
+                        <div className="absolute bottom-6 right-6 bg-emerald-500/90 backdrop-blur-sm text-white px-4 py-3 rounded-2xl flex items-center gap-3 shadow-lg">
+                          <CheckCircle className="w-5 h-5" />
+                          <span className="font-semibold">تم رفع الصورة بنجاح</span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleDeleteImage}
+                        className="absolute top-6 left-6 p-3 bg-red-500 text-white rounded-2xl hover:bg-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100 hover:scale-110 shadow-lg"
+                      >
+                        <X size={22} />
+                      </button>
+
+                      {isCompressing && (
+                        <div className="absolute inset-0 bg-black/80 rounded-3xl flex items-center justify-center backdrop-blur-sm">
+                          <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 flex flex-col items-center gap-6 border border-white/20 shadow-2xl">
+                            <div className="w-12 h-12 border-4 border-indigo-400 border-t-transparent rounded-full animate-spin"></div>
+                            <div className="text-center space-y-2">
+                              <p className="text-white font-bold text-xl">جاري معالجة الصورة</p>
+                              <p className="text-slate-300">يرجى الانتظار لحظات...</p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Submit Buttons */}
+              <div className="flex flex-col sm:flex-row gap-6 justify-end pt-8 border-t border-slate-700/50">
+                <button
+                  type="button"
+                  className="px-8 py-4 border-2 border-slate-600 text-slate-300 rounded-2xl hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300 font-semibold text-lg hover:scale-105"
+                >
+                  إلغاء
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting || isCompressing}
+                  onClick={handleSubmit}
+                  className="relative px-10 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-2xl hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-300 font-semibold shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-4 hover:scale-105 text-lg"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      جاري إنشاء الفئة...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-6 w-6" />
+                      إضافة الفئة الجديدة
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="px-8 pb-6">
+        <div className="text-center">
+          <p className="text-slate-500 text-sm">© 2025 نظام إدارة الفئات المتطور - تم التصميم بعناية فائقة</p>
         </div>
       </div>
     </div>

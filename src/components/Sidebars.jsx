@@ -4,6 +4,7 @@ import {
   Grid3X3,
   Building2,
   Image,
+  ShoppingCart,
 } from "lucide-react";
 import { useState } from "react";
 import { FaBars, FaSignOutAlt } from "react-icons/fa";
@@ -71,6 +72,7 @@ const Sidebar = () => {
               { icon: <Grid3X3 className="w-5 h-5" />, label: "Categories", path: "/categories" },
               { icon: <Building2 className="w-5 h-5" />, label: "Brands", path: "/brands" },
               { icon: <Image className="w-5 h-5" />, label: "Banner", path: "/banner" },
+              { icon: <ShoppingCart className="w-5 h-5" />, label: "Orders", path: "/orders" },
             ].map((item, index) => (
               <li
                 key={index}

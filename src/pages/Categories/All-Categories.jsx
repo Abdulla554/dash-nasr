@@ -1,278 +1,458 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
-import { Trash, Plus, Sparkles, Download, ArrowRight } from "lucide-react";
+import React, { useState } from "react";
+import { 
+  Search, 
+  Filter, 
+  Plus, 
+  Grid,
+  List,
+  Eye, 
+  Edit, 
+  Trash2,
+  Sparkles,
+  ArrowUpDown,
+  TrendingUp,
+  Package,
+  Monitor,
+  Laptop,
+  Gamepad2,
+  Server,
+  MousePointer,
+  Sun,
+  Moon
+} from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion, easeOut, easeInOut } from "framer-motion";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axiosInstance from "../../lib/axios";
-import { toast } from "react-toastify";
-import ConfirmationModal from "../../components/ConfirmationModal";
-import ClipLoader from "react-spinners/ClipLoader";
-export default function AllCategories() {
-  const queryClient = useQueryClient();
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedCategorieId, setSelectedCategorieId] = useState(null);
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-  const {
-    data: demoCategories,
-    isLoading,
 
-  } = useQuery({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      try {
-        const response = await axiosInstance.get("/categories");
-        return response.data;
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-        throw error;
+export default function LuxuryCategoriesPage() {
+  const [isDark, setIsDark] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
+  const [sortBy, setSortBy] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [viewMode, setViewMode] = useState("grid");
+
+  // Demo Categories Data
+  const demoCategoriesData = [
+    {
+      id: 1,
+      title: "أجهزة الكمبيوتر المكتبية",
+      titleEn: "Desktop PCs",
+      description: "أجهزة كمبيوتر مكتبية عالية الأداء للمنزل والمكتب مع أحدث التقنيات",
+      image: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=500&h=400&fit=crop",
+      category: "pc",
+      productCount: 45,
+      isActive: true,
+      createdAt: "2024-01-15",
+      growth: "+15%",
+      icon: Monitor
+    },
+    {
+      id: 2,
+      title: "أجهزة اللابتوب",
+      titleEn: "Laptops",
+      description: "لابتوبات متنوعة للأعمال والترفيه والدراسة بأداء استثنائي",
+      image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=400&fit=crop",
+      category: "laptop",
+      productCount: 32,
+      isActive: true,
+      createdAt: "2024-01-10",
+      growth: "+23%",
+      icon: Laptop
+    },
+    {
+      id: 3,
+      title: "إكسسوارات الكمبيوتر",
+      titleEn: "Computer Accessories",
+      description: "فأرات، لوحات مفاتيح، سماعات، وملحقات عالية الجودة",
+      image: "https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&h=400&fit=crop",
+      category: "accessories",
+      productCount: 78,
+      isActive: true,
+      createdAt: "2024-01-20",
+      growth: "+31%",
+      icon: MousePointer
+    },
+    {
+      id: 4,
+      title: "أجهزة الألعاب",
+      titleEn: "Gaming PCs",
+      description: "أجهزة كمبيوتر مخصصة للألعاب بأداء عالي وتبريد متطور",
+      image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=500&h=400&fit=crop",
+      category: "pc",
+      productCount: 28,
+      isActive: true,
+      createdAt: "2024-01-25",
+      growth: "+42%",
+      icon: Gamepad2
+    },
+    {
+      id: 5,
+      title: "لابتوبات الألعاب",
+      titleEn: "Gaming Laptops",
+      description: "لابتوبات عالية الأداء مخصصة للألعاب بكروت شاشة قوية",
+      image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500&h=400&fit=crop",
+      category: "laptop",
+      productCount: 19,
+      isActive: true,
+      createdAt: "2024-01-18",
+      growth: "+28%",
+      icon: Gamepad2
+    },
+    {
+      id: 6,
+      title: "أجهزة الخوادم",
+      titleEn: "Servers",
+      description: "خوادم قوية للشركات والمؤسسات بموثوقية عالية",
+      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500&h=400&fit=crop",
+      category: "pc",
+      productCount: 15,
+      isActive: true,
+      createdAt: "2024-01-08",
+      growth: "+18%",
+      icon: Server
+    }
+  ];
+
+  // Filter and sort categories
+  const filteredAndSortedCategories = React.useMemo(() => {
+    let filtered = demoCategoriesData;
+
+    // Filter by search term
+    if (searchTerm) {
+      filtered = filtered.filter(category =>
+        category.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        category.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        category.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Filter by category type
+    if (filterCategory !== "all") {
+      filtered = filtered.filter(category => category.category === filterCategory);
+    }
+
+    // Sort categories
+    filtered.sort((a, b) => {
+      let aValue, bValue;
+
+      switch (sortBy) {
+        case "name":
+          aValue = a.title;
+          bValue = b.title;
+          break;
+        case "products":
+          aValue = a.productCount;
+          bValue = b.productCount;
+          break;
+        case "date":
+          aValue = new Date(a.createdAt);
+          bValue = new Date(b.createdAt);
+          break;
+        default:
+          aValue = a.title;
+          bValue = b.title;
       }
-    },
-    refetchInterval: 5000,
-    refetchOnWindowFocus: true,
-    refetchOnMount: true,
-  });
 
-  const deleteMutation = useMutation({
-    mutationFn: async (categorieId) => {
-      try {
-        await axiosInstance.delete(`/categories/${categorieId}`);
-        return categorieId;
-      } catch (error) {
-        console.error("Error deleting categorie:", error);
-        throw error;
+      if (sortOrder === "asc") {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
       }
-    },
-    onSuccess: () => {
-      // Invalidate and refetch certificates query
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
-      toast.success("Categorie deleted successfully", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-    },
-    onError: () => {
-      toast.error("Failed to delete categorie", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-    },
-  });
+    });
 
-  if (isLoading) {
-    return (
-      <div className="flex h-screen flex-col items-center justify-center min-h-[120px] bg-nsr-dark">
-        <ClipLoader color={"#1A73E8"} size={48} speedMultiplier={1.2} />
-        <span className="text-nsr-primary font-bold text-lg mt-3">
-          جاري التحميل...
-        </span>
-      </div>
-    );
-  }
+    return filtered;
+  }, [searchTerm, filterCategory, sortBy, sortOrder]);
 
-
-  const handleDelete = (id) => {
-    setSelectedCategorieId(id);
-    setDeleteModalOpen(true);
-  };
-
-  const handleConfirmDelete = () => {
-    if (selectedCategorieId) {
-      deleteMutation.mutate(selectedCategorieId);
+  const getCategoryBadge = (categoryType) => {
+    switch (categoryType) {
+      case "pc":
+        return { text: "أجهزة كمبيوتر", color: "from-blue-600 to-blue-800", textColor: "text-white" };
+      case "laptop":
+        return { text: "لابتوبات", color: "from-emerald-600 to-emerald-800", textColor: "text-white" };
+      case "accessories":
+        return { text: "إكسسوارات", color: "from-purple-600 to-purple-800", textColor: "text-white" };
+      default:
+        return { text: "فئة", color: "from-slate-600 to-slate-800", textColor: "text-white" };
     }
   };
-  // Demo Categories data
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const renderCategorie = (Categorie) => {
-    if (!Categorie) return null;
-
-    return (
-      <motion.div
-        variants={itemVariants}
-        whileHover={{ y: -8, scale: 1.02 }}
-        key={Categorie.id}
-        className="card-nsr relative border-2 border-nsr-primary border-dashed  rounded-3xl p-5 w-full backdrop-blur-lg  shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-500 hover:shadow-[0_15px_40px_rgb(26,115,232,0.2)] group overflow-hidden"
-      >
-        {/* Animated background gradient */}
-        <div className="absolute inset-0 bg-nsr-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-
-        {/* Glowing orb effect */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-nsr-accent rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-700"></div>
-
-        <div className="relative">
-          <div className="relative overflow-hidden rounded-2xl aspect-[4/3] mb-6 border border-nsr-accent/10">
-            <div className="absolute inset-0 bg-gradient-to-t from-nsr-secondary/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-            <img
-              src={Categorie.image}
-              alt={Categorie.title || "Categorie"}
-              className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-            />
-          </div>
-
-          <div className="space-y-4 relative z-10">
-            <h2 className="text-2xl font-bold   text-w group-hover:from-nsr-accent group-hover:via-nsr-primary group-hover:to-nsr-secondary transition-all duration-500">
-              {Categorie.title || "Untitled Categorie"}
-            </h2>
-            <p className="text-nsr-neutral line-clamp-2 font-light group-hover:text-nsr-accent/90 transition-colors duration-300">
-              {Categorie.description || "No description available"}
-            </p>
-
-            <div className="pt-4 flex justify-between items-center">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => handleDelete(Categorie.id)}
-                className="relative px-5 py-2.5 rounded-xl bg-gradient-to-r from-red-500/10 to-red-600/10 border border-red-500/50 hover:border-red-600 text-red-600 flex items-center gap-2 hover:bg-red-100/20 transition-all duration-300 group/btn overflow-hidden"
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-red-500/20 to-red-600/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></span>
-                <span className="font-medium relative z-10">Delete</span>
-                <Trash
-                  size={18}
-                  className="relative z-10 group-hover/btn:rotate-12 transition-transform duration-300"
-                />
-              </motion.button>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    );
-  };
+  const toggleSort = () => setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <div className="min-h-screen bg-[#068DF1]/5">
-      <ConfirmationModal
-        isOpen={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        onConfirm={handleConfirmDelete}
-        title="Confirm Deletion"
-        message="Are you sure you want to delete this categorie? This action cannot be undone."
-      />
-
-      {/* Modern Header */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-nsr-primary to-nsr-secondary">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-15"></div>
-          <div className="absolute inset-0 bg-nsr-accent/20"></div>
-        </div>
-
-        <div className="relative py-8">
-          <div className="mx-auto max-w-7xl px-6">
-            <div className="flex flex-col gap-12 md:flex-row md:items-center md:justify-between">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="flex flex-col gap-8"
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black" dir="rtl">
+      {/* Header */}
+      <div className="relative bg-gradient-to-r from-slate-900/95 via-slate-800/95 to-black/95 backdrop-blur-sm border-b border-slate-700/50">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-blue-600/10"></div>
+        <div className="relative px-8 py-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <div className="p-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+                  فئات المنتجات
+                </h1>
+                <p className="text-slate-400 mt-2 text-lg">إدارة شاملة لجميع فئات منتجاتك</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="group p-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl hover:border-purple-500/30 transition-all duration-300"
               >
-                <div className="flex items-center gap-5">
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: [0, 5, -5, 0] }}
-                    className="p-4 bg-nsr-accent/10 rounded-2xl backdrop-blur-xl border border-nsr-accent/20 neon-glow"
-                  >
-                    <Sparkles className="h-8 w-8 text-nsr-accent" />
-                  </motion.div>
-                  <div>
-                    <motion.h1
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2, duration: 0.8 }}
-                      className="text-5xl py-2 font-bold text-nsr-accent"
-                    >
-                      Categorie
-                    </motion.h1>
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: "6rem" }}
-                      transition={{ delay: 0.5, duration: 0.8 }}
-                      className="h-1.5 bg-nsr-accent rounded-full mt-3"
-                    ></motion.div>
-                  </div>
-                </div>
-              </motion.div>
+                {isDark ? (
+                  <Sun className="h-6 w-6 text-purple-400 group-hover:text-white transition-colors" />
+                ) : (
+                  <Moon className="h-6 w-6 text-purple-400 group-hover:text-white transition-colors" />
+                )}
+              </button>
 
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8 }}
-              >
-                <Link to="/categories/add">
-                  <motion.button
-                    whileHover={{ scale: 1.05, y: -4 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="btn-primary relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 text-white shadow-lg shadow-nsr-primary/30 transition-all duration-500 hover:shadow-xl hover:shadow-nsr-accent/40 group"
-                  >
-                    <span className="absolute inset-0 bg-nsr-accent translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
-                    <Plus className="h-6 w-6 transition-all duration-500 group-hover:rotate-180 relative z-10" />
-                    <span className="font-semibold relative z-10 text-lg">
-                      Add Categorie 
-                    </span>
-                  </motion.button>
-                </Link>
-              </motion.div>
+              {/* Add Category Button */}
+              <Link to="/categories/add">
+              <button className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/25 transition-all duration-500 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105">
+                <Plus className="h-6 w-6 transition-all duration-500 group-hover:rotate-180" />
+                <span className="font-semibold text-lg">إضافة فئة جديدة</span>
+              </button>
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Categories Grid */}
-      <div className="py-6 px-6">
-        <div className="mx-auto max-w-7xl">
-          {demoCategories?.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="text-center py-20 bg-gradient-to-br from-[#1A1A1A] to-[#0F0F0F] backdrop-blur-lg rounded-3xl border border-[#ECB774]/10"
+      {/* Stats Cards */}
+      <div className="px-8 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          {[
+            { title: "إجمالي الفئات", value: demoCategoriesData.length, icon: Package, color: "from-purple-600 to-purple-800", change: "+12%" },
+            { title: "فئات الكمبيوتر", value: demoCategoriesData.filter(c => c.category === 'pc').length, icon: Monitor, color: "from-blue-600 to-blue-800", change: "+23%" },
+            { title: "فئات اللابتوب", value: demoCategoriesData.filter(c => c.category === 'laptop').length, icon: Laptop, color: "from-emerald-600 to-emerald-800", change: "+18%" },
+            { title: "الإكسسوارات", value: demoCategoriesData.filter(c => c.category === 'accessories').length, icon: MousePointer, color: "from-orange-600 to-orange-800", change: "+31%" }
+          ].map((stat, index) => (
+            <div key={index} className="group relative">
+              <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl opacity-80 group-hover:opacity-90 transition-all duration-300`}></div>
+              <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-purple-500/30 transition-all duration-300 group-hover:transform group-hover:scale-105">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+                    <stat.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <span className="text-emerald-400 font-semibold text-sm flex items-center gap-1">
+                    <TrendingUp className="w-4 h-4" />
+                    {stat.change}
+                  </span>
+                </div>
+                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-white/80 text-sm">{stat.title}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Search and Filters */}
+      <div className="px-8 pb-6">
+        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Search Bar */}
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400" size={20} />
+                <input
+                  type="text"
+                  placeholder="البحث في الفئات..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pr-12 pl-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
+                />
+              </div>
+            </div>
+
+            {/* Filter Controls */}
+            <div className="flex flex-wrap gap-4">
+              {/* Category Filter */}
+              <select
+                value={filterCategory}
+                onChange={(e) => setFilterCategory(e.target.value)}
+                className="px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
+              >
+                <option value="all">جميع الفئات</option>
+                <option value="pc">أجهزة الكمبيوتر</option>
+                <option value="laptop">اللابتوبات</option>
+                <option value="accessories">الإكسسوارات</option>
+              </select>
+
+              {/* Sort By */}
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
+              >
+                <option value="name">الاسم</option>
+                <option value="products">عدد المنتجات</option>
+                <option value="date">تاريخ الإنشاء</option>
+              </select>
+
+              {/* Sort Order */}
+              <button
+                onClick={toggleSort}
+                className="group p-3 bg-slate-800/50 border border-slate-700/50 rounded-xl hover:border-purple-500/30 transition-all duration-300"
+                title={sortOrder === "asc" ? "ترتيب تنازلي" : "ترتيب تصاعدي"}
+              >
+                <ArrowUpDown className="h-5 w-5 text-slate-400 group-hover:text-purple-400 transition-colors" />
+              </button>
+
+              {/* View Mode Toggle */}
+              <div className="flex border border-slate-700/50 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`p-3 transition-all duration-300 ${viewMode === "grid"
+                    ? "bg-purple-600 text-white"
+                    : "bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 hover:text-white"
+                    }`}
+                >
+                  <Grid className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => setViewMode("list")}
+                  className={`p-3 transition-all duration-300 ${viewMode === "list"
+                    ? "bg-purple-600 text-white"
+                    : "bg-slate-800/50 text-slate-400 hover:bg-slate-700/50 hover:text-white"
+                    }`}
+                >
+                  <List className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Results Count */}
+          <div className="mt-4 flex items-center justify-between">
+            <p className="text-slate-300">
+              عرض {filteredAndSortedCategories.length} من {demoCategoriesData.length} فئة
+            </p>
+            <div className="flex items-center gap-2">
+              <Filter size={16} className="text-purple-400" />
+              <span className="text-sm text-slate-400">فلاتر نشطة</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Categories Grid/List */}
+      <div className="px-8 pb-8">
+        {filteredAndSortedCategories.length === 0 ? (
+          <div className="text-center py-20 bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-2xl border border-white/10">
+            <Search size={48} className="text-purple-400 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold text-white mb-2">لم يتم العثور على فئات</h3>
+            <p className="text-slate-400 mb-6">جرب تغيير الفلاتر أو البحث بكلمات مختلفة</p>
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setFilterCategory('all');
+              }}
+              className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-colors duration-300"
             >
-              <h3 className="text-2xl font-bold text-[#1FA0FF] mb-3">
-                No Categories Found
-              </h3>
-              <p className="text-[#87CEEB]">
-                Add your first Categorie to get started
-              </p>
-            </motion.div>
-          ) : (
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            >
-              {demoCategories?.map(renderCategorie)}
-            </motion.div>
-          )}
+              إعادة تعيين الفلاتر
+            </button>
+          </div>
+        ) : (
+          <div className={`grid gap-6 ${viewMode === "grid" 
+            ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" 
+            : "grid-cols-1"
+          }`}>
+            {filteredAndSortedCategories.map((category) => {
+              const badge = getCategoryBadge(category.category);
+              const IconComponent = category.icon;
+
+              return (
+                <div key={category.id} className="group relative">
+                  {/* Background Gradient */}
+                  <div className={`absolute inset-0 bg-gradient-to-r ${badge.color} rounded-2xl opacity-20 group-hover:opacity-30 transition-all duration-300`}></div>
+                  
+                  {/* Main Card */}
+                  <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-purple-500/30 transition-all duration-300 group-hover:transform group-hover:scale-[1.02]">
+                    
+                    {/* Category Badge */}
+                    <div className="absolute top-4 right-4 z-20">
+                      <div className={`px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${badge.color} ${badge.textColor}`}>
+                        {badge.text}
+                      </div>
+                    </div>
+
+                    {/* Growth Badge */}
+                    <div className="absolute top-4 left-4 z-20">
+                      <div className="px-2 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        {category.growth}
+                      </div>
+                    </div>
+
+                    {/* Image Container */}
+                    <div className="relative overflow-hidden aspect-[4/3]">
+                      <img
+                        src={category.image}
+                        alt={category.title}
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                      
+                      {/* Icon Overlay */}
+                      <div className="absolute bottom-4 right-4">
+                        <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+                          <IconComponent className="w-6 h-6 text-white" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6 space-y-4">
+                      <div>
+                        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors duration-300">
+                          {category.title}
+                        </h3>
+                        <p className="text-sm text-slate-400 line-clamp-2 mb-3">
+                          {category.description}
+                        </p>
+                        <div className="flex items-center gap-4 text-sm">
+                          <div className="flex items-center gap-2">
+                            <Package className="w-4 h-4 text-blue-400" />
+                            <span className="text-slate-300">{category.productCount} منتج</span>
+                          </div>
+                          <div className="text-slate-500">
+                            {new Date(category.createdAt).toLocaleDateString('ar')}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                        <div className="flex items-center gap-2">
+                          <button className="group/btn p-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 rounded-xl hover:bg-blue-500/30 transition-all duration-300 hover:scale-110">
+                            <Eye size={16} className="group-hover/btn:scale-110 transition-transform" />
+                          </button>
+                          <button className="group/btn p-2 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/30 transition-all duration-300 hover:scale-110">
+                            <Edit size={16} className="group-hover/btn:scale-110 transition-transform" />
+                          </button>
+                        </div>
+
+                        <button className="group/btn p-2 bg-red-500/20 border border-red-500/30 text-red-300 rounded-xl hover:bg-red-500/30 transition-all duration-300 hover:scale-110">
+                          <Trash2 size={16} className="group-hover/btn:scale-110 transition-transform" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="px-8 pb-6">
+        <div className="text-center">
+          <p className="text-slate-500 text-sm">© 2025 نظام إدارة الفئات الفخم - جميع الحقوق محفوظة</p>
         </div>
       </div>
     </div>

@@ -15,6 +15,8 @@ import AllBrands from "./pages/Brands/All-brands";
 import AddBrand from "./pages/Brands/Add-brands";
 import AddBanner from "./pages/Banner/Add-Banner";
 import AllBanner from "./pages/Banner/All-Banner";
+import AllOrders from "./pages/Orders/All-Orders";
+import OrderDetails from "./pages/Orders/Order-Details";
 import { ThemeProvider } from "./contexts/ThemeContext.jsx";
 import { CurrencyProvider } from "./contexts/CurrencyContext.jsx";
 
@@ -125,6 +127,22 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <AddBanner />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute>
+                  <AllOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/:id"
+              element={
+                <ProtectedRoute>
+                  <OrderDetails />
                 </ProtectedRoute>
               }
             />

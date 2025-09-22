@@ -135,9 +135,9 @@ export default function ProductDetails() {
 
     if (!product) {
         return (
-            <div className="min-h-screen bg-nsr-dark flex items-center justify-center">
+            <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${isDark ? 'bg-gradient-nsr-dark' : 'bg-gradient-nsr-light'}`}>
                 <div className="text-center">
-                    <h2 className="text-2xl font-bold text-nsr-primary mb-4">المنتج غير موجود</h2>
+                    <h2 className={`text-2xl font-bold mb-4 transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>المنتج غير موجود</h2>
                     <Link to="/products" className="text-nsr-accent hover:underline">
                         العودة للمنتجات
                     </Link>
@@ -187,7 +187,7 @@ export default function ProductDetails() {
     };
 
     return (
-        <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-nsr-dark' : 'bg-nsr-light'}`}>
+        <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-gradient-nsr-dark' : 'bg-gradient-nsr-light'}`}>
             <ConfirmationModal
                 isOpen={deleteModalOpen}
                 onClose={() => setDeleteModalOpen(false)}
@@ -211,7 +211,7 @@ export default function ProductDetails() {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => navigate('/products')}
-                            className="flex items-center gap-2 text-nsr-primary hover:text-nsr-accent transition-colors duration-300"
+                            className={`flex items-center gap-2 transition-colors duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
                         >
                             <ArrowLeft size={20} />
                             <span>العودة للمنتجات</span>
@@ -222,7 +222,7 @@ export default function ProductDetails() {
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={toggleCurrency}
-                                className="p-2 bg-nsr-primary/10 rounded-xl text-nsr-primary hover:bg-nsr-accent/10 hover:text-nsr-accent transition-all duration-300 flex items-center gap-2"
+                                className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 flex items-center gap-2 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
                             >
                                 <DollarSign size={20} />
                                 <span className="text-sm font-semibold">{getCurrencyCode()}</span>
@@ -232,7 +232,7 @@ export default function ProductDetails() {
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={handleShare}
-                                className="p-2 bg-nsr-primary/10 rounded-xl text-nsr-primary hover:bg-nsr-accent/10 hover:text-nsr-accent transition-all duration-300"
+                                className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
                             >
                                 <Share2 size={20} />
                             </motion.button>
@@ -248,7 +248,7 @@ export default function ProductDetails() {
                     {/* Images */}
                     <div className="space-y-6">
                         {/* Main Image */}
-                        <div className="relative aspect-square rounded-3xl overflow-hidden bg-nsr-secondary/20">
+                        <div className={`relative aspect-square rounded-3xl overflow-hidden transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/20' : 'bg-nsr-light-100/50'}`}>
                             <img
                                 src={product.images[selectedImage]}
                                 alt={product.title}
@@ -324,19 +324,19 @@ export default function ProductDetails() {
                                 <span className="text-lg text-nsr-accent font-semibold">{product.brand}</span>
                                 <div className="flex items-center gap-1">
                                     <Star size={16} className="text-yellow-400 fill-current" />
-                                    <span className="text-nsr-primary font-medium">{product.rating}</span>
-                                    <span className="text-nsr-neutral">({product.reviews} تقييم)</span>
+                                    <span className={`font-medium transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>{product.rating}</span>
+                                    <span className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>({product.reviews} تقييم)</span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Title */}
-                        <h1 className="text-4xl font-bold text-nsr-primary leading-tight">
+                        <h1 className={`text-4xl font-bold leading-tight transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>
                             {product.title}
                         </h1>
 
                         {/* Description */}
-                        <p className="text-lg text-nsr-neutral leading-relaxed">
+                        <p className={`text-lg leading-relaxed transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
                             {product.description}
                         </p>
 
@@ -346,7 +346,7 @@ export default function ProductDetails() {
                                 {getCurrencySymbol()}{convertCurrency(product.price).toLocaleString()}
                             </span>
                             {product.originalPrice && (
-                                <span className="text-2xl text-nsr-neutral line-through">
+                                <span className={`text-2xl line-through transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
                                     {getCurrencySymbol()}{convertCurrency(product.originalPrice).toLocaleString()}
                                 </span>
                             )}
@@ -355,7 +355,7 @@ export default function ProductDetails() {
                         {/* Stock Status */}
                         <div className="flex items-center gap-3">
                             <div className={`w-4 h-4 rounded-full ${product.stock > 10 ? 'bg-green-500' : product.stock > 0 ? 'bg-yellow-500' : 'bg-red-500'}`}></div>
-                            <span className="text-lg text-nsr-primary">
+                            <span className={`text-lg transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>
                                 {product.stock > 0 ? `${product.stock} متوفر في المخزن` : 'غير متوفر حالياً'}
                             </span>
                         </div>
@@ -363,31 +363,31 @@ export default function ProductDetails() {
                         {/* Admin Actions */}
                         <div className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div className="bg-nsr-secondary/30 rounded-2xl p-4">
+                                <div className={`rounded-2xl p-4 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
                                     <div className="flex items-center gap-3 mb-2">
                                         <Package size={20} className="text-nsr-accent" />
-                                        <h4 className="text-sm font-semibold text-nsr-primary">المخزون الحالي</h4>
+                                        <h4 className={`text-sm font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>المخزون الحالي</h4>
                                     </div>
                                     <p className="text-2xl font-bold text-nsr-accent">{product.stock}</p>
-                                    <p className="text-xs text-nsr-neutral">وحدة متوفرة</p>
+                                    <p className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>وحدة متوفرة</p>
                                 </div>
 
-                                <div className="bg-nsr-secondary/30 rounded-2xl p-4">
+                                <div className={`rounded-2xl p-4 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
                                     <div className="flex items-center gap-3 mb-2">
                                         <Calendar size={20} className="text-nsr-accent" />
-                                        <h4 className="text-sm font-semibold text-nsr-primary">تاريخ الإضافة</h4>
+                                        <h4 className={`text-sm font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>تاريخ الإضافة</h4>
                                     </div>
-                                    <p className="text-sm font-bold text-nsr-primary">15 يناير 2024</p>
-                                    <p className="text-xs text-nsr-neutral">منذ 3 أيام</p>
+                                    <p className={`text-sm font-bold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>15 يناير 2024</p>
+                                    <p className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>منذ 3 أيام</p>
                                 </div>
 
-                                <div className="bg-nsr-secondary/30 rounded-2xl p-4">
+                                <div className={`rounded-2xl p-4 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
                                     <div className="flex items-center gap-3 mb-2">
                                         <Tag size={20} className="text-nsr-accent" />
-                                        <h4 className="text-sm font-semibold text-nsr-primary">رقم المنتج</h4>
+                                        <h4 className={`text-sm font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>رقم المنتج</h4>
                                     </div>
-                                    <p className="text-sm font-bold text-nsr-primary">#{product.id.toString().padStart(6, '0')}</p>
-                                    <p className="text-xs text-nsr-neutral">معرف فريد</p>
+                                    <p className={`text-sm font-bold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>#{product.id.toString().padStart(6, '0')}</p>
+                                    <p className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>معرف فريد</p>
                                 </div>
                             </div>
 
@@ -415,12 +415,12 @@ export default function ProductDetails() {
 
                         {/* Features */}
                         <div className="space-y-4">
-                            <h3 className="text-2xl font-bold text-nsr-primary">المميزات الرئيسية</h3>
+                            <h3 className={`text-2xl font-bold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>المميزات الرئيسية</h3>
                             <div className="grid grid-cols-1 gap-3">
                                 {product.features.map((feature, index) => (
                                     <div key={index} className="flex items-center gap-3">
                                         <Check size={20} className="text-green-500 flex-shrink-0" />
-                                        <span className="text-nsr-neutral">{feature}</span>
+                                        <span className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>{feature}</span>
                                     </div>
                                 ))}
                             </div>
@@ -428,10 +428,10 @@ export default function ProductDetails() {
 
                         {/* Tags */}
                         <div className="space-y-4">
-                            <h3 className="text-2xl font-bold text-nsr-primary">العلامات</h3>
+                            <h3 className={`text-2xl font-bold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>العلامات</h3>
                             <div className="flex flex-wrap gap-3">
                                 {product.tags.map((tag, index) => (
-                                    <span key={index} className="bg-nsr-primary/10 text-nsr-primary px-4 py-2 rounded-full text-sm font-medium">
+                                    <span key={index} className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300 ${isDark ? 'bg-nsr-primary/10 text-nsr-light' : 'bg-nsr-light-200 text-nsr-dark'}`}>
                                         {tag}
                                     </span>
                                 ))}
@@ -440,38 +440,38 @@ export default function ProductDetails() {
 
                         {/* Product Management Info */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="bg-nsr-secondary/30 rounded-2xl p-6">
+                            <div className={`rounded-2xl p-6 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
                                 <div className="flex items-center gap-3 mb-3">
                                     <Truck size={24} className="text-nsr-accent" />
-                                    <h4 className="text-lg font-semibold text-nsr-primary">معلومات الشحن</h4>
+                                    <h4 className={`text-lg font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>معلومات الشحن</h4>
                                 </div>
                                 <div className="space-y-2">
-                                    <p className="text-nsr-neutral">{product.shipping}</p>
+                                    <p className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>{product.shipping}</p>
                                     <div className="flex items-center gap-2 text-sm">
-                                        <span className="text-nsr-neutral">تكلفة الشحن:</span>
-                                        <span className="text-nsr-primary font-medium">مجاني</span>
+                                        <span className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>تكلفة الشحن:</span>
+                                        <span className={`font-medium transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>مجاني</span>
                                     </div>
                                     <div className="flex items-center gap-2 text-sm">
-                                        <span className="text-nsr-neutral">وقت التسليم:</span>
-                                        <span className="text-nsr-primary font-medium">2-3 أيام</span>
+                                        <span className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>وقت التسليم:</span>
+                                        <span className={`font-medium transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>2-3 أيام</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="bg-nsr-secondary/30 rounded-2xl p-6">
+                            <div className={`rounded-2xl p-6 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
                                 <div className="flex items-center gap-3 mb-3">
                                     <Shield size={24} className="text-nsr-accent" />
-                                    <h4 className="text-lg font-semibold text-nsr-primary">معلومات الضمان</h4>
+                                    <h4 className={`text-lg font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>معلومات الضمان</h4>
                                 </div>
                                 <div className="space-y-2">
-                                    <p className="text-nsr-neutral">{product.warranty}</p>
+                                    <p className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>{product.warranty}</p>
                                     <div className="flex items-center gap-2 text-sm">
-                                        <span className="text-nsr-neutral">نوع الضمان:</span>
-                                        <span className="text-nsr-primary font-medium">ضمان شامل</span>
+                                        <span className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>نوع الضمان:</span>
+                                        <span className={`font-medium transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>ضمان شامل</span>
                                     </div>
                                     <div className="flex items-center gap-2 text-sm">
-                                        <span className="text-nsr-neutral">مركز الصيانة:</span>
-                                        <span className="text-nsr-primary font-medium">متوفر</span>
+                                        <span className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>مركز الصيانة:</span>
+                                        <span className={`font-medium transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>متوفر</span>
                                     </div>
                                 </div>
                             </div>
@@ -481,13 +481,13 @@ export default function ProductDetails() {
 
                 {/* Specifications */}
                 <div className="mt-16">
-                    <h2 className="text-3xl font-bold text-nsr-primary mb-8">المواصفات التقنية</h2>
-                    <div className="bg-nsr-secondary/30 rounded-3xl p-8">
+                    <h2 className={`text-3xl font-bold mb-8 transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>المواصفات التقنية</h2>
+                    <div className={`rounded-3xl p-8 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {Object.entries(product.specifications).map(([key, value]) => (
-                                <div key={key} className="flex justify-between items-center py-3 border-b border-nsr-primary/10 last:border-b-0">
-                                    <span className="text-nsr-neutral font-medium">{key}:</span>
-                                    <span className="text-nsr-primary font-semibold">{value}</span>
+                                <div key={key} className={`flex justify-between items-center py-3 border-b last:border-b-0 transition-colors duration-300 ${isDark ? 'border-nsr-primary/10' : 'border-nsr-primary/20'}`}>
+                                    <span className={`font-medium transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>{key}:</span>
+                                    <span className={`font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>{value}</span>
                                 </div>
                             ))}
                         </div>
@@ -496,52 +496,52 @@ export default function ProductDetails() {
 
                 {/* Sales Analytics */}
                 <div className="mt-16">
-                    <h2 className="text-3xl font-bold text-nsr-primary mb-8">إحصائيات المبيعات</h2>
+                    <h2 className={`text-3xl font-bold mb-8 transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>إحصائيات المبيعات</h2>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                        <div className="bg-nsr-secondary/30 rounded-2xl p-6">
+                        <div className={`rounded-2xl p-6 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
                             <div className="flex items-center gap-3 mb-3">
                                 <div className="p-2 bg-green-500/10 rounded-lg">
                                     <Package size={20} className="text-green-500" />
                                 </div>
-                                <h4 className="text-sm font-semibold text-nsr-primary">إجمالي المبيعات</h4>
+                                <h4 className={`text-sm font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>إجمالي المبيعات</h4>
                             </div>
                             <p className="text-2xl font-bold text-nsr-accent">1,247</p>
-                            <p className="text-xs text-nsr-neutral">وحدة مباعة</p>
+                            <p className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>وحدة مباعة</p>
                         </div>
 
-                        <div className="bg-nsr-secondary/30 rounded-2xl p-6">
+                        <div className={`rounded-2xl p-6 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
                             <div className="flex items-center gap-3 mb-3">
                                 <div className="p-2 bg-blue-500/10 rounded-lg">
                                     <DollarSign size={20} className="text-blue-500" />
                                 </div>
-                                <h4 className="text-sm font-semibold text-nsr-primary">إجمالي الإيرادات</h4>
+                                <h4 className={`text-sm font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>إجمالي الإيرادات</h4>
                             </div>
                             <p className="text-2xl font-bold text-nsr-accent">
                                 {getCurrencySymbol()}{convertCurrency(15999 * 1247).toLocaleString()}
                             </p>
-                            <p className="text-xs text-nsr-neutral">من هذا المنتج</p>
+                            <p className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>من هذا المنتج</p>
                         </div>
 
-                        <div className="bg-nsr-secondary/30 rounded-2xl p-6">
+                        <div className={`rounded-2xl p-6 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
                             <div className="flex items-center gap-3 mb-3">
                                 <div className="p-2 bg-orange-500/10 rounded-lg">
                                     <Star size={20} className="text-orange-500" />
                                 </div>
-                                <h4 className="text-sm font-semibold text-nsr-primary">متوسط التقييم</h4>
+                                <h4 className={`text-sm font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>متوسط التقييم</h4>
                             </div>
                             <p className="text-2xl font-bold text-nsr-accent">{product.rating}</p>
-                            <p className="text-xs text-nsr-neutral">من 5 نجوم</p>
+                            <p className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>من 5 نجوم</p>
                         </div>
 
-                        <div className="bg-nsr-secondary/30 rounded-2xl p-6">
+                        <div className={`rounded-2xl p-6 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
                             <div className="flex items-center gap-3 mb-3">
                                 <div className="p-2 bg-purple-500/10 rounded-lg">
                                     <Calendar size={20} className="text-purple-500" />
                                 </div>
-                                <h4 className="text-sm font-semibold text-nsr-primary">آخر مبيع</h4>
+                                <h4 className={`text-sm font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>آخر مبيع</h4>
                             </div>
                             <p className="text-2xl font-bold text-nsr-accent">2</p>
-                            <p className="text-xs text-nsr-neutral">ساعات مضت</p>
+                            <p className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>ساعات مضت</p>
                         </div>
                     </div>
                 </div>

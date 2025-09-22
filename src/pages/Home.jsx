@@ -103,50 +103,51 @@ export default function LuxuryDashboard() {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDark
-      ? 'bg-gradient-to-br from-slate-900 via-slate-800 to-black'
-      : 'bg-gradient-to-br from-gray-50 to-white'
+      ? 'bg-gradient-nsr-dark'
+      : 'bg-gradient-nsr-light'
       }`} dir="rtl">
       {/* Header */}
       <div className={`relative backdrop-blur-sm border-b transition-colors duration-300 ${isDark
-        ? 'bg-gradient-to-r from-slate-900/95 via-slate-800/95 to-black/95 border-slate-700/50'
-        : 'bg-white/95 border-gray-200/50 shadow-sm'
+        ? 'bg-nsr-secondary/50 border-nsr-primary/20'
+        : 'bg-nsr-light/95 border-nsr-primary/20 shadow-sm'
         }`}>
-        <div className={`absolute inset-0 transition-colors duration-300 ${isDark ? 'bg-gradient-to-r from-blue-600/10 to-transparent' : 'bg-gradient-to-r from-blue-600/5 to-transparent'
+        <div className={`absolute inset-0 transition-colors duration-300 ${isDark ? 'bg-gradient-to-r from-nsr-accent/10 to-transparent' : 'bg-gradient-to-r from-nsr-secondary/5 to-transparent'
           }`}></div>
         <div className="relative px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className={`text-3xl font-bold transition-colors duration-300 ${isDark
-                ? 'bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent'
-                : 'bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent'
+                ? 'text-nsr-light'
+                : 'text-nsr-dark'
                 }`}>
                 لوحة التحكم الرئيسية
               </h1>
-              <p className={`mt-1 transition-colors duration-300 ${isDark ? 'text-slate-400' : 'text-gray-500'
+              <p className={`mt-1 transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'
                 }`}>مرحباً بك في نظام الإدارة المتقدم</p>
             </div>
             <div className="flex items-center gap-4">
               <button
                 onClick={toggleCurrency}
-                className={`p-3 rounded-xl transition-all duration-300 hover:scale-105 flex items-center gap-2 ${isDark
-                  ? 'bg-slate-700/50 hover:bg-slate-600/50 text-green-400'
-                  : 'bg-gray-100 hover:bg-gray-200 text-green-600'
+                className={`p-3 rounded-xl transition-all duration-300 hover:scale-105 flex items-center text-black gap-2 ${isDark
+                  ? 'bg-nsr-primary/10 hover:bg-nsr-primary/20 text-nsr-accent border border-nsr-primary/20'
+                  
+                  : 'bg-nsr-light-100 hover:bg-nsr-light-200 text-nsr-accent border border-nsr-primary/20'
                   }`}
                 title={`التبديل إلى ${currency === 'USD' ? 'الدينار العراقي' : 'الدولار الأمريكي'}`}
               >
                 {currency === 'USD' ? <FaDollarSign className="w-5 h-5" /> : <FaExchangeAlt className="w-5 h-5" />}
-                <span className="text-sm font-medium">{getCurrencyCode()}</span>
+                <span className="text-sm font-medium text-black">{getCurrencyCode()}</span>
               </button>
               <button
                 onClick={toggleTheme}
-                className={`p-3 rounded-xl transition-all duration-300 hover:scale-105 ${isDark
-                  ? 'bg-slate-700/50 hover:bg-slate-600/50 text-yellow-400'
-                  : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+                className={`p-3 rounded-xl transition-all duration-300 hover:scale-105 text-black ${isDark
+                  ? 'bg-nsr-primary/10 hover:bg-nsr-primary/20 text-nsr-accent border border-nsr-primary/20'
+                  : 'bg-nsr-light-100 hover:bg-nsr-light-200 text-nsr-accent border border-nsr-primary/20'
                   }`}
               >
-                {isDark ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
+                {isDark ? <FaSun className="w-5 h-5 text-white" /> : <FaMoon className="w-5 h-5 text-black" />}
               </button>
-            
+
             </div>
           </div>
         </div>
@@ -155,9 +156,9 @@ export default function LuxuryDashboard() {
       {/* Business Overview */}
       <div className="px-8 py-8">
         <div className="mb-8">
-          <h2 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-white' : 'text-gray-800'
+          <h2 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'
             }`}>نظرة عامة على الأعمال</h2>
-          <p className={`transition-colors duration-300 ${isDark ? 'text-slate-400' : 'text-gray-500'
+          <p className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'
             }`}>تتبع أداء عملك في الوقت الفعلي</p>
         </div>
 
@@ -168,36 +169,36 @@ export default function LuxuryDashboard() {
               <div className={`absolute inset-0 bg-gradient-to-r ${item.gradient} rounded-2xl opacity-80 group-hover:opacity-90 transition-all duration-300`}></div>
 
               {/* Glass effect overlay */}
-              <div className={`relative backdrop-blur-sm border rounded-2xl p-6 hover:border-blue-500/30 transition-all duration-300 group-hover:transform group-hover:scale-105 ${isDark
-                ? 'bg-white/5 border-white/10'
-                : 'bg-white/80 border-gray-200/50 shadow-lg'
+              <div className={`relative backdrop-blur-sm border rounded-2xl p-6 hover:border-nsr-accent/30 transition-all duration-300 group-hover:transform group-hover:scale-105 ${isDark
+                ? 'bg-nsr-secondary/30 border-nsr-primary/20'
+                : 'bg-nsr-light/80 border-nsr-primary/20 shadow-lg'
                 }`}>
                 <div className="flex items-start justify-between mb-6">
                   <div className="flex items-center gap-4">
                     <div className={`p-3 backdrop-blur-sm rounded-xl border transition-colors duration-300 ${isDark
-                      ? 'bg-white/10 border-white/20'
-                      : 'bg-gray-100/80 border-gray-200/50'
+                      ? 'bg-nsr-primary/10 border-nsr-primary/20'
+                      : 'bg-nsr-light-100/80 border-nsr-primary/20'
                       }`}>
                       {item.icon}
                     </div>
                     <div>
-                      <span className={`font-medium text-lg transition-colors duration-300 ${isDark ? 'text-white/90' : 'text-gray-800'
+                      <span className={`font-medium text-lg transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'
                         }`}>{item.title}</span>
                     </div>
                   </div>
-                  <div className={`flex items-center gap-2 px-3 py-1 rounded-full backdrop-blur-sm transition-colors duration-300 ${getTrendColor(item.trend)} ${isDark ? 'bg-white/10' : 'bg-gray-100/80'
+                  <div className={`flex items-center gap-2 px-3 py-1 rounded-full backdrop-blur-sm transition-colors duration-300 ${getTrendColor(item.trend)} ${isDark ? 'bg-nsr-primary/10' : 'bg-nsr-light-100/80'
                     }`}>
                     {getTrendIcon(item.trend)}
                     <span className="font-semibold">{item.change}</span>
                   </div>
                 </div>
-                <div className={`text-4xl font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-white' : 'text-gray-800'
+                <div className={`text-4xl font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'
                   }`}>{item.value}</div>
-                <div className={`w-full h-1 rounded-full overflow-hidden transition-colors duration-300 ${isDark ? 'bg-white/20' : 'bg-gray-200'
+                <div className={`w-full h-1 rounded-full overflow-hidden transition-colors duration-300 ${isDark ? 'bg-nsr-primary/20' : 'bg-nsr-light-200'
                   }`}>
                   <div className={`h-full rounded-full w-3/4 animate-pulse transition-colors duration-300 ${isDark
-                    ? 'bg-gradient-to-r from-white/60 to-white/40'
-                    : 'bg-gradient-to-r from-blue-600/60 to-blue-400/40'
+                    ? 'bg-gradient-nsr-elegant'
+                    : 'bg-gradient-nsr-secondary'
                     }`}></div>
                 </div>
               </div>
@@ -212,23 +213,23 @@ export default function LuxuryDashboard() {
           {/* New Orders */}
           <div className="relative">
             <div className={`absolute inset-0 rounded-2xl transition-colors duration-300 ${isDark
-              ? 'bg-gradient-to-r from-slate-800/80 to-slate-900/80'
-              : 'bg-white/80'
+              ? 'bg-gradient-nsr-secondary'
+              : 'bg-nsr-light/80'
               }`}></div>
-            <div className={`relative backdrop-blur-sm border rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all duration-300 ${isDark
-              ? 'bg-white/5 border-white/10'
-              : 'bg-white/90 border-gray-200/50 shadow-lg'
+            <div className={`relative backdrop-blur-sm border rounded-2xl overflow-hidden hover:border-nsr-accent/30 transition-all duration-300 ${isDark
+              ? 'bg-nsr-secondary/30 border-nsr-primary/20'
+              : 'bg-nsr-light/90 border-nsr-primary/20 shadow-lg'
               }`}>
-              <div className={`p-6 border-b transition-colors duration-300 ${isDark ? 'border-white/10' : 'border-gray-200/50'
+              <div className={`p-6 border-b transition-colors duration-300 ${isDark ? 'border-nsr-primary/20' : 'border-nsr-primary/20'
                 }`}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className={`text-2xl font-bold mb-1 transition-colors duration-300 ${isDark ? 'text-white' : 'text-gray-800'
+                    <h3 className={`text-2xl font-bold mb-1 transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'
                       }`}>الطلبات الجديدة</h3>
-                    <p className={`transition-colors duration-300 ${isDark ? 'text-slate-400' : 'text-gray-500'
+                    <p className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'
                       }`}>آخر الطلبات الواردة</p>
                   </div>
-                  <button className="group flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25">
+                  <button className="group flex items-center gap-2 px-4 py-2 bg-nsr-accent hover:bg-nsr-accent/90 text-white rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-nsr-accent/25">
                     عرض الكل
                     <FaEye className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   </button>

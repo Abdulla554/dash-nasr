@@ -13,6 +13,7 @@ import {
   AlertCircle,
   Star
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function LuxuryAddCategoryPage() {
   const [isDark, setIsDark] = useState(true);
@@ -101,22 +102,22 @@ export default function LuxuryAddCategoryPage() {
   const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black" dir="rtl">
+    <div className="min-h-screen bg-gradient-nsr-dark" dir="rtl">
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-slate-900/95 via-slate-800/95 to-black/95 backdrop-blur-sm border-b border-slate-700/50">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/10 to-purple-600/10"></div>
+      <div className="relative bg-nsr-secondary/50 backdrop-blur-sm border-b border-nsr-primary/20">
+        <div className="absolute inset-0 bg-gradient-to-r from-nsr-accent/10 to-nsr-secondary/10"></div>
         <div className="relative px-8 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <div className="p-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-lg shadow-indigo-500/25">
+              <div className="p-4 bg-gradient-nsr-elegant rounded-2xl shadow-lg shadow-nsr-accent/25">
                 <Plus className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-white via-slate-200 to-slate-300 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold text-nsr-light">
                   إضافة فئة جديدة
                 </h1>
-                <p className="text-slate-400 mt-2 text-lg">أضف اسم الفئة وصورة جذابة</p>
-                <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full mt-3"></div>
+                <p className="text-nsr-light-200 mt-2 text-lg">أضف اسم الفئة وصورة جذابة</p>
+                <div className="w-24 h-1 bg-gradient-nsr-elegant rounded-full mt-3"></div>
               </div>
             </div>
 
@@ -124,20 +125,23 @@ export default function LuxuryAddCategoryPage() {
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="group p-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl hover:border-indigo-500/30 transition-all duration-300 hover:bg-white/10"
+                className="group p-3 bg-nsr-primary/10 backdrop-blur-sm border border-nsr-primary/20 rounded-2xl hover:border-nsr-accent/30 transition-all duration-300 hover:bg-nsr-primary/20"
               >
                 {isDark ? (
-                  <Sun className="h-6 w-6 text-indigo-400 group-hover:text-white transition-colors" />
+                  <Sun className="h-6 w-6 text-nsr-accent group-hover:text-nsr-light transition-colors" />
                 ) : (
-                  <Moon className="h-6 w-6 text-indigo-400 group-hover:text-white transition-colors" />
+                  <Moon className="h-6 w-6 text-nsr-accent group-hover:text-nsr-light transition-colors" />
                 )}
               </button>
 
               {/* Back Button */}
-              <button className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:border-indigo-500/30 transition-all duration-500 hover:bg-white/20 hover:scale-105">
+              <Link
+                to="/categories"
+                className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 bg-nsr-primary/10 backdrop-blur-sm border border-nsr-primary/20 text-nsr-light hover:border-nsr-accent/30 transition-all duration-500 hover:bg-nsr-primary/20 hover:scale-105"
+              >
                 <ArrowRight className="h-6 w-6 transition-all duration-300 group-hover:-translate-x-1" />
                 <span className="font-semibold text-lg">العودة للفئات</span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -146,26 +150,26 @@ export default function LuxuryAddCategoryPage() {
       {/* Main Form */}
       <div className="px-8 py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+          <div className="bg-nsr-secondary/30 backdrop-blur-sm border border-nsr-primary/20 rounded-3xl overflow-hidden shadow-2xl">
 
             {/* Form Container */}
             <div className="p-8 space-y-10">
 
               {/* Basic Information Section */}
               <div className="space-y-8">
-                <div className="flex items-center gap-4 pb-4 border-b border-white/10">
-                  <div className="p-3 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-2xl border border-indigo-500/30">
-                    <Save className="h-6 w-6 text-indigo-400" />
+                <div className="flex items-center gap-4 pb-4 border-b border-nsr-primary/20">
+                  <div className="p-3 bg-gradient-nsr-elegant/20 rounded-2xl border border-nsr-accent/30">
+                    <Save className="h-6 w-6 text-nsr-accent" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-white">اسم الفئة</h2>
-                    <p className="text-slate-400 mt-1">أدخل اسم الفئة الجديدة</p>
+                    <h2 className="text-2xl font-bold text-nsr-light">اسم الفئة</h2>
+                    <p className="text-nsr-light-200 mt-1">أدخل اسم الفئة الجديدة</p>
                   </div>
                 </div>
 
                 {/* Category Name */}
                 <div className="space-y-4">
-                  <label className="text-lg font-semibold text-slate-300 flex items-center gap-2">
+                  <label className="text-lg font-semibold text-nsr-light-200 flex items-center gap-2">
                     اسم الفئة
                     <Star className="w-4 h-4 text-red-400" />
                   </label>
@@ -174,9 +178,9 @@ export default function LuxuryAddCategoryPage() {
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
-                    className={`w-full px-6 py-5 bg-slate-800/50 border rounded-2xl text-white placeholder-slate-400 focus:outline-none transition-all duration-300 text-xl ${errors.title
-                        ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                        : 'border-slate-700/50 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20'
+                    className={`w-full px-6 py-5 bg-nsr-primary/20 border rounded-2xl text-nsr-light placeholder-nsr-light-200 focus:outline-none transition-all duration-300 text-xl ${errors.title
+                      ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
+                      : 'border-nsr-primary/30 focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20'
                       }`}
                     placeholder="مثال: أجهزة الكمبيوتر المكتبية"
                   />
@@ -204,8 +208,8 @@ export default function LuxuryAddCategoryPage() {
                 <div>
                   {!imagePreview ? (
                     <div className={`relative border-2 border-dashed rounded-3xl py-20 px-6 transition-all duration-300 bg-slate-800/20 hover:bg-slate-800/40 cursor-pointer group ${errors.image
-                        ? 'border-red-500/50'
-                        : 'border-slate-700/50 hover:border-indigo-500/50'
+                      ? 'border-red-500/50'
+                      : 'border-slate-700/50 hover:border-indigo-500/50'
                       }`}>
                       <input
                         type="file"

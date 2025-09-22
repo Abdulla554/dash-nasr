@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { 
-  Search, 
-  Filter, 
-  Plus, 
+import {
+  Search,
+  Filter,
+  Plus,
   Grid,
   List,
-  Eye, 
-  Edit, 
+  Eye,
+  Edit,
   Trash2,
   Sparkles,
   ArrowUpDown,
@@ -179,43 +179,43 @@ export default function LuxuryCategoriesPage() {
   const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-black" dir="rtl">
+    <div className="min-h-screen bg-gradient-nsr-dark" dir="rtl">
       {/* Header */}
-      <div className="relative bg-gradient-to-r from-slate-900/95 via-slate-800/95 to-black/95 backdrop-blur-sm border-b border-slate-700/50">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-blue-600/10"></div>
+      <div className="relative bg-nsr-secondary/50 backdrop-blur-sm border-b border-nsr-primary/20">
+        <div className="absolute inset-0 bg-gradient-to-r from-nsr-accent/10 to-nsr-secondary/10"></div>
         <div className="relative px-8 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <div className="p-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl">
+              <div className="p-4 bg-gradient-nsr-elegant rounded-2xl">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold text-nsr-light">
                   فئات المنتجات
                 </h1>
-                <p className="text-slate-400 mt-2 text-lg">إدارة شاملة لجميع فئات منتجاتك</p>
+                <p className="text-nsr-light-200 mt-2 text-lg">إدارة شاملة لجميع فئات منتجاتك</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-4">
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="group p-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl hover:border-purple-500/30 transition-all duration-300"
+                className="group p-3 bg-nsr-primary/10 backdrop-blur-sm border border-nsr-primary/20 rounded-2xl hover:border-nsr-accent/30 transition-all duration-300"
               >
                 {isDark ? (
-                  <Sun className="h-6 w-6 text-purple-400 group-hover:text-white transition-colors" />
+                  <Sun className="h-6 w-6 text-nsr-accent group-hover:text-nsr-light transition-colors" />
                 ) : (
-                  <Moon className="h-6 w-6 text-purple-400 group-hover:text-white transition-colors" />
+                  <Moon className="h-6 w-6 text-nsr-accent group-hover:text-nsr-light transition-colors" />
                 )}
               </button>
 
               {/* Add Category Button */}
               <Link to="/categories/add">
-              <button className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/25 transition-all duration-500 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105">
-                <Plus className="h-6 w-6 transition-all duration-500 group-hover:rotate-180" />
-                <span className="font-semibold text-lg">إضافة فئة جديدة</span>
-              </button>
+                <button className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 bg-gradient-nsr-elegant text-white shadow-lg shadow-nsr-accent/25 transition-all duration-500 hover:shadow-xl hover:shadow-nsr-accent/40 hover:scale-105">
+                  <Plus className="h-6 w-6 transition-all duration-500 group-hover:rotate-180" />
+                  <span className="font-semibold text-lg">إضافة فئة جديدة</span>
+                </button>
               </Link>
             </div>
           </div>
@@ -358,10 +358,10 @@ export default function LuxuryCategoriesPage() {
             </button>
           </div>
         ) : (
-          <div className={`grid gap-6 ${viewMode === "grid" 
-            ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" 
+          <div className={`grid gap-6 ${viewMode === "grid"
+            ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             : "grid-cols-1"
-          }`}>
+            }`}>
             {filteredAndSortedCategories.map((category) => {
               const badge = getCategoryBadge(category.category);
               const IconComponent = category.icon;
@@ -370,10 +370,10 @@ export default function LuxuryCategoriesPage() {
                 <div key={category.id} className="group relative">
                   {/* Background Gradient */}
                   <div className={`absolute inset-0 bg-gradient-to-r ${badge.color} rounded-2xl opacity-20 group-hover:opacity-30 transition-all duration-300`}></div>
-                  
+
                   {/* Main Card */}
                   <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-purple-500/30 transition-all duration-300 group-hover:transform group-hover:scale-[1.02]">
-                    
+
                     {/* Category Badge */}
                     <div className="absolute top-4 right-4 z-20">
                       <div className={`px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${badge.color} ${badge.textColor}`}>
@@ -396,7 +396,7 @@ export default function LuxuryCategoriesPage() {
                         className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                      
+
                       {/* Icon Overlay */}
                       <div className="absolute bottom-4 right-4">
                         <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">

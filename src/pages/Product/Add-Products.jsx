@@ -177,7 +177,7 @@ export default function AddProduct() {
                   }}
                 >
                   <ArrowLeft className={`w-5 h-5 transition-colors duration-300 ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`} />
-                  <span className={`font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`}>
+                  <span className={`font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-black group-hover:text-gray-800'}`}>
                     العودة للمنتجات
                   </span>
                 </_motion.button>

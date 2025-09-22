@@ -258,7 +258,7 @@ export default function LuxuryProductsPage() {
 
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-nsr-dark' : 'bg-gray-50'}`} dir="rtl">
+    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-gradient-nsr-dark' : 'bg-gradient-nsr-light'}`} dir="rtl">
       {/* Delete Confirmation Modal */}
       {deleteModalOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
@@ -292,34 +292,34 @@ export default function LuxuryProductsPage() {
         </div>
       )}
       {/* Header */}
-      <div className={`relative backdrop-blur-sm border-b transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/20' : 'bg-white/80 border-gray-200 shadow-sm'}`}>
+      <div className={`relative backdrop-blur-sm border-b transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/20' : 'bg-nsr-light/80 border-nsr-primary/20 shadow-sm'}`}>
         <div className="absolute inset-0 bg-gradient-to-r from-nsr-accent/10 to-transparent"></div>
-        <div className="relative px-8 py-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6">
-              <div className="p-4 bg-gradient-to-r from-nsr-accent to-nsr-primary rounded-2xl">
-                <ShoppingCart className="w-8 h-8 text-white" />
+        <div className="relative px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 lg:gap-0">
+            <div className="flex items-center gap-3 sm:gap-4 lg:gap-6">
+              <div className="p-3 sm:p-4 bg-gradient-nsr-elegant rounded-xl sm:rounded-2xl">
+                <ShoppingCart className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
-                <h1 className={`text-4xl font-bold transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-black'}`}>
+                <h1 className={`text-2xl sm:text-3xl lg:text-4xl font-bold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>
                   إدارة المنتجات
                 </h1>
-                <p className={`mt-2 text-lg transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-gray-800'}`}>إدارة شاملة لجميع منتجاتك</p>
+                <p className={`mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>إدارة شاملة لجميع منتجاتك</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
               {/* Theme Toggle */}
               <_motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleTheme}
-                className={`group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-white/60 border-gray-200 hover:border-nsr-accent/30 shadow-sm'}`}
+                className={`group p-2 sm:p-3 backdrop-blur-sm border rounded-xl sm:rounded-2xl transition-all duration-300 ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-nsr-light-100 border-nsr-primary/20 hover:border-nsr-accent/30 shadow-sm'}`}
               >
                 {isDark ? (
-                  <Sun className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`} />
+                  <Sun className={`h-5 w-5 sm:h-6 sm:w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`} />
                 ) : (
-                  <Moon className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`} />
+                  <Moon className={`h-5 w-5 sm:h-6 sm:w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`} />
                 )}
               </_motion.button>
 
@@ -328,21 +328,21 @@ export default function LuxuryProductsPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleCurrency}
-                className={`group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 flex items-center gap-2 ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-white/60 border-gray-200 hover:border-nsr-accent/30 shadow-sm'}`}
+                className={`group p-2 sm:p-3 backdrop-blur-sm border rounded-xl sm:rounded-2xl transition-all duration-300 flex items-center gap-1 sm:gap-2 ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-nsr-light-100 border-nsr-primary/20 hover:border-nsr-accent/30 shadow-sm'}`}
               >
-                <DollarSign className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`} />
-                <span className={`font-semibold transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`}>{getCurrencyCode()}</span>
+                <DollarSign className={`h-5 w-5 sm:h-6 sm:w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`} />
+                <span className={`font-semibold text-sm sm:text-base transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`}>{getCurrencyCode()}</span>
               </_motion.button>
 
               {/* Add Product Button */}
-              <Link to="/products/add">
+              <Link to="/products/add" className="flex-1 lg:flex-none">
                 <_motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 bg-gradient-to-r from-nsr-accent to-nsr-primary text-white shadow-lg shadow-nsr-accent/25 transition-all duration-500 hover:shadow-xl hover:shadow-nsr-accent/40"
+                  className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-nsr-elegant text-white shadow-lg shadow-nsr-accent/25 transition-all duration-500 hover:shadow-xl hover:shadow-nsr-accent/40 w-full lg:w-auto"
                 >
-                  <Plus className="h-6 w-6 transition-all duration-500 group-hover:rotate-180" />
-                  <span className="font-semibold text-lg">إضافة منتج جديد</span>
+                  <Plus className="h-5 w-5 sm:h-6 sm:w-6 transition-all duration-500 group-hover:rotate-180" />
+                  <span className="font-semibold text-sm sm:text-base lg:text-lg">إضافة منتج جديد</span>
                 </_motion.button>
               </Link>
             </div>
@@ -351,8 +351,8 @@ export default function LuxuryProductsPage() {
       </div>
 
       {/* Stats Cards */}
-      <div className="px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {[
             { title: "إجمالي المنتجات", value: demoProducts.length, icon: ShoppingCart, color: "from-nsr-accent to-nsr-primary", change: "+12%" },
             { title: "الأكثر مبيعاً", value: demoProducts.filter(p => p.isBestSeller).length, icon: TrendingUp, color: "from-emerald-600 to-emerald-800", change: "+23%" },
@@ -361,15 +361,15 @@ export default function LuxuryProductsPage() {
           ].map((stat, index) => (
             <div key={index} className="group relative">
               <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl opacity-80 group-hover:opacity-90 transition-all duration-300`}></div>
-              <div className={`relative backdrop-blur-sm border rounded-2xl p-6 transition-all duration-300 group-hover:transform group-hover:scale-105 ${isDark ? 'bg-nsr-secondary/30 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-white/70 border-gray-200 hover:border-nsr-accent/30 shadow-sm'}`}>
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`p-3 backdrop-blur-sm rounded-xl border ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20' : 'bg-white/20 border-gray-300/20'}`}>
-                    <stat.icon className="w-6 h-6 text-white" />
+              <div className={`relative backdrop-blur-sm border rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 group-hover:transform group-hover:scale-105 ${isDark ? 'bg-nsr-secondary/30 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-nsr-light/70 border-nsr-primary/20 hover:border-nsr-accent/30 shadow-sm'}`}>
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <div className={`p-2 sm:p-3 backdrop-blur-sm rounded-lg sm:rounded-xl border ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20' : 'bg-nsr-light-100/20 border-nsr-primary/20'}`}>
+                    <stat.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
-                  <span className="text-emerald-400 font-semibold text-sm">{stat.change}</span>
+                  <span className="text-emerald-400 font-semibold text-xs sm:text-sm">{stat.change}</span>
                 </div>
-                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-white/80 text-sm">{stat.title}</div>
+                <div className="text-2xl sm:text-3xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-white/80 text-xs sm:text-sm">{stat.title}</div>
               </div>
             </div>
           ))}
@@ -377,30 +377,30 @@ export default function LuxuryProductsPage() {
       </div>
 
       {/* Filters and Search */}
-      <div className="px-8 pb-6">
-        <div className={`backdrop-blur-sm border rounded-2xl p-6 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30 border-nsr-primary/20' : 'bg-white/70 border-gray-200 shadow-sm'}`}>
-          <div className="flex flex-col lg:flex-row gap-6">
+      <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
+        <div className={`backdrop-blur-sm border rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30 border-nsr-primary/20' : 'bg-nsr-light/70 border-nsr-primary/20 shadow-sm'}`}>
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
             {/* Search Bar */}
             <div className="flex-1">
               <div className="relative">
-                <Search className={`absolute right-4 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-gray-700'}`} size={20} />
+                <Search className={`absolute right-4 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`} size={20} />
                 <input
                   type="text"
                   placeholder="البحث في المنتجات..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className={`w-full pr-12 pl-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                  className={`w-full pr-12 pl-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-light placeholder-nsr-light-200 focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-nsr-light border-nsr-primary/30 text-nsr-dark placeholder-nsr-dark-600 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
                 />
               </div>
             </div>
 
             {/* Filters */}
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-2 sm:gap-3 lg:gap-4">
               {/* Category */}
               <select
                 value={filters.category}
                 onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                className={`px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                className={`px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-light focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-nsr-light border-nsr-primary/30 text-nsr-dark focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
               >
                 <option value="all">جميع الفئات</option>
                 <option value="laptops">لابتوبات</option>
@@ -411,7 +411,7 @@ export default function LuxuryProductsPage() {
               <select
                 value={filters.brand}
                 onChange={(e) => setFilters({ ...filters, brand: e.target.value })}
-                className={`px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                className={`px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-light focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-nsr-light border-nsr-primary/30 text-nsr-dark focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
               >
                 <option value="all">جميع الماركات</option>
                 {brands.map(brand => (
@@ -423,7 +423,7 @@ export default function LuxuryProductsPage() {
               <select
                 value={filters.priceRange}
                 onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
-                className={`px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                className={`px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-light focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-nsr-light border-nsr-primary/30 text-nsr-dark focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
               >
                 <option value="all">جميع الأسعار</option>
                 <option value="under-1000">أقل من {getCurrencySymbol()}1,000</option>
@@ -436,7 +436,7 @@ export default function LuxuryProductsPage() {
               <select
                 value={filters.sortBy}
                 onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
-                className={`px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                className={`px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-light focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-nsr-light border-nsr-primary/30 text-nsr-dark focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
               >
                 <option value="newest">الأحدث</option>
                 <option value="best-seller">الأكثر مبيعاً</option>
@@ -448,66 +448,66 @@ export default function LuxuryProductsPage() {
           </div>
 
           {/* Results Count */}
-          <div className="mt-4 flex items-center justify-between">
-            <p className={`transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-black'}`}>
+          <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+            <p className={`text-sm sm:text-base transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
               عرض {sortedProducts.length} من {demoProducts.length} منتج
             </p>
             <div className="flex items-center gap-2">
-              <Filter size={16} className="text-nsr-accent" />
-              <span className={`text-sm transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-gray-700'}`}>فلاتر نشطة</span>
+              <Filter size={14} className="text-nsr-accent sm:w-4 sm:h-4" />
+              <span className={`text-xs sm:text-sm transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>فلاتر نشطة</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Products Table */}
-      <div className="px-8 pb-8">
+      <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
         {sortedProducts.length === 0 ? (
-          <div className="text-center py-20 bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-2xl border border-white/10">
-            <Search size={48} className="text-blue-400 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-white mb-2">لم يتم العثور على منتجات</h3>
-            <p className="text-slate-400 mb-6">جرب تغيير الفلاتر أو البحث بكلمات مختلفة</p>
+          <div className={`text-center py-12 sm:py-16 lg:py-20 rounded-xl sm:rounded-2xl border transition-colors duration-300 ${isDark ? 'bg-gradient-nsr-secondary border-nsr-primary/20' : 'bg-nsr-light/80 border-nsr-primary/20'}`}>
+            <Search size={32} className="text-nsr-accent mx-auto mb-3 sm:mb-4 sm:w-12 sm:h-12 lg:w-12 lg:h-12" />
+            <h3 className={`text-lg sm:text-xl lg:text-2xl font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>لم يتم العثور على منتجات</h3>
+            <p className={`mb-4 sm:mb-6 text-sm sm:text-base transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>جرب تغيير الفلاتر أو البحث بكلمات مختلفة</p>
             <button
               onClick={() => {
                 setSearchTerm('');
                 setFilters({ category: 'all', brand: 'all', priceRange: 'all', sortBy: 'newest' });
               }}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors duration-300"
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-nsr-accent hover:bg-nsr-accent/90 text-white rounded-lg sm:rounded-xl font-semibold transition-colors duration-300 text-sm sm:text-base"
             >
               إعادة تعيين الفلاتر
             </button>
           </div>
         ) : (
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden">
+          <div className={`backdrop-blur-sm border rounded-xl sm:rounded-2xl overflow-hidden transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30 border-nsr-primary/20' : 'bg-nsr-light/80 border-nsr-primary/20'}`}>
             <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gradient-to-r from-slate-800/80 to-slate-900/80">
+              <table className="w-full min-w-[800px]">
+                <thead className={`transition-colors duration-300 ${isDark ? 'bg-gradient-nsr-secondary' : 'bg-nsr-light-100'}`}>
                   <tr>
-                    <th className="px-6 py-4 text-right text-blue-400 font-semibold">الصورة</th>
-                    <th className="px-6 py-4 text-right text-blue-400 font-semibold">معلومات المنتج</th>
-                    <th className="px-6 py-4 text-right text-blue-400 font-semibold">المواصفات</th>
-                    <th className="px-6 py-4 text-right text-blue-400 font-semibold">السعر</th>
-                    <th className="px-6 py-4 text-right text-blue-400 font-semibold">المخزون</th>
-                    <th className="px-6 py-4 text-right text-blue-400 font-semibold">الحالة</th>
-                    <th className="px-6 py-4 text-right text-blue-400 font-semibold">الإجراءات</th>
+                    <th className={`px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-nsr-accent'}`}>الصورة</th>
+                    <th className={`px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-nsr-accent'}`}>معلومات المنتج</th>
+                    <th className={`px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-nsr-accent'}`}>المواصفات</th>
+                    <th className={`px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-nsr-accent'}`}>السعر</th>
+                    <th className={`px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-nsr-accent'}`}>المخزون</th>
+                    <th className={`px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-nsr-accent'}`}>الحالة</th>
+                    <th className={`px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-nsr-accent'}`}>الإجراءات</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/10">
+                <tbody className={`divide-y transition-colors duration-300 ${isDark ? 'divide-nsr-primary/20' : 'divide-nsr-primary/20'}`}>
                   {sortedProducts.map((product) => {
                     const discountPercentage = getDiscountPercentage(product.originalPrice, product.price);
 
                     return (
-                      <tr key={product.id} className="hover:bg-white/5 transition-colors duration-300">
+                      <tr key={product.id} className={`transition-colors duration-300 ${isDark ? 'hover:bg-nsr-primary/5' : 'hover:bg-nsr-light-100/50'}`}>
                         {/* الصورة */}
-                        <td className="px-6 py-4">
-                          <div className="relative w-16 h-16 rounded-xl overflow-hidden group">
+                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+                          <div className="relative w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-lg sm:rounded-xl overflow-hidden group">
                             <img
                               src={product.images[0]}
                               alt={product.title}
                               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                             />
                             {product.isNew && (
-                              <span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+                              <span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded-full font-semibold">
                                 جديد
                               </span>
                             )}
@@ -515,24 +515,24 @@ export default function LuxuryProductsPage() {
                         </td>
 
                         {/* معلومات المنتج */}
-                        <td className="px-6 py-4">
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm text-blue-400 font-medium bg-blue-500/10 px-2 py-1 rounded-lg">
+                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+                          <div className="space-y-1 sm:space-y-2">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
+                              <span className={`text-xs sm:text-sm font-medium px-1 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg transition-colors duration-300 ${isDark ? 'text-nsr-accent bg-nsr-accent/10' : 'text-nsr-accent bg-nsr-accent/10'}`}>
                                 {product.brand}
                               </span>
                               <div className="flex items-center gap-1">
-                                <Star size={12} className="text-yellow-400 fill-current" />
-                                <span className="text-xs text-slate-300">{product.rating}</span>
-                                <span className="text-xs text-slate-500">({product.reviews})</span>
+                                <Star size={10} className="text-yellow-400 fill-current sm:w-3 sm:h-3" />
+                                <span className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>{product.rating}</span>
+                                <span className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>({product.reviews})</span>
                               </div>
                             </div>
-                            <h3 className="font-semibold text-white text-sm max-w-xs">
+                            <h3 className={`font-semibold text-xs sm:text-sm max-w-xs transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>
                               {product.title}
                             </h3>
                             <div className="flex flex-wrap gap-1">
                               {product.tags.slice(0, 2).map((tag, tagIndex) => (
-                                <span key={tagIndex} className="bg-slate-700/50 text-slate-300 px-2 py-0.5 rounded-lg text-xs">
+                                <span key={tagIndex} className={`px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs transition-colors duration-300 ${isDark ? 'bg-nsr-primary/20 text-nsr-light-200' : 'bg-nsr-light-200 text-nsr-dark-600'}`}>
                                   {tag}
                                 </span>
                               ))}
@@ -541,39 +541,39 @@ export default function LuxuryProductsPage() {
                         </td>
 
                         {/* المواصفات */}
-                        <td className="px-6 py-4">
+                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
                           <div className="space-y-1 text-xs">
                             {product.specifications.processor && (
-                              <div className="text-slate-300">
-                                <span className="font-medium text-blue-400">المعالج:</span> {product.specifications.processor}
+                              <div className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
+                                <span className="font-medium text-nsr-accent">المعالج:</span> {product.specifications.processor}
                               </div>
                             )}
                             {product.specifications.ram && (
-                              <div className="text-slate-300">
-                                <span className="font-medium text-blue-400">الذاكرة:</span> {product.specifications.ram}
+                              <div className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
+                                <span className="font-medium text-nsr-accent">الذاكرة:</span> {product.specifications.ram}
                               </div>
                             )}
                             {product.specifications.storage && (
-                              <div className="text-slate-300">
-                                <span className="font-medium text-blue-400">التخزين:</span> {product.specifications.storage}
+                              <div className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
+                                <span className="font-medium text-nsr-accent">التخزين:</span> {product.specifications.storage}
                               </div>
                             )}
                           </div>
                         </td>
 
                         {/* السعر */}
-                        <td className="px-6 py-4">
+                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
                           <div className="space-y-1">
-                            <div className="text-lg font-bold text-blue-400">
+                            <div className="text-sm sm:text-base lg:text-lg font-bold text-nsr-accent">
                               {getCurrencySymbol()}{convertCurrency(product.price).toLocaleString()}
                             </div>
                             {product.originalPrice && (
-                              <div className="text-sm text-slate-500 line-through">
+                              <div className={`text-xs sm:text-sm line-through transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
                                 {getCurrencySymbol()}{convertCurrency(product.originalPrice).toLocaleString()}
                               </div>
                             )}
                             {discountPercentage > 0 && (
-                              <span className="bg-red-500 text-white px-2 py-1 rounded-lg text-xs font-semibold">
+                              <span className="bg-red-500 text-white px-1 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-xs font-semibold">
                                 -{discountPercentage}%
                               </span>
                             )}
@@ -581,24 +581,24 @@ export default function LuxuryProductsPage() {
                         </td>
 
                         {/* المخزون */}
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
-                            <div className={`w-3 h-3 rounded-full ${getStockColor(product.stock)}`}></div>
-                            <span className="text-sm text-white font-medium">
+                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+                          <div className="flex items-center gap-1 sm:gap-2">
+                            <div className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${getStockColor(product.stock)}`}></div>
+                            <span className={`text-xs sm:text-sm font-medium transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>
                               {product.stock}
                             </span>
                           </div>
                         </td>
 
                         {/* الحالة */}
-                        <td className="px-6 py-4">
+                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
                           <div className="flex flex-col gap-1">
                             {product.isBestSeller && (
-                              <span className="bg-orange-500/20 text-orange-300 px-2 py-1 rounded-lg text-xs text-center border border-orange-500/30">
+                              <span className="bg-orange-500/20 text-orange-300 px-1 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-xs text-center border border-orange-500/30">
                                 الأكثر مبيعاً
                               </span>
                             )}
-                            <span className={`px-2 py-1 rounded-lg text-xs text-center border ${product.stock > 10
+                            <span className={`px-1 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-xs text-center border ${product.stock > 10
                               ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30'
                               : product.stock > 0
                                 ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30'
@@ -610,15 +610,15 @@ export default function LuxuryProductsPage() {
                         </td>
 
                         {/* الإجراءات */}
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-2">
+                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+                          <div className="flex items-center gap-1 sm:gap-2">
                             <Link to={`/products/${product.id}`}>
                               <_motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
-                                className="group p-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 rounded-xl hover:bg-blue-500/30 transition-all duration-300"
+                                className="group p-1.5 sm:p-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 rounded-lg sm:rounded-xl hover:bg-blue-500/30 transition-all duration-300"
                               >
-                                <Eye size={16} className="group-hover:scale-110 transition-transform" />
+                                <Eye size={14} className="group-hover:scale-110 transition-transform sm:w-4 sm:h-4" />
                               </_motion.button>
                             </Link>
 
@@ -626,9 +626,9 @@ export default function LuxuryProductsPage() {
                               <_motion.button
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
-                                className="group p-2 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/30 transition-all duration-300"
+                                className="group p-1.5 sm:p-2 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 rounded-lg sm:rounded-xl hover:bg-emerald-500/30 transition-all duration-300"
                               >
-                                <Edit size={16} className="group-hover:scale-110 transition-transform" />
+                                <Edit size={14} className="group-hover:scale-110 transition-transform sm:w-4 sm:h-4" />
                               </_motion.button>
                             </Link>
 
@@ -636,9 +636,9 @@ export default function LuxuryProductsPage() {
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                               onClick={() => handleDelete(product.id)}
-                              className="group p-2 bg-red-500/20 border border-red-500/30 text-red-300 rounded-xl hover:bg-red-500/30 transition-all duration-300"
+                              className="group p-1.5 sm:p-2 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg sm:rounded-xl hover:bg-red-500/30 transition-all duration-300"
                             >
-                              <Trash size={16} className="group-hover:scale-110 transition-transform" />
+                              <Trash size={14} className="group-hover:scale-110 transition-transform sm:w-4 sm:h-4" />
                             </_motion.button>
                           </div>
                         </td>

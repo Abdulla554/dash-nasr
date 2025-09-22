@@ -5,94 +5,168 @@ export default {
   theme: {
     extend: {
       colors: {
-        // NSR-PC Color Palette
-        primary: {
-          DEFAULT: "#1A73E8", // الأزرق الملكي الفخم
-          50: "#E3F2FD",
-          100: "#BBDEFB",
-          200: "#90CAF9",
-          300: "#64B5F6",
-          400: "#42A5F5",
-          500: "#1A73E8",
-          600: "#1976D2",
-          700: "#1565C0",
-          800: "#0D47A1",
-          900: "#0A3D91",
-        },
-        secondary: {
-          DEFAULT: "#1B3C73", // النيلي الفخم
-          50: "#E8EAF6",
-          100: "#C5CAE9",
-          200: "#9FA8DA",
-          300: "#7986CB",
-          400: "#5C6BC0",
-          500: "#1B3C73",
-          600: "#3949AB",
-          700: "#303F9F",
-          800: "#283593",
-          900: "#1A237E",
-        },
+        // نظام الألوان الجديد الممتاز
+        // 1️⃣ الأسود/الغامق
         dark: {
-          DEFAULT: "#121212", // الأسود الفحمي
-          50: "#F5F5F5",
-          100: "#EEEEEE",
-          200: "#E0E0E0",
-          300: "#BDBDBD",
-          400: "#9E9E9E",
-          500: "#757575",
-          600: "#616161",
-          700: "#424242",
-          800: "#303030",
-          900: "#121212",
+          DEFAULT: "#1a1a2e", // الأسود الفخم الأساسي
+          50: "#f8f9fa",
+          100: "#e9ecef",
+          200: "#dee2e6",
+          300: "#ced4da",
+          400: "#adb5bd",
+          500: "#6c757d",
+          600: "#495057",
+          700: "#343a40",
+          800: "#212529",
+          900: "#1a1a2e", // اللون الأساسي
+          950: "#0f0f1a", // أغمق للتباين
         },
-        neutral: {
-          DEFAULT: "#B0BEC5", // الفضي الرمادي
-          50: "#F8F9FA",
-          100: "#F1F3F4",
-          200: "#E8EAED",
-          300: "#DADCE0",
-          400: "#BDC1C6",
-          500: "#B0BEC5",
-          600: "#9AA0A6",
-          700: "#80868B",
-          800: "#5F6368",
-          900: "#3C4043",
+        // 2️⃣ الأبيض/الفاتح
+        light: {
+          DEFAULT: "#F9F3EF", // الكريمي الفخم الأساسي
+          50: "#F9F3EF", // اللون الأساسي
+          100: "#f5f0eb",
+          200: "#f0e8e0",
+          300: "#e8ddd2",
+          400: "#ddd0c1",
+          500: "#d1c2b0",
+          600: "#c4b39e",
+          700: "#b5a28b",
+          800: "#a59077",
+          900: "#947d62",
         },
+        // 3️⃣ اللون الثانوي - الأزرق الباهت الفخم
+        secondary: {
+          DEFAULT: "#749BC2", // الأزرق الباهت الفخم
+          50: "#f0f4f8",
+          100: "#d9e4f0",
+          200: "#b3c9e1",
+          300: "#8daed2",
+          400: "#749BC2", // اللون الأساسي
+          500: "#5a8bb3",
+          600: "#4a7ba3",
+          700: "#3a6b93",
+          800: "#2a5b83",
+          900: "#1a4b73",
+          950: "#0a3b63",
+        },
+        // 4️⃣ اللون الأكسنت - التركواز المعدني
         accent: {
-          DEFAULT: "#00CFFF", // السماوي الكهربائي
-          50: "#E0F7FF",
-          100: "#B3EBFF",
-          200: "#80DDFF",
-          300: "#4DCEFF",
-          400: "#1AC1FF",
-          500: "#00CFFF",
-          600: "#00B8E6",
-          700: "#00A1CC",
-          800: "#008AB3",
-          900: "#006699",
+          DEFAULT: "#2C6D90", // التركواز المعدني
+          50: "#e6f2f7",
+          100: "#b3d9e6",
+          200: "#80c0d5",
+          300: "#4da7c4",
+          400: "#2C6D90", // اللون الأساسي
+          500: "#2a5f7d",
+          600: "#28516a",
+          700: "#264357",
+          800: "#243544",
+          900: "#222731",
+          950: "#20191e",
+        },
+        // ألوان إضافية للدعم
+        primary: {
+          DEFAULT: "#749BC2", // نفس الثانوي للتوافق
+          50: "#f0f4f8",
+          100: "#d9e4f0",
+          200: "#b3c9e1",
+          300: "#8daed2",
+          400: "#749BC2",
+          500: "#5a8bb3",
+          600: "#4a7ba3",
+          700: "#3a6b93",
+          800: "#2a5b83",
+          900: "#1a4b73",
+        },
+        // ألوان الحالة
+        success: {
+          DEFAULT: "#10b981",
+          50: "#ecfdf5",
+          100: "#d1fae5",
+          200: "#a7f3d0",
+          300: "#6ee7b7",
+          400: "#34d399",
+          500: "#10b981",
+          600: "#059669",
+          700: "#047857",
+          800: "#065f46",
+          900: "#064e3b",
+        },
+        warning: {
+          DEFAULT: "#f59e0b",
+          50: "#fffbeb",
+          100: "#fef3c7",
+          200: "#fde68a",
+          300: "#fcd34d",
+          400: "#fbbf24",
+          500: "#f59e0b",
+          600: "#d97706",
+          700: "#b45309",
+          800: "#92400e",
+          900: "#78350f",
+        },
+        error: {
+          DEFAULT: "#ef4444",
+          50: "#fef2f2",
+          100: "#fee2e2",
+          200: "#fecaca",
+          300: "#fca5a5",
+          400: "#f87171",
+          500: "#ef4444",
+          600: "#dc2626",
+          700: "#b91c1c",
+          800: "#991b1b",
+          900: "#7f1d1d",
         },
       },
+      // ألوان الخلفية المخصصة
       backgroundColor: {
-        "nsr-dark": "#121212",
-        "nsr-light": "#ffffff",
-        "nsr-primary": "#1A73E8",
-        "nsr-secondary": "#1B3C73",
-        "nsr-neutral": "#B0BEC5",
-        "nsr-accent": "#00CFFF",
+        "nsr-dark": "#1a1a2e",
+        "nsr-light": "#F9F3EF",
+        "nsr-secondary": "#749BC2",
+        "nsr-accent": "#2C6D90",
+        "nsr-dark-900": "#1a1a2e",
+        "nsr-light-cream": "#F9F3EF",
+        "nsr-blue-elegant": "#749BC2",
+        "nsr-turquoise": "#2C6D90",
       },
+      // ألوان النص المخصصة
       textColor: {
-        "nsr-primary": "#1A73E8",
-        "nsr-secondary": "#1B3C73",
-        "nsr-neutral": "#B0BEC5",
-        "nsr-accent": "#00CFFF",
-        "nsr-dark": "#1e293b",
-        "nsr-light": "#ffffff",
+        "nsr-dark": "#1a1a2e",
+        "nsr-light": "#F9F3EF",
+        "nsr-secondary": "#749BC2",
+        "nsr-accent": "#2C6D90",
+        "nsr-dark-900": "#1a1a2e",
+        "nsr-light-cream": "#F9F3EF",
+        "nsr-blue-elegant": "#749BC2",
+        "nsr-turquoise": "#2C6D90",
       },
+      // ألوان الحدود المخصصة
       borderColor: {
-        "nsr-primary": "#1A73E8",
-        "nsr-secondary": "#1B3C73",
-        "nsr-neutral": "#B0BEC5",
-        "nsr-accent": "#00CFFF",
+        "nsr-dark": "#1a1a2e",
+        "nsr-light": "#F9F3EF",
+        "nsr-secondary": "#749BC2",
+        "nsr-accent": "#2C6D90",
+        "nsr-dark-900": "#1a1a2e",
+        "nsr-light-cream": "#F9F3EF",
+        "nsr-blue-elegant": "#749BC2",
+        "nsr-turquoise": "#2C6D90",
+      },
+      // تدرجات مخصصة
+      backgroundImage: {
+        "gradient-nsr-dark":
+          "linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%)",
+        "gradient-nsr-light":
+          "linear-gradient(135deg, #F9F3EF 0%, #f5f0eb 100%)",
+        "gradient-nsr-secondary":
+          "linear-gradient(135deg, #749BC2 0%, #5a8bb3 100%)",
+        "gradient-nsr-accent":
+          "linear-gradient(135deg, #2C6D90 0%, #2a5f7d 100%)",
+        "gradient-nsr-elegant":
+          "linear-gradient(135deg, #749BC2 0%, #2C6D90 100%)",
+        "gradient-nsr-sunset":
+          "linear-gradient(135deg, #F9F3EF 0%, #749BC2 50%, #2C6D90 100%)",
       },
     },
   },

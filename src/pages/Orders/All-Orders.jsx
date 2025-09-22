@@ -377,12 +377,12 @@ export default function AllOrdersPage() {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={toggleTheme}
-                                className={`group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-white/60 border-gray-200 hover:border-nsr-accent/30 shadow-sm'}`}
+                                className={`group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-nsr-light-100 border-nsr-primary/20 hover:border-nsr-accent/30 shadow-sm'}`}
                             >
                                 {isDark ? (
-                                    <Sun className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`} />
+                                    <Sun className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`} />
                                 ) : (
-                                    <Moon className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`} />
+                                    <Moon className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`} />
                                 )}
                             </_motion.button>
 
@@ -391,10 +391,10 @@ export default function AllOrdersPage() {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={toggleCurrency}
-                                className={`group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 flex items-center gap-2 ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-white/60 border-gray-200 hover:border-nsr-accent/30 shadow-sm'}`}
+                                className={`group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 flex items-center gap-2 ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-nsr-light-100 border-nsr-primary/20 hover:border-nsr-accent/30 shadow-sm'}`}
                             >
-                                <DollarSign className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`} />
-                                <span className={`font-semibold transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`}>{getCurrencyCode()}</span>
+                                <DollarSign className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`} />
+                                <span className={`font-semibold transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`}>{getCurrencyCode()}</span>
                             </_motion.button>
                         </div>
                     </div>

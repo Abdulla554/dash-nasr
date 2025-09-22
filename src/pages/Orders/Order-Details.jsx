@@ -655,7 +655,7 @@ export default function OrderDetails() {
     };
 
     return (
-        <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-nsr-dark' : 'bg-nsr-light'}`}>
+        <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-gradient-nsr-dark' : 'bg-gradient-nsr-light'}`}>
             <ConfirmationModal
                 isOpen={deleteModalOpen}
                 onClose={() => setDeleteModalOpen(false)}
@@ -679,7 +679,7 @@ export default function OrderDetails() {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => navigate('/orders')}
-                            className="flex items-center gap-2 text-nsr-primary hover:text-nsr-accent transition-colors duration-300"
+                            className={`flex items-center gap-2 transition-colors duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
                         >
                             <ArrowLeft size={20} />
                             <span>العودة للطلبات</span>
@@ -690,7 +690,7 @@ export default function OrderDetails() {
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={toggleCurrency}
-                                className="p-2 bg-nsr-primary/10 rounded-xl text-nsr-primary hover:bg-nsr-accent/10 hover:text-nsr-accent transition-all duration-300 flex items-center gap-2"
+                                className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 flex items-center gap-2 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
                             >
                                 <DollarSign size={20} />
                                 <span className="text-sm font-semibold">{getCurrencyCode()}</span>
@@ -700,7 +700,7 @@ export default function OrderDetails() {
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={handlePrint}
-                                className="p-2 bg-nsr-primary/10 rounded-xl text-nsr-primary hover:bg-nsr-accent/10 hover:text-nsr-accent transition-all duration-300"
+                                className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
                             >
                                 <Printer size={20} />
                             </_motion.button>
@@ -709,7 +709,7 @@ export default function OrderDetails() {
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 onClick={handleShare}
-                                className="p-2 bg-nsr-primary/10 rounded-xl text-nsr-primary hover:bg-nsr-accent/10 hover:text-nsr-accent transition-all duration-300"
+                                className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
                             >
                                 <Share2 size={20} />
                             </_motion.button>
@@ -724,10 +724,10 @@ export default function OrderDetails() {
                 <div className="bg-nsr-secondary/30 rounded-3xl p-8 mb-8">
                     <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                         <div>
-                            <h1 className="text-3xl font-bold text-nsr-primary mb-2">
+                            <h1 className={`text-3xl font-bold mb-2 transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>
                                 {order.orderNumber}
                             </h1>
-                            <p className="text-nsr-neutral">
+                            <p className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
                                 تم إنشاء الطلب في {new Date(order.orderDate).toLocaleDateString('ar-SA', {
                                     year: 'numeric',
                                     month: 'long',

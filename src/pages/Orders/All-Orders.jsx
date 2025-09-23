@@ -29,6 +29,7 @@ import { motion as _motion } from "framer-motion";
 import { useTheme } from "../../contexts/ThemeContext.jsx";
 import { useCurrency } from "../../contexts/CurrencyContext.jsx";
 import ExchangeRateModal from "../../components/ExchangeRateModal.jsx";
+import { useOrders } from "../../hooks/useOrdersQuery";
 
 export default function AllOrdersPage() {
     const { isDark, toggleTheme } = useTheme();
@@ -40,171 +41,12 @@ export default function AllOrdersPage() {
         sortBy: 'newest'
     });
 
-    // Demo data for orders
-    const demoOrders = [
-        {
-            id: 1,
-            orderNumber: "ORD-2024-001",
-            customer: {
-                name: "أحمد محمد",
-                email: "ahmed@example.com",
-                phone: "+966501234567"
-            },
-            items: [
-                {
-                    id: 1,
-                    name: "MacBook Pro 16-inch M3 Max",
-                    price: 15999,
-                    quantity: 1,
-                    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=100"
-                },
-                {
-                    id: 2,
-                    name: "Logitech MX Master 3S",
-                    price: 299,
-                    quantity: 2,
-                    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=100"
-                }
-            ],
-            total: 16597,
-            status: "completed",
-            paymentMethod: "credit_card",
-            shippingAddress: {
-                street: "شارع الملك فهد",
-                city: "الرياض",
-                postalCode: "12345"
-            },
-            orderDate: "2024-01-15",
-            deliveryDate: "2024-01-18",
-            trackingNumber: "TRK123456789"
-        },
-        {
-            id: 2,
-            orderNumber: "ORD-2024-002",
-            customer: {
-                name: "فاطمة أحمد",
-                email: "fatima@example.com",
-                phone: "+966507654321"
-            },
-            items: [
-                {
-                    id: 3,
-                    name: "Dell XPS 15 OLED",
-                    price: 12999,
-                    quantity: 1,
-                    image: "https://images.unsplash.com/photo-1496181133206-7fd91fc51a46?w=100"
-                }
-            ],
-            total: 12999,
-            status: "processing",
-            paymentMethod: "bank_transfer",
-            shippingAddress: {
-                street: "شارع العليا",
-                city: "جدة",
-                postalCode: "54321"
-            },
-            orderDate: "2024-01-16",
-            deliveryDate: null,
-            trackingNumber: "TRK987654321"
-        },
-        {
-            id: 3,
-            orderNumber: "ORD-2024-003",
-            customer: {
-                name: "محمد علي",
-                email: "mohammed@example.com",
-                phone: "+966509876543"
-            },
-            items: [
-                {
-                    id: 4,
-                    name: "Samsung 49-inch Ultrawide Monitor",
-                    price: 3999,
-                    quantity: 1,
-                    image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=100"
-                },
-                {
-                    id: 5,
-                    name: "ASUS ROG Strix G16",
-                    price: 11999,
-                    quantity: 1,
-                    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=100"
-                }
-            ],
-            total: 15998,
-            status: "shipped",
-            paymentMethod: "credit_card",
-            shippingAddress: {
-                street: "شارع التحلية",
-                city: "الدمام",
-                postalCode: "67890"
-            },
-            orderDate: "2024-01-17",
-            deliveryDate: "2024-01-20",
-            trackingNumber: "TRK456789123"
-        },
-        {
-            id: 4,
-            orderNumber: "ORD-2024-004",
-            customer: {
-                name: "نورا السعد",
-                email: "nora@example.com",
-                phone: "+966501112233"
-            },
-            items: [
-                {
-                    id: 6,
-                    name: "Logitech MX Master 3S",
-                    price: 299,
-                    quantity: 3,
-                    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=100"
-                }
-            ],
-            total: 897,
-            status: "cancelled",
-            paymentMethod: "credit_card",
-            shippingAddress: {
-                street: "شارع الأمير محمد",
-                city: "الخبر",
-                postalCode: "11111"
-            },
-            orderDate: "2024-01-18",
-            deliveryDate: null,
-            trackingNumber: null
-        },
-        {
-            id: 5,
-            orderNumber: "ORD-2024-005",
-            customer: {
-                name: "خالد النعيم",
-                email: "khalid@example.com",
-                phone: "+966504445566"
-            },
-            items: [
-                {
-                    id: 1,
-                    name: "MacBook Pro 16-inch M3 Max",
-                    price: 15999,
-                    quantity: 1,
-                    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=100"
-                }
-            ],
-            total: 15999,
-            status: "pending",
-            paymentMethod: "cash_on_delivery",
-            shippingAddress: {
-                street: "شارع الملك عبدالعزيز",
-                city: "الرياض",
-                postalCode: "22222"
-            },
-            orderDate: "2024-01-19",
-            deliveryDate: null,
-            trackingNumber: null
-        }
-    ];
+    // Use orders from API
+    const { data: ordersData, isLoading: ordersLoading, error: ordersError } = useOrders();
+    const orders = ordersData?.data || [];
 
     // Filter orders
-    const filteredOrders = demoOrders.filter(order => {
+    const filteredOrders = orders.filter(order => {
         const matchesSearch = order.orderNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
             order.customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             order.customer.email.toLowerCase().includes(searchTerm.toLowerCase());
@@ -405,10 +247,10 @@ export default function AllOrdersPage() {
             <div className="px-8 py-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                     {[
-                        { title: "إجمالي الطلبات", value: demoOrders.length, icon: ShoppingCart, color: "from-nsr-accent to-nsr-primary", change: "+15%" },
-                        { title: "الطلبات المكتملة", value: demoOrders.filter(o => o.status === 'completed').length, icon: CheckCircle, color: "from-emerald-600 to-emerald-800", change: "+8%" },
-                        { title: "قيد المعالجة", value: demoOrders.filter(o => o.status === 'processing').length, icon: Clock, color: "from-blue-600 to-blue-800", change: "+12%" },
-                        { title: "إجمالي المبيعات", value: demoOrders.reduce((sum, order) => sum + order.total, 0), icon: TrendingUp, color: "from-purple-600 to-purple-800", change: "+23%" }
+                        { title: "إجمالي الطلبات", value: orders.length, icon: ShoppingCart, color: "from-nsr-accent to-nsr-primary", change: "+15%" },
+                        { title: "الطلبات المكتملة", value: orders.filter(o => o.status === 'completed').length, icon: CheckCircle, color: "from-emerald-600 to-emerald-800", change: "+8%" },
+                        { title: "قيد المعالجة", value: orders.filter(o => o.status === 'processing').length, icon: Clock, color: "from-blue-600 to-blue-800", change: "+12%" },
+                        { title: "إجمالي المبيعات", value: orders.reduce((sum, order) => sum + order.total, 0), icon: TrendingUp, color: "from-purple-600 to-purple-800", change: "+23%" }
                     ].map((stat, index) => (
                         <div key={index} className="group relative">
                             <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl opacity-80 group-hover:opacity-90 transition-all duration-300`}></div>
@@ -483,7 +325,7 @@ export default function AllOrdersPage() {
                     {/* Results Count */}
                     <div className="mt-4 flex items-center justify-between">
                         <p className={`transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-black'}`}>
-                            عرض {sortedOrders.length} من {demoOrders.length} طلب
+                            عرض {sortedOrders.length} من {orders.length} طلب
                         </p>
                         <div className="flex items-center gap-2">
                             <Filter size={16} className="text-nsr-accent" />

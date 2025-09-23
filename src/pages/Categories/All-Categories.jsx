@@ -21,6 +21,7 @@ import {
   Moon
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCategories } from "../../hooks/useCategoriesQuery";
 
 export default function LuxuryCategoriesPage() {
   const [isDark, setIsDark] = useState(true);
@@ -30,91 +31,12 @@ export default function LuxuryCategoriesPage() {
   const [sortOrder, setSortOrder] = useState("asc");
   const [viewMode, setViewMode] = useState("grid");
 
-  // Demo Categories Data
-  const demoCategoriesData = [
-    {
-      id: 1,
-      title: "أجهزة الكمبيوتر المكتبية",
-      titleEn: "Desktop PCs",
-      description: "أجهزة كمبيوتر مكتبية عالية الأداء للمنزل والمكتب مع أحدث التقنيات",
-      image: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=500&h=400&fit=crop",
-      category: "pc",
-      productCount: 45,
-      isActive: true,
-      createdAt: "2024-01-15",
-      growth: "+15%",
-      icon: Monitor
-    },
-    {
-      id: 2,
-      title: "أجهزة اللابتوب",
-      titleEn: "Laptops",
-      description: "لابتوبات متنوعة للأعمال والترفيه والدراسة بأداء استثنائي",
-      image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&h=400&fit=crop",
-      category: "laptop",
-      productCount: 32,
-      isActive: true,
-      createdAt: "2024-01-10",
-      growth: "+23%",
-      icon: Laptop
-    },
-    {
-      id: 3,
-      title: "إكسسوارات الكمبيوتر",
-      titleEn: "Computer Accessories",
-      description: "فأرات، لوحات مفاتيح، سماعات، وملحقات عالية الجودة",
-      image: "https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&h=400&fit=crop",
-      category: "accessories",
-      productCount: 78,
-      isActive: true,
-      createdAt: "2024-01-20",
-      growth: "+31%",
-      icon: MousePointer
-    },
-    {
-      id: 4,
-      title: "أجهزة الألعاب",
-      titleEn: "Gaming PCs",
-      description: "أجهزة كمبيوتر مخصصة للألعاب بأداء عالي وتبريد متطور",
-      image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=500&h=400&fit=crop",
-      category: "pc",
-      productCount: 28,
-      isActive: true,
-      createdAt: "2024-01-25",
-      growth: "+42%",
-      icon: Gamepad2
-    },
-    {
-      id: 5,
-      title: "لابتوبات الألعاب",
-      titleEn: "Gaming Laptops",
-      description: "لابتوبات عالية الأداء مخصصة للألعاب بكروت شاشة قوية",
-      image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500&h=400&fit=crop",
-      category: "laptop",
-      productCount: 19,
-      isActive: true,
-      createdAt: "2024-01-18",
-      growth: "+28%",
-      icon: Gamepad2
-    },
-    {
-      id: 6,
-      title: "أجهزة الخوادم",
-      titleEn: "Servers",
-      description: "خوادم قوية للشركات والمؤسسات بموثوقية عالية",
-      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500&h=400&fit=crop",
-      category: "pc",
-      productCount: 15,
-      isActive: true,
-      createdAt: "2024-01-08",
-      growth: "+18%",
-      icon: Server
-    }
-  ];
+  // Use categories from API
+  const { data: categories = [], isLoading, error } = useCategories();
 
   // Filter and sort categories
   const filteredAndSortedCategories = React.useMemo(() => {
-    let filtered = demoCategoriesData;
+    let filtered = categories;
 
     // Filter by search term
     if (searchTerm) {
@@ -226,10 +148,10 @@ export default function LuxuryCategoriesPage() {
       <div className="px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {[
-            { title: "إجمالي الفئات", value: demoCategoriesData.length, icon: Package, color: "from-purple-600 to-purple-800", change: "+12%" },
-            { title: "فئات الكمبيوتر", value: demoCategoriesData.filter(c => c.category === 'pc').length, icon: Monitor, color: "from-blue-600 to-blue-800", change: "+23%" },
-            { title: "فئات اللابتوب", value: demoCategoriesData.filter(c => c.category === 'laptop').length, icon: Laptop, color: "from-emerald-600 to-emerald-800", change: "+18%" },
-            { title: "الإكسسوارات", value: demoCategoriesData.filter(c => c.category === 'accessories').length, icon: MousePointer, color: "from-orange-600 to-orange-800", change: "+31%" }
+            { title: "إجمالي الفئات", value: categories.length, icon: Package, color: "from-purple-600 to-purple-800", change: "+12%" },
+            { title: "فئات الكمبيوتر", value: categories.filter(c => c.category === 'pc').length, icon: Monitor, color: "from-blue-600 to-blue-800", change: "+23%" },
+            { title: "فئات اللابتوب", value: categories.filter(c => c.category === 'laptop').length, icon: Laptop, color: "from-emerald-600 to-emerald-800", change: "+18%" },
+            { title: "الإكسسوارات", value: categories.filter(c => c.category === 'accessories').length, icon: MousePointer, color: "from-orange-600 to-orange-800", change: "+31%" }
           ].map((stat, index) => (
             <div key={index} className="group relative">
               <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl opacity-80 group-hover:opacity-90 transition-all duration-300`}></div>
@@ -330,7 +252,7 @@ export default function LuxuryCategoriesPage() {
           {/* Results Count */}
           <div className="mt-4 flex items-center justify-between">
             <p className="text-slate-300">
-              عرض {filteredAndSortedCategories.length} من {demoCategoriesData.length} فئة
+              عرض {filteredAndSortedCategories.length} من {categories.length} فئة
             </p>
             <div className="flex items-center gap-2">
               <Filter size={16} className="text-purple-400" />

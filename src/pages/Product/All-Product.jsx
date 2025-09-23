@@ -21,6 +21,8 @@ import { motion as _motion } from "framer-motion";
 
 import { useTheme } from "../../contexts/ThemeContext.jsx";
 import { useCurrency } from "../../contexts/CurrencyContext.jsx";
+import { useProducts, useDeleteProduct } from "../../hooks/useProductsQuery";
+import { useBrands } from "../../hooks/useBrandsQuery";
 
 export default function LuxuryProductsPage() {
   const { isDark, toggleTheme } = useTheme();
@@ -33,149 +35,28 @@ export default function LuxuryProductsPage() {
     sortBy: 'newest'
   });
 
-  // Demo data for products
-  const demoProducts = [
-    {
-      id: 1,
-      title: "MacBook Pro 16-inch M3 Max",
-      description: "أقوى لابتوب من Apple مع معالج M3 Max وذاكرة 32GB ومساحة تخزين 1TB SSD",
-      price: 15999,
-      originalPrice: 17999,
-      category: "laptops",
-      brand: "Apple",
-      images: [
-        "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800",
-        "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800",
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800",
-        "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800"
-      ],
-      specifications: {
-        processor: "Apple M3 Max",
-        ram: "32GB",
-        storage: "1TB SSD",
-        graphics: "M3 Max GPU"
-      },
-      rating: 4.9,
-      reviews: 128,
-      stock: 15,
-      isNew: true,
-      isBestSeller: true,
-      tags: ["premium", "professional", "creative"]
-    },
-    {
-      id: 2,
-      title: "Dell XPS 15 OLED",
-      description: "لابتوب عالي الأداء مع شاشة OLED 4K ومعالج Intel i7 الجيل الثالث عشر",
-      price: 12999,
-      originalPrice: 14999,
-      category: "laptops",
-      brand: "Dell",
-      images: [
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800",
-        "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800",
-        "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800",
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800"
-      ],
-      specifications: {
-        processor: "Intel Core i7-13700H",
-        ram: "16GB",
-        storage: "512GB SSD",
-        graphics: "NVIDIA RTX 4050"
-      },
-      rating: 4.7,
-      reviews: 89,
-      stock: 23,
-      isNew: false,
-      isBestSeller: true,
-      tags: ["oled", "4k", "portable"]
-    },
-    {
-      id: 3,
-      title: "ASUS ROG Strix G16",
-      description: "لابتوب للألعاب مع معالج Intel i9 وكرت شاشة RTX 4070",
-      price: 11999,
-      originalPrice: 13999,
-      category: "laptops",
-      brand: "ASUS",
-      images: [
-        "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800",
-        "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800",
-        "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800",
-        "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800"
-      ],
-      specifications: {
-        processor: "Intel Core i9-13980HX",
-        ram: "32GB",
-        storage: "1TB SSD",
-        graphics: "NVIDIA RTX 4070"
-      },
-      rating: 4.8,
-      reviews: 156,
-      stock: 8,
-      isNew: true,
-      isBestSeller: false,
-      tags: ["gaming", "high-performance", "rgb"]
-    },
-    {
-      id: 4,
-      title: "Logitech MX Master 3S",
-      description: "ماوس لاسلكي احترافي مع تقنية MagSpeed وزر صامت",
-      price: 299,
-      originalPrice: 399,
-      category: "accessories",
-      brand: "Logitech",
-      images: [
-        "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800",
-        "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800",
-        "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800",
-        "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800"
-      ],
-      specifications: {
-        connectivity: "Bluetooth & USB-C",
-        battery: "Up to 70 days",
-        dpi: "8000 DPI",
-        buttons: "7 programmable buttons"
-      },
-      rating: 4.8,
-      reviews: 234,
-      stock: 45,
-      isNew: false,
-      isBestSeller: true,
-      tags: ["wireless", "professional", "ergonomic"]
-    },
-    {
-      id: 5,
-      title: "Samsung 49-inch Ultrawide Monitor",
-      description: "شاشة عريضة احترافية بدقة 5120x1440 مع تقنية HDR10",
-      price: 3999,
-      originalPrice: 4999,
-      category: "accessories",
-      brand: "Samsung",
-      images: [
-        "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800",
-        "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800",
-        "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800",
-        "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800"
-      ],
-      specifications: {
-        size: "49-inch",
-        resolution: "5120x1440",
-        refreshRate: "120Hz",
-        panel: "VA"
-      },
-      rating: 4.9,
-      reviews: 78,
-      stock: 12,
-      isNew: false,
-      isBestSeller: true,
-      tags: ["ultrawide", "professional", "hdr"]
-    }
-  ];
+  // React Query hooks
+  const { data: productsData, isLoading, error, refetch } = useProducts({
+    search: searchTerm,
+    category: filters.category !== 'all' ? filters.category : undefined,
+    brand: filters.brand !== 'all' ? filters.brand : undefined,
+    sort: filters.sortBy,
+    page: 1,
+    limit: 20
+  });
 
-  const brands = [...new Set(demoProducts.map(p => p.brand))];
+  const deleteProductMutation = useDeleteProduct();
+  const { data: brandsData } = useBrands();
+
+  const products = productsData?.data || [];
+  const pagination = productsData?.pagination || {};
+  const brands = brandsData || [];
+
+  // Use products from API
+  const displayProducts = products;
 
   // Filter products
-  const filteredProducts = demoProducts.filter(product => {
+  const filteredProducts = displayProducts.filter(product => {
     const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.brand.toLowerCase().includes(searchTerm.toLowerCase());
@@ -246,14 +127,19 @@ export default function LuxuryProductsPage() {
     setDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    // في التطبيق الحقيقي، هنا ستكون API call
-    toast.success(`تم حذف المنتج رقم ${selectedProductId} بنجاح`, {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    setDeleteModalOpen(false);
-    setSelectedProductId(null);
+  const handleConfirmDelete = async () => {
+    try {
+      await deleteProductMutation.mutateAsync(selectedProductId);
+      toast.success(`تم حذف المنتج رقم ${selectedProductId} بنجاح`, {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      setDeleteModalOpen(false);
+      setSelectedProductId(null);
+    } catch (error) {
+      toast.error('فشل في حذف المنتج');
+      console.error('Delete error:', error);
+    }
   };
 
 
@@ -354,10 +240,10 @@ export default function LuxuryProductsPage() {
       <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {[
-            { title: "إجمالي المنتجات", value: demoProducts.length, icon: ShoppingCart, color: "from-nsr-accent to-nsr-primary", change: "+12%" },
-            { title: "الأكثر مبيعاً", value: demoProducts.filter(p => p.isBestSeller).length, icon: TrendingUp, color: "from-emerald-600 to-emerald-800", change: "+23%" },
-            { title: "المنتجات الجديدة", value: demoProducts.filter(p => p.isNew).length, icon: Zap, color: "from-purple-600 to-purple-800", change: "+8%" },
-            { title: "المنتجات المميزة", value: demoProducts.filter(p => p.rating >= 4.8).length, icon: Award, color: "from-yellow-600 to-yellow-800", change: "+15%" }
+            { title: "إجمالي المنتجات", value: displayProducts.length, icon: ShoppingCart, color: "from-nsr-accent to-nsr-primary", change: "+12%" },
+            { title: "الأكثر مبيعاً", value: displayProducts.filter(p => p.isBestSeller).length, icon: TrendingUp, color: "from-emerald-600 to-emerald-800", change: "+23%" },
+            { title: "المنتجات الجديدة", value: displayProducts.filter(p => p.isNew).length, icon: Zap, color: "from-purple-600 to-purple-800", change: "+8%" },
+            { title: "المنتجات المميزة", value: displayProducts.filter(p => p.rating >= 4.8).length, icon: Award, color: "from-yellow-600 to-yellow-800", change: "+15%" }
           ].map((stat, index) => (
             <div key={index} className="group relative">
               <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl opacity-80 group-hover:opacity-90 transition-all duration-300`}></div>
@@ -415,7 +301,7 @@ export default function LuxuryProductsPage() {
               >
                 <option value="all">جميع الماركات</option>
                 {brands.map(brand => (
-                  <option key={brand} value={brand}>{brand}</option>
+                  <option key={brand.id} value={brand.name}>{brand.name}</option>
                 ))}
               </select>
 
@@ -450,7 +336,7 @@ export default function LuxuryProductsPage() {
           {/* Results Count */}
           <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
             <p className={`text-sm sm:text-base transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
-              عرض {sortedProducts.length} من {demoProducts.length} منتج
+              عرض {sortedProducts.length} من {displayProducts.length} منتج
             </p>
             <div className="flex items-center gap-2">
               <Filter size={14} className="text-nsr-accent sm:w-4 sm:h-4" />

@@ -11,41 +11,41 @@ import ClipLoader from "react-spinners/ClipLoader";
 export default function AllBanner() {
   const queryClient = useQueryClient();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [selectedBrandId, setSelectedBrandId] = useState(null);
+  const [selectedBannerId, setSelectedBannerId] = useState(null);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   const {
-    data: demoBanner,
+    data: banners,
     isLoading,
-   
+    error
   } = useQuery({
-    queryKey: ["Banner"],
+    queryKey: ["banners"],
     queryFn: async () => {
       try {
-        const response = await axiosInstance.get("/brands");
+        const response = await axiosInstance.get("/banners");
         return response.data;
       } catch (error) {
-        console.error("Error fetching certificates:", error);
+        console.error("Error fetching banners:", error);
         throw error;
       }
     },
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (brandId) => {
+    mutationFn: async (bannerId) => {
       try {
-        await axiosInstance.delete(`/brands/${brandId}`);
-        return brandId;
+        await axiosInstance.delete(`/banners/${bannerId}`);
+        return bannerId;
       } catch (error) {
-        console.error("Error deleting brand:", error);
+        console.error("Error deleting banner:", error);
         throw error;
       }
     },
     onSuccess: () => {
-      // Invalidate and refetch certificates query
-      queryClient.invalidateQueries({ queryKey: ["Banner"] });
-      toast.success("Brand deleted successfully", {
+      // Invalidate and refetch banners query
+      queryClient.invalidateQueries({ queryKey: ["banners"] });
+      toast.success("Banner deleted successfully", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -55,7 +55,7 @@ export default function AllBanner() {
       });
     },
     onError: () => {
-      toast.error("Failed to delete brand", {
+      toast.error("Failed to delete banner", {
         position: "top-right",
         autoClose: 3000,
         hideProgressBar: false,
@@ -88,13 +88,13 @@ export default function AllBanner() {
   };
 
   const handleDelete = (id) => {
-    setSelectedBrandId(id);
+    setSelectedBannerId(id);
     setDeleteModalOpen(true);
   };
 
   const handleConfirmDelete = () => {
-    if (selectedBrandId) {
-      deleteMutation.mutate(selectedBrandId);
+    if (selectedBannerId) {
+      deleteMutation.mutate(selectedBannerId);
     }
   };
   if (isLoading) {
@@ -107,31 +107,31 @@ export default function AllBanner() {
       </div>
     );
   }
-  const renderBrand = (Brand) => {
-    if (!Brand) return null;
+  const renderBanner = (Banner) => {
+    if (!Banner) return null;
 
     return (
       <motion.div
         variants={itemVariants}
         whileHover={{ scale: 1.05 }}
-        key={Brand.id}
+        key={Banner.id}
         className="relative group "
       >
         <div className="card-nsr relative overflow-hidden rounded-2xl border-2 border-nsr-primary border-dashed aspect-square bg-nsr-secondary">
           <div className="absolute inset-0 bg-gradient-to-br  from-black/20 to-black/40 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <img
-            src={Brand.image}
-            alt={`Brand ${Brand.id}`}
+            src={Banner.image}
+            alt={`Banner ${Banner.id}`}
             className="w-full h-full object-fill transform group-hover:scale-110 transition-transform duration-1000 ease-out"
           />
           <motion.div className="absolute inset-0 z-20 flex items-center justify-center  duration-500">
             <motion.button
-              onClick={() => handleDelete(Brand.id)}
+              onClick={() => handleDelete(Banner.id)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               className="p-3 rounded-full bg-nsr-accent/10 backdrop-blur-lg border-2 border-nsr-accent border-dashed text-nsr-accent hover:bg-nsr-accent/20 transition-all duration-300"
             >
-              <Trash size={20}  />
+              <Trash size={20} />
             </motion.button>
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -147,7 +147,7 @@ export default function AllBanner() {
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
         title="Confirm Deletion"
-        message="Are you sure you want to delete this brand? This action cannot be undone."
+        message="Are you sure you want to delete this banner? This action cannot be undone."
       />
       {/* Modern Header */}
       <div
@@ -199,9 +199,9 @@ export default function AllBanner() {
             </p>
           </div>
 
-         
-           {/* Premium Action Button */}
-           <Link to="/banner/add">
+
+          {/* Premium Action Button */}
+          <Link to="/banner/add">
             <button className="group relative px-12 py-5 bg-nsr-primary backdrop-blur-lg
                          text-white hover:text-nsr-primary font-bold text-xl rounded-none border-2 border-white/40
                          transform transition-all duration-700 hover:scale-105 hover:-rotate-1
@@ -259,7 +259,7 @@ export default function AllBanner() {
       {/* Luxurious Banner Grid */}
       <div className="py-16 px-6">
         <div className="mx-auto max-w-7xl">
-          {demoBanner?.length === 0 ? (
+          {banners?.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -270,7 +270,7 @@ export default function AllBanner() {
                 No Banner Found
               </h3>
               <p className="text-white">
-                Add your first Brand to get started
+                Add your first Banner to get started
               </p>
             </motion.div>
           ) : (
@@ -280,7 +280,7 @@ export default function AllBanner() {
               animate="visible"
               className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             >
-              {demoBanner?.map(renderBrand)}
+              {banners?.map(renderBanner)}
             </motion.div>
           )}
         </div>

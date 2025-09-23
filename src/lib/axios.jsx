@@ -2,13 +2,16 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
-  timeout: 30000, // 30 seconds timeout
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
+  timeout: 10000, // 10 seconds timeout (reduced for faster fallback)
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
   withCredentials: false,
+  // Add retry configuration
+  retry: 1,
+  retryDelay: 1000,
 });
 
 // Request interceptor
@@ -57,6 +60,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // Handle errors
     let errorMessage = "حدث خطأ غير متوقع";
+    let isNetworkError = false;
 
     if (error.response) {
       // Server responded with error status
@@ -83,23 +87,33 @@ axiosInstance.interceptors.response.use(
           break;
         case 500:
           errorMessage = "خطأ في الخادم";
+          isNetworkError = true;
           break;
         default:
           errorMessage = data.message || `خطأ ${status}`;
       }
     } else if (error.request) {
-      // Network error
-      errorMessage = "خطأ في الاتصال بالخادم";
+      // Network error - Backend not available
+      errorMessage = "الخادم غير متاح";
+      isNetworkError = true;
     } else {
       // Other error
       errorMessage = error.message || "حدث خطأ غير متوقع";
     }
 
-    // Show error message
-    if (error.config?.showErrorMessage !== false) {
+    // Show error message only for non-network errors
+    if (error.config?.showErrorMessage !== false && !isNetworkError) {
       toast.error(errorMessage, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 3000,
+      });
+    }
+
+    // For network errors, show a less intrusive notification
+    if (isNetworkError) {
+      toast.info("الخادم غير متاح - لا توجد بيانات متاحة", {
+        position: "top-right",
+        autoClose: 2000,
       });
     }
 

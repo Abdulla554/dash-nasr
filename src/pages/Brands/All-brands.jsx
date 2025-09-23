@@ -16,9 +16,9 @@ export default function AllBrands() {
     window.scrollTo(0, 0);
   }, []);
   const {
-    data: demoBrands,
+    data: brands,
     isLoading,
-   
+    error
   } = useQuery({
     queryKey: ["brands"],
     queryFn: async () => {
@@ -26,7 +26,7 @@ export default function AllBrands() {
         const response = await axiosInstance.get("/brands");
         return response.data;
       } catch (error) {
-        console.error("Error fetching certificates:", error);
+        console.error("Error fetching brands:", error);
         throw error;
       }
     },
@@ -43,7 +43,7 @@ export default function AllBrands() {
       }
     },
     onSuccess: () => {
-      // Invalidate and refetch certificates query
+      // Invalidate and refetch brands query
       queryClient.invalidateQueries({ queryKey: ["brands"] });
       toast.success("Brand deleted successfully", {
         position: "top-right",
@@ -131,7 +131,7 @@ export default function AllBrands() {
               whileTap={{ scale: 0.95 }}
               className="p-3 rounded-full bg-nsr-accent/10 backdrop-blur-lg border-2 border-nsr-accent border-dashed text-nsr-accent hover:bg-nsr-accent/20 transition-all duration-300"
             >
-              <Trash size={20}  />
+              <Trash size={20} />
             </motion.button>
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -199,9 +199,9 @@ export default function AllBrands() {
             </p>
           </div>
 
-         
-           {/* Premium Action Button */}
-           <Link to="/brands/add">
+
+          {/* Premium Action Button */}
+          <Link to="/brands/add">
             <button className="group relative px-12 py-5 bg-nsr-primary backdrop-blur-lg
                          text-white hover:text-nsr-primary font-bold text-xl rounded-none border-2 border-white/40
                          transform transition-all duration-700 hover:scale-105 hover:-rotate-1
@@ -259,7 +259,7 @@ export default function AllBrands() {
       {/* Luxurious Brands Grid */}
       <div className="py-16 px-6">
         <div className="mx-auto max-w-7xl">
-          {demoBrands?.length === 0 ? (
+          {brands?.length === 0 ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -280,7 +280,7 @@ export default function AllBrands() {
               animate="visible"
               className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
             >
-              {demoBrands?.map(renderBrand)}
+              {brands?.map(renderBrand)}
             </motion.div>
           )}
         </div>

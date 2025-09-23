@@ -26,30 +26,18 @@ export const useDashboard = () => {
   }, []);
 
   const getRevenueStats = async () => {
-    try {
-      const response = await api.getRevenueStats();
-      return response.data.data;
-    } catch (err) {
-      throw err;
-    }
+    const response = await api.getRevenueStats();
+    return response.data.data;
   };
 
   const getOrdersChart = async () => {
-    try {
-      const response = await api.getOrdersChart();
-      return response.data.data;
-    } catch (err) {
-      throw err;
-    }
+    const response = await api.getOrdersChart();
+    return response.data.data;
   };
 
   const getProductsChart = async () => {
-    try {
-      const response = await api.getProductsChart();
-      return response.data.data;
-    } catch (err) {
-      throw err;
-    }
+    const response = await api.getProductsChart();
+    return response.data.data;
   };
 
   return {
@@ -79,19 +67,47 @@ export const useDashboardData = () => {
       setLoading(true);
       setError(null);
 
-      const [statsRes, revenueRes, ordersRes, productsRes] = await Promise.all([
-        api.getDashboardStats(),
-        api.getRevenueStats(),
-        api.getOrdersChart(),
-        api.getProductsChart(),
-      ]);
+      // Use Promise.allSettled to handle partial failures gracefully
+      const [statsRes, revenueRes, ordersRes, productsRes] =
+        await Promise.allSettled([
+          api.getDashboardStats(),
+          api.getRevenueStats(),
+          api.getOrdersChart(),
+          api.getProductsChart(),
+        ]);
 
-      setDashboardData({
-        stats: statsRes.data.data,
-        revenue: revenueRes.data.data,
-        ordersChart: ordersRes.data.data,
-        productsChart: productsRes.data.data,
-      });
+      // Process results and handle partial failures
+      const dashboardData = {
+        stats:
+          statsRes.status === "fulfilled" ? statsRes.value.data.data : null,
+        revenue:
+          revenueRes.status === "fulfilled" ? revenueRes.value.data.data : null,
+        ordersChart:
+          ordersRes.status === "fulfilled" ? ordersRes.value.data.data : null,
+        productsChart:
+          productsRes.status === "fulfilled"
+            ? productsRes.value.data.data
+            : null,
+      };
+
+      setDashboardData(dashboardData);
+
+      // Only set error if all requests failed
+      const failedRequests = [
+        statsRes,
+        revenueRes,
+        ordersRes,
+        productsRes,
+      ].filter((result) => result.status === "rejected");
+
+      if (failedRequests.length === 4) {
+        setError("فشل في تحميل جميع البيانات");
+      } else if (failedRequests.length > 0) {
+        // Some requests failed, but we have partial data
+        console.warn(
+          `${failedRequests.length} من الطلبات فشلت، سيتم استخدام البيانات المتاحة`
+        );
+      }
     } catch (err) {
       setError(
         err.response?.data?.message || "حدث خطأ في جلب بيانات الداشبورد"
@@ -136,21 +152,13 @@ export const useAnalytics = () => {
   }, []);
 
   const getSalesAnalytics = async () => {
-    try {
-      const response = await api.getSalesAnalytics();
-      return response.data.data;
-    } catch (err) {
-      throw err;
-    }
+    const response = await api.getSalesAnalytics();
+    return response.data.data;
   };
 
   const getProductsAnalytics = async () => {
-    try {
-      const response = await api.getProductsAnalytics();
-      return response.data.data;
-    } catch (err) {
-      throw err;
-    }
+    const response = await api.getProductsAnalytics();
+    return response.data.data;
   };
 
   return {

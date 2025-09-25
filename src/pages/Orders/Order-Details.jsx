@@ -27,6 +27,7 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import ExchangeRateModal from "../../components/ExchangeRateModal";
 import { useCurrency } from "../../contexts/CurrencyContext.jsx";
 import { useTheme } from "../../contexts/ThemeContext.jsx";
+import { useOrder } from "../../hooks/useOrdersQuery.js";
 
 export default function OrderDetails() {
     const { id } = useParams();
@@ -35,495 +36,40 @@ export default function OrderDetails() {
     const { isDark } = useTheme();
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-    // Demo data - in real app, this would come from API
-    const demoOrders = [
-        {
-            id: 1,
-            orderNumber: "ORD-2024-001",
-            customer: {
-                name: "أحمد محمد",
-                email: "ahmed@example.com",
-                phone: "+966501234567",
-                address: "الرياض، المملكة العربية السعودية"
-            },
-            items: [
-                {
-                    id: 1,
-                    name: "MacBook Pro 16-inch M3 Max",
-                    price: 15999,
-                    originalPrice: 17999,
-                    quantity: 1,
-                    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=200",
-                    specifications: {
-                        processor: "Apple M3 Max",
-                        ram: "32GB",
-                        storage: "1TB SSD",
-                        graphics: "M3 Max GPU"
-                    },
-                    category: "laptops",
-                    brand: "Apple"
-                },
-                {
-                    id: 2,
-                    name: "Logitech MX Master 3S",
-                    price: 299,
-                    originalPrice: 399,
-                    quantity: 2,
-                    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200",
-                    specifications: {
-                        connectivity: "Bluetooth & USB-C",
-                        battery: "Up to 70 days",
-                        dpi: "8000 DPI"
-                    },
-                    category: "accessories",
-                    brand: "Logitech"
-                }
-            ],
-            subtotal: 16597,
-            shipping: 0,
-            tax: 0,
-            discount: 200,
-            total: 16397,
-            status: "completed",
-            paymentMethod: "credit_card",
-            paymentStatus: "paid",
-            shippingAddress: {
-                street: "شارع الملك فهد، حي النخيل",
-                city: "الرياض",
-                region: "منطقة الرياض",
-                postalCode: "12345",
-                country: "المملكة العربية السعودية"
-            },
-            billingAddress: {
-                street: "شارع الملك فهد، حي النخيل",
-                city: "الرياض",
-                region: "منطقة الرياض",
-                postalCode: "12345",
-                country: "المملكة العربية السعودية"
-            },
-            orderDate: "2024-01-15T10:30:00Z",
-            deliveryDate: "2024-01-18T14:20:00Z",
-            trackingNumber: "TRK123456789",
-            notes: "يرجى التسليم في الصباح الباكر",
-            timeline: [
-                {
-                    status: "order_placed",
-                    title: "تم وضع الطلب",
-                    description: "تم استلام طلبك بنجاح",
-                    date: "2024-01-15T10:30:00Z",
-                    completed: true
-                },
-                {
-                    status: "payment_confirmed",
-                    title: "تم تأكيد الدفع",
-                    description: "تم تأكيد عملية الدفع بنجاح",
-                    date: "2024-01-15T10:35:00Z",
-                    completed: true
-                },
-                {
-                    status: "processing",
-                    title: "قيد المعالجة",
-                    description: "يتم تحضير طلبك للشحن",
-                    date: "2024-01-15T11:00:00Z",
-                    completed: true
-                },
-                {
-                    status: "shipped",
-                    title: "تم الشحن",
-                    description: "تم شحن طلبك وهو في الطريق إليك",
-                    date: "2024-01-16T09:15:00Z",
-                    completed: true
-                },
-                {
-                    status: "delivered",
-                    title: "تم التسليم",
-                    description: "تم تسليم طلبك بنجاح",
-                    date: "2024-01-18T14:20:00Z",
-                    completed: true
-                }
-            ]
-        },
-        {
-            id: 2,
-            orderNumber: "ORD-2024-002",
-            customer: {
-                name: "فاطمة أحمد",
-                email: "fatima@example.com",
-                phone: "+966507654321",
-                address: "جدة، المملكة العربية السعودية"
-            },
-            items: [
-                {
-                    id: 3,
-                    name: "Dell XPS 15 OLED",
-                    price: 12999,
-                    originalPrice: 14999,
-                    quantity: 1,
-                    image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200",
-                    specifications: {
-                        processor: "Intel Core i7-13700H",
-                        ram: "16GB",
-                        storage: "512GB SSD",
-                        graphics: "NVIDIA RTX 4050"
-                    },
-                    category: "laptops",
-                    brand: "Dell"
-                }
-            ],
-            subtotal: 12999,
-            shipping: 50,
-            tax: 650,
-            discount: 0,
-            total: 13699,
-            status: "processing",
-            paymentMethod: "bank_transfer",
-            paymentStatus: "pending",
-            shippingAddress: {
-                street: "شارع العليا، حي الزهراء",
-                city: "جدة",
-                region: "منطقة مكة المكرمة",
-                postalCode: "54321",
-                country: "المملكة العربية السعودية"
-            },
-            billingAddress: {
-                street: "شارع العليا، حي الزهراء",
-                city: "جدة",
-                region: "منطقة مكة المكرمة",
-                postalCode: "54321",
-                country: "المملكة العربية السعودية"
-            },
-            orderDate: "2024-01-16T14:20:00Z",
-            deliveryDate: null,
-            trackingNumber: "TRK987654321",
-            notes: "يرجى التواصل قبل التسليم",
-            timeline: [
-                {
-                    status: "order_placed",
-                    title: "تم وضع الطلب",
-                    description: "تم استلام طلبك بنجاح",
-                    date: "2024-01-16T14:20:00Z",
-                    completed: true
-                },
-                {
-                    status: "payment_pending",
-                    title: "في انتظار الدفع",
-                    description: "في انتظار تأكيد عملية التحويل البنكي",
-                    date: "2024-01-16T14:25:00Z",
-                    completed: false
-                },
-                {
-                    status: "processing",
-                    title: "قيد المعالجة",
-                    description: "سيتم تحضير طلبك للشحن بعد تأكيد الدفع",
-                    date: null,
-                    completed: false
-                },
-                {
-                    status: "shipped",
-                    title: "تم الشحن",
-                    description: "سيتم شحن طلبك بعد المعالجة",
-                    date: null,
-                    completed: false
-                },
-                {
-                    status: "delivered",
-                    title: "تم التسليم",
-                    description: "سيتم تسليم طلبك بعد الشحن",
-                    date: null,
-                    completed: false
-                }
-            ]
-        },
-        {
-            id: 3,
-            orderNumber: "ORD-2024-003",
-            customer: {
-                name: "محمد علي",
-                email: "mohammed@example.com",
-                phone: "+966509876543",
-                address: "الدمام، المملكة العربية السعودية"
-            },
-            items: [
-                {
-                    id: 4,
-                    name: "Samsung 49-inch Ultrawide Monitor",
-                    price: 3999,
-                    originalPrice: 4999,
-                    quantity: 1,
-                    image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=200",
-                    specifications: {
-                        size: "49-inch",
-                        resolution: "5120x1440",
-                        refreshRate: "120Hz",
-                        panel: "VA"
-                    },
-                    category: "accessories",
-                    brand: "Samsung"
-                },
-                {
-                    id: 5,
-                    name: "ASUS ROG Strix G16",
-                    price: 11999,
-                    originalPrice: 13999,
-                    quantity: 1,
-                    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=200",
-                    specifications: {
-                        processor: "Intel Core i9-13980HX",
-                        ram: "32GB",
-                        storage: "1TB SSD",
-                        graphics: "NVIDIA RTX 4070"
-                    },
-                    category: "laptops",
-                    brand: "ASUS"
-                }
-            ],
-            subtotal: 15998,
-            shipping: 0,
-            tax: 800,
-            discount: 0,
-            total: 16798,
-            status: "shipped",
-            paymentMethod: "credit_card",
-            paymentStatus: "paid",
-            shippingAddress: {
-                street: "شارع التحلية، حي الفيصلية",
-                city: "الدمام",
-                region: "المنطقة الشرقية",
-                postalCode: "67890",
-                country: "المملكة العربية السعودية"
-            },
-            billingAddress: {
-                street: "شارع التحلية، حي الفيصلية",
-                city: "الدمام",
-                region: "المنطقة الشرقية",
-                postalCode: "67890",
-                country: "المملكة العربية السعودية"
-            },
-            orderDate: "2024-01-17T09:15:00Z",
-            deliveryDate: "2024-01-20T16:30:00Z",
-            trackingNumber: "TRK456789123",
-            notes: "يرجى التأكد من وجود شخص في العنوان",
-            timeline: [
-                {
-                    status: "order_placed",
-                    title: "تم وضع الطلب",
-                    description: "تم استلام طلبك بنجاح",
-                    date: "2024-01-17T09:15:00Z",
-                    completed: true
-                },
-                {
-                    status: "payment_confirmed",
-                    title: "تم تأكيد الدفع",
-                    description: "تم تأكيد عملية الدفع بنجاح",
-                    date: "2024-01-17T09:20:00Z",
-                    completed: true
-                },
-                {
-                    status: "processing",
-                    title: "قيد المعالجة",
-                    description: "يتم تحضير طلبك للشحن",
-                    date: "2024-01-17T10:00:00Z",
-                    completed: true
-                },
-                {
-                    status: "shipped",
-                    title: "تم الشحن",
-                    description: "تم شحن طلبك وهو في الطريق إليك",
-                    date: "2024-01-18T08:30:00Z",
-                    completed: true
-                },
-                {
-                    status: "delivered",
-                    title: "تم التسليم",
-                    description: "سيتم تسليم طلبك قريباً",
-                    date: null,
-                    completed: false
-                }
-            ]
-        },
-        {
-            id: 4,
-            orderNumber: "ORD-2024-004",
-            customer: {
-                name: "نورا السعد",
-                email: "nora@example.com",
-                phone: "+966501112233",
-                address: "الخبر، المملكة العربية السعودية"
-            },
-            items: [
-                {
-                    id: 6,
-                    name: "Logitech MX Master 3S",
-                    price: 299,
-                    originalPrice: 399,
-                    quantity: 3,
-                    image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200",
-                    specifications: {
-                        connectivity: "Bluetooth & USB-C",
-                        battery: "Up to 70 days",
-                        dpi: "8000 DPI"
-                    },
-                    category: "accessories",
-                    brand: "Logitech"
-                }
-            ],
-            subtotal: 897,
-            shipping: 0,
-            tax: 45,
-            discount: 0,
-            total: 942,
-            status: "cancelled",
-            paymentMethod: "credit_card",
-            paymentStatus: "refunded",
-            shippingAddress: {
-                street: "شارع الأمير محمد، حي الشاطئ",
-                city: "الخبر",
-                region: "المنطقة الشرقية",
-                postalCode: "11111",
-                country: "المملكة العربية السعودية"
-            },
-            billingAddress: {
-                street: "شارع الأمير محمد، حي الشاطئ",
-                city: "الخبر",
-                region: "المنطقة الشرقية",
-                postalCode: "11111",
-                country: "المملكة العربية السعودية"
-            },
-            orderDate: "2024-01-18T14:45:00Z",
-            deliveryDate: null,
-            trackingNumber: null,
-            notes: "تم إلغاء الطلب بناءً على طلب العميل",
-            timeline: [
-                {
-                    status: "order_placed",
-                    title: "تم وضع الطلب",
-                    description: "تم استلام طلبك بنجاح",
-                    date: "2024-01-18T14:45:00Z",
-                    completed: true
-                },
-                {
-                    status: "payment_confirmed",
-                    title: "تم تأكيد الدفع",
-                    description: "تم تأكيد عملية الدفع بنجاح",
-                    date: "2024-01-18T14:50:00Z",
-                    completed: true
-                },
-                {
-                    status: "cancelled",
-                    title: "تم إلغاء الطلب",
-                    description: "تم إلغاء الطلب بناءً على طلب العميل",
-                    date: "2024-01-18T15:30:00Z",
-                    completed: true
-                },
-                {
-                    status: "refunded",
-                    title: "تم استرداد المبلغ",
-                    description: "تم استرداد المبلغ إلى الحساب",
-                    date: "2024-01-18T16:00:00Z",
-                    completed: true
-                }
-            ]
-        },
-        {
-            id: 5,
-            orderNumber: "ORD-2024-005",
-            customer: {
-                name: "خالد النعيم",
-                email: "khalid@example.com",
-                phone: "+966504445566",
-                address: "الرياض، المملكة العربية السعودية"
-            },
-            items: [
-                {
-                    id: 1,
-                    name: "MacBook Pro 16-inch M3 Max",
-                    price: 15999,
-                    originalPrice: 17999,
-                    quantity: 1,
-                    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=200",
-                    specifications: {
-                        processor: "Apple M3 Max",
-                        ram: "32GB",
-                        storage: "1TB SSD",
-                        graphics: "M3 Max GPU"
-                    },
-                    category: "laptops",
-                    brand: "Apple"
-                }
-            ],
-            subtotal: 15999,
-            shipping: 0,
-            tax: 800,
-            discount: 0,
-            total: 16799,
-            status: "pending",
-            paymentMethod: "cash_on_delivery",
-            paymentStatus: "pending",
-            shippingAddress: {
-                street: "شارع الملك عبدالعزيز، حي الملز",
-                city: "الرياض",
-                region: "منطقة الرياض",
-                postalCode: "22222",
-                country: "المملكة العربية السعودية"
-            },
-            billingAddress: {
-                street: "شارع الملك عبدالعزيز، حي الملز",
-                city: "الرياض",
-                region: "منطقة الرياض",
-                postalCode: "22222",
-                country: "المملكة العربية السعودية"
-            },
-            orderDate: "2024-01-19T11:20:00Z",
-            deliveryDate: null,
-            trackingNumber: null,
-            notes: "الدفع عند الاستلام - يرجى التأكد من وجود شخص في العنوان",
-            timeline: [
-                {
-                    status: "order_placed",
-                    title: "تم وضع الطلب",
-                    description: "تم استلام طلبك بنجاح",
-                    date: "2024-01-19T11:20:00Z",
-                    completed: true
-                },
-                {
-                    status: "processing",
-                    title: "قيد المعالجة",
-                    description: "يتم تحضير طلبك للشحن",
-                    date: "2024-01-19T12:00:00Z",
-                    completed: false
-                },
-                {
-                    status: "shipped",
-                    title: "تم الشحن",
-                    description: "سيتم شحن طلبك بعد المعالجة",
-                    date: null,
-                    completed: false
-                },
-                {
-                    status: "delivered",
-                    title: "تم التسليم",
-                    description: "سيتم تسليم طلبك بعد الشحن",
-                    date: null,
-                    completed: false
-                }
-            ]
-        }
-    ];
+    // Fetch order data from API
+    const { data: orderData, isLoading, error } = useOrder(id);
+    const order = orderData?.data || orderData;
 
-    const order = demoOrders.find(o => o.id === parseInt(id));
+    console.log("Order data:", orderData);
+    console.log("Order:", order);
+    console.log("Loading:", isLoading);
+    console.log("Error:", error);
 
     useEffect(() => {
-        if (!order) {
+        if (error) {
             navigate('/orders');
         }
         window.scrollTo(0, 0);
-    }, [order, navigate]);
+    }, [error, navigate]);
 
-    if (!order) {
+    if (isLoading) {
+        return (
+            <div className="min-h-screen bg-nsr-dark flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-nsr-accent mx-auto mb-4"></div>
+                    <h2 className="text-2xl font-bold text-nsr-primary mb-4">جاري تحميل تفاصيل الطلب...</h2>
+                    <p className="text-nsr-neutral">يرجى الانتظار</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (error || !order) {
         return (
             <div className="min-h-screen bg-nsr-dark flex items-center justify-center">
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-nsr-primary mb-4">الطلب غير موجود</h2>
+                    <p className="text-nsr-neutral mb-4">{error?.message || 'حدث خطأ في تحميل الطلب'}</p>
                     <Link to="/orders" className="text-nsr-accent hover:underline">
                         العودة للطلبات
                     </Link>
@@ -728,7 +274,7 @@ export default function OrderDetails() {
                                 {order.orderNumber}
                             </h1>
                             <p className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
-                                تم إنشاء الطلب في {new Date(order.orderDate).toLocaleDateString('ar-SA', {
+                                تم إنشاء الطلب في {new Date(order.createdAt || order.orderDate).toLocaleDateString('ar-SA', {
                                     year: 'numeric',
                                     month: 'long',
                                     day: 'numeric',
@@ -770,13 +316,13 @@ export default function OrderDetails() {
                                 <div className="space-y-4">
                                     <div>
                                         <label className="text-sm text-nsr-neutral">الاسم</label>
-                                        <p className="text-nsr-primary font-semibold">{order.customer.name}</p>
+                                        <p className="text-nsr-primary font-semibold">{order.customerName}</p>
                                     </div>
                                     <div>
                                         <label className="text-sm text-nsr-neutral">البريد الإلكتروني</label>
                                         <div className="flex items-center gap-2">
                                             <Mail size={16} className="text-nsr-accent" />
-                                            <p className="text-nsr-primary">{order.customer.email}</p>
+                                            <p className="text-nsr-primary">{order.customerEmail}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -786,12 +332,12 @@ export default function OrderDetails() {
                                         <label className="text-sm text-nsr-neutral">رقم الهاتف</label>
                                         <div className="flex items-center gap-2">
                                             <Phone size={16} className="text-nsr-accent" />
-                                            <p className="text-nsr-primary">{order.customer.phone}</p>
+                                            <p className="text-nsr-primary">{order.customerPhone}</p>
                                         </div>
                                     </div>
                                     <div>
                                         <label className="text-sm text-nsr-neutral">العنوان</label>
-                                        <p className="text-nsr-primary">{order.customer.address}</p>
+                                        <p className="text-nsr-primary">{order.customerAddress || 'غير محدد'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -805,55 +351,59 @@ export default function OrderDetails() {
                             </div>
 
                             <div className="space-y-4">
-                                {order.items.map((item, index) => (
-                                    <div key={index} className="flex gap-4 p-4 bg-nsr-primary/5 rounded-xl">
-                                        <img
-                                            src={item.image}
-                                            alt={item.name}
-                                            className="w-20 h-20 rounded-xl object-cover"
-                                        />
-                                        <div className="flex-1">
-                                            <div className="flex justify-between items-start mb-2">
-                                                <div>
-                                                    <h3 className="text-lg font-semibold text-nsr-primary">{item.name}</h3>
-                                                    <p className="text-sm text-nsr-neutral">{item.brand} • {item.category}</p>
-                                                </div>
-                                                <div className="text-right">
-                                                    <p className="text-lg font-bold text-nsr-accent">
-                                                        {getCurrencySymbol()}{convertCurrency(item.price).toLocaleString()}
-                                                    </p>
-                                                    {item.originalPrice && (
-                                                        <p className="text-sm text-nsr-neutral line-through">
-                                                            {getCurrencySymbol()}{convertCurrency(item.originalPrice).toLocaleString()}
+                                {order.items && order.items.length > 0 ? (
+                                    order.items.map((item, index) => (
+                                        <div key={index} className="flex gap-4 p-4 bg-nsr-primary/5 rounded-xl">
+                                            <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
+                                                <Package size={24} className="text-white" />
+                                            </div>
+                                            <div className="flex-1">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <div>
+                                                        <h3 className="text-lg font-semibold text-nsr-primary">
+                                                            {item.product?.name || `منتج #${item.productId?.slice(-6) || 'غير محدد'}`}
+                                                        </h3>
+                                                        <p className="text-sm text-nsr-neutral">
+                                                            {item.product?.brand?.name || 'غير محدد'} • {item.product?.category?.name || 'غير محدد'}
                                                         </p>
-                                                    )}
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-lg font-bold text-nsr-accent">
+                                                            {getCurrencySymbol()}{convertCurrency(item.price || 0).toLocaleString()}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div className="flex justify-between items-center">
-                                                <div className="text-sm text-nsr-neutral">
-                                                    الكمية: <span className="font-semibold text-nsr-primary">{item.quantity}</span>
+                                                <div className="flex justify-between items-center">
+                                                    <div className="text-sm text-nsr-neutral">
+                                                        الكمية: <span className="font-semibold text-nsr-primary">{item.quantity}</span>
+                                                    </div>
+                                                    <div className="text-sm text-nsr-neutral">
+                                                        المجموع: <span className="font-bold text-nsr-accent">
+                                                            {getCurrencySymbol()}{convertCurrency((item.price || 0) * item.quantity).toLocaleString()}
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <div className="text-sm text-nsr-neutral">
-                                                    المجموع: <span className="font-bold text-nsr-accent">
-                                                        {getCurrencySymbol()}{convertCurrency(item.price * item.quantity).toLocaleString()}
-                                                    </span>
-                                                </div>
-                                            </div>
 
-                                            {item.specifications && (
-                                                <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
-                                                    {Object.entries(item.specifications).slice(0, 4).map(([key, value]) => (
-                                                        <div key={key} className="flex justify-between">
-                                                            <span className="text-nsr-neutral">{key}:</span>
-                                                            <span className="text-nsr-primary font-medium">{value}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
+                                                {item.product?.specifications && (
+                                                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                                                        {Object.entries(item.product.specifications).slice(0, 4).map(([key, value]) => (
+                                                            <div key={key} className="flex justify-between">
+                                                                <span className="text-nsr-neutral">{key}:</span>
+                                                                <span className="text-nsr-primary font-medium">{value}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
+                                    ))
+                                ) : (
+                                    <div className="text-center py-8">
+                                        <Package size={48} className="text-nsr-neutral mx-auto mb-4" />
+                                        <p className="text-nsr-neutral">لا توجد منتجات في هذا الطلب</p>
                                     </div>
-                                ))}
+                                )}
                             </div>
                         </div>
 
@@ -865,38 +415,46 @@ export default function OrderDetails() {
                             </div>
 
                             <div className="space-y-4">
-                                {order.timeline.map((step, index) => (
-                                    <div key={index} className="flex gap-4">
-                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step.completed ? 'bg-green-500' : 'bg-gray-500'
-                                            }`}>
-                                            {step.completed ? (
-                                                <CheckCircle size={16} className="text-white" />
-                                            ) : (
-                                                <Clock size={16} className="text-white" />
-                                            )}
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <h3 className={`font-semibold ${step.completed ? 'text-nsr-primary' : 'text-nsr-neutral'}`}>
-                                                        {step.title}
-                                                    </h3>
-                                                    <p className="text-sm text-nsr-neutral">{step.description}</p>
-                                                </div>
-                                                {step.date && (
-                                                    <span className="text-xs text-nsr-neutral">
-                                                        {new Date(step.date).toLocaleDateString('ar-SA', {
-                                                            month: 'short',
-                                                            day: 'numeric',
-                                                            hour: '2-digit',
-                                                            minute: '2-digit'
-                                                        })}
-                                                    </span>
+                                {order.timeline && order.timeline.length > 0 ? (
+                                    order.timeline.map((step, index) => (
+                                        <div key={index} className="flex gap-4">
+                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step.completed ? 'bg-green-500' : 'bg-gray-500'
+                                                }`}>
+                                                {step.completed ? (
+                                                    <CheckCircle size={16} className="text-white" />
+                                                ) : (
+                                                    <Clock size={16} className="text-white" />
                                                 )}
                                             </div>
+                                            <div className="flex-1">
+                                                <div className="flex justify-between items-start">
+                                                    <div>
+                                                        <h3 className={`font-semibold ${step.completed ? 'text-nsr-primary' : 'text-nsr-neutral'}`}>
+                                                            {step.title}
+                                                        </h3>
+                                                        <p className="text-sm text-nsr-neutral">{step.description}</p>
+                                                    </div>
+                                                    {step.date && (
+                                                        <span className="text-xs text-nsr-neutral">
+                                                            {new Date(step.date).toLocaleDateString('ar-SA', {
+                                                                month: 'short',
+                                                                day: 'numeric',
+                                                                hour: '2-digit',
+                                                                minute: '2-digit'
+                                                            })}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
+                                    ))
+                                ) : (
+                                    <div className="text-center py-8">
+                                        <Calendar size={48} className="text-nsr-neutral mx-auto mb-4" />
+                                        <p className="text-nsr-neutral">مسار الطلب غير متوفر</p>
+                                        <p className="text-sm text-nsr-neutral mt-2">حالة الطلب: {getStatusText(order.status)}</p>
                                     </div>
-                                ))}
+                                )}
                             </div>
                         </div>
                     </div>
@@ -911,11 +469,11 @@ export default function OrderDetails() {
                                 <div className="flex justify-between">
                                     <span className="text-nsr-neutral">المجموع الفرعي</span>
                                     <span className="text-nsr-primary">
-                                        {getCurrencySymbol()}{convertCurrency(order.subtotal).toLocaleString()}
+                                        {getCurrencySymbol()}{convertCurrency(order.subtotal || order.totalAmount || 0).toLocaleString()}
                                     </span>
                                 </div>
 
-                                {order.discount > 0 && (
+                                {order.discount && order.discount > 0 && (
                                     <div className="flex justify-between text-green-400">
                                         <span>الخصم</span>
                                         <span>-{getCurrencySymbol()}{convertCurrency(order.discount).toLocaleString()}</span>
@@ -925,11 +483,11 @@ export default function OrderDetails() {
                                 <div className="flex justify-between">
                                     <span className="text-nsr-neutral">الشحن</span>
                                     <span className="text-nsr-primary">
-                                        {order.shipping === 0 ? 'مجاني' : `${getCurrencySymbol()}${convertCurrency(order.shipping).toLocaleString()}`}
+                                        {order.shipping === 0 ? 'مجاني' : `${getCurrencySymbol()}${convertCurrency(order.shipping || 0).toLocaleString()}`}
                                     </span>
                                 </div>
 
-                                {order.tax > 0 && (
+                                {order.tax && order.tax > 0 && (
                                     <div className="flex justify-between">
                                         <span className="text-nsr-neutral">الضريبة</span>
                                         <span className="text-nsr-primary">
@@ -942,7 +500,7 @@ export default function OrderDetails() {
                                     <div className="flex justify-between text-lg font-bold">
                                         <span className="text-nsr-primary">المجموع الكلي</span>
                                         <span className="text-nsr-accent">
-                                            {getCurrencySymbol()}{convertCurrency(order.total).toLocaleString()}
+                                            {getCurrencySymbol()}{convertCurrency(order.totalAmount || order.total || 0).toLocaleString()}
                                         </span>
                                     </div>
                                 </div>
@@ -957,10 +515,10 @@ export default function OrderDetails() {
                             </div>
 
                             <div className="space-y-2 text-sm">
-                                <p className="text-nsr-primary">{order.shippingAddress.street}</p>
-                                <p className="text-nsr-primary">{order.shippingAddress.city}, {order.shippingAddress.region}</p>
-                                <p className="text-nsr-primary">{order.shippingAddress.postalCode}</p>
-                                <p className="text-nsr-primary">{order.shippingAddress.country}</p>
+                                <p className="text-nsr-primary">{order.shippingAddress?.street || 'غير محدد'}</p>
+                                <p className="text-nsr-primary">{order.shippingAddress?.city || 'غير محدد'}, {order.shippingAddress?.region || 'غير محدد'}</p>
+                                <p className="text-nsr-primary">{order.shippingAddress?.postalCode || 'غير محدد'}</p>
+                                <p className="text-nsr-primary">{order.shippingAddress?.country || 'غير محدد'}</p>
                             </div>
 
                             {order.trackingNumber && (
@@ -984,12 +542,12 @@ export default function OrderDetails() {
                             <div className="space-y-2 text-sm">
                                 <div className="flex justify-between">
                                     <span className="text-nsr-neutral">طريقة الدفع</span>
-                                    <span className="text-nsr-primary">{getPaymentMethodText(order.paymentMethod)}</span>
+                                    <span className="text-nsr-primary">{getPaymentMethodText(order.paymentMethod) || 'غير محدد'}</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-nsr-neutral">حالة الدفع</span>
                                     <span className={`px-2 py-1 rounded-lg text-xs border ${getPaymentStatusColor(order.paymentStatus)}`}>
-                                        {getPaymentStatusText(order.paymentStatus)}
+                                        {getPaymentStatusText(order.paymentStatus) || 'غير محدد'}
                                     </span>
                                 </div>
                             </div>
@@ -1022,13 +580,13 @@ export default function OrderDetails() {
                         </div>
 
                         {/* Notes */}
-                        {order.notes && (
+                        {(order.notes || order.notes) && (
                             <div className="bg-nsr-secondary/30 rounded-2xl p-6">
                                 <div className="flex items-center gap-3 mb-4">
                                     <Tag size={20} className="text-nsr-accent" />
                                     <h3 className="text-lg font-bold text-nsr-primary">ملاحظات</h3>
                                 </div>
-                                <p className="text-sm text-nsr-neutral">{order.notes}</p>
+                                <p className="text-sm text-nsr-neutral">{order.notes || 'لا توجد ملاحظات'}</p>
                             </div>
                         )}
                     </div>

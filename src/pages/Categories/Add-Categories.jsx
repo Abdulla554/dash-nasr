@@ -4,38 +4,37 @@ import {
   X,
   ArrowRight,
   Save,
-  Sparkles,
   Image,
   CheckCircle,
-  Sun,
-  Moon,
+
   Plus,
   AlertCircle,
   Star
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useCreateCategory } from "../../hooks/useCategoriesQuery";
+import { toast } from "react-toastify";
 
 export default function LuxuryAddCategoryPage() {
-  const [isDark, setIsDark] = useState(true);
   const [, setCategorieImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isCompressing, setIsCompressing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
+    name: "", // Changed from title to name
+    description: "",
   });
+
+  // Add the create category mutation
+  const createCategoryMutation = useCreateCategory();
 
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.title.trim()) {
-      newErrors.title = "اسم الفئة مطلوب";
-    }
-
-    if (!imagePreview) {
-      newErrors.image = "صورة الفئة مطلوبة";
+    if (!formData.name.trim()) {
+      newErrors.name = "اسم الفئة مطلوب";
     }
 
     setErrors(newErrors);
@@ -92,14 +91,32 @@ export default function LuxuryAddCategoryPage() {
 
     setIsSubmitting(true);
 
-    // Simulate submission
-    setTimeout(() => {
+    try {
+      const categoryData = {
+        name: formData.name,
+        description: formData.description || "",
+        image: imagePreview || ""
+      };
+
+      console.log("Creating category:", categoryData);
+
+      await createCategoryMutation.mutateAsync(categoryData);
+
+      toast.success("تم إضافة الفئة بنجاح!");
+
+      // Reset form
+      setFormData({ name: "", description: "" });
+      setImagePreview(null);
+      setCategorieImage(null);
+
+    } catch (error) {
+      console.error("Error creating category:", error);
+      toast.error("حدث خطأ أثناء إضافة الفئة");
+    } finally {
       setIsSubmitting(false);
-      alert("تم إضافة الفئة بنجاح!");
-    }, 2500);
+    }
   };
 
-  const toggleTheme = () => setIsDark(!isDark);
 
   return (
     <div className="min-h-screen bg-gradient-nsr-dark" dir="rtl">
@@ -122,17 +139,7 @@ export default function LuxuryAddCategoryPage() {
             </div>
 
             <div className="flex items-center gap-4">
-              {/* Theme Toggle */}
-              <button
-                onClick={toggleTheme}
-                className="group p-3 bg-nsr-primary/10 backdrop-blur-sm border border-nsr-primary/20 rounded-2xl hover:border-nsr-accent/30 transition-all duration-300 hover:bg-nsr-primary/20"
-              >
-                {isDark ? (
-                  <Sun className="h-6 w-6 text-nsr-accent group-hover:text-nsr-light transition-colors" />
-                ) : (
-                  <Moon className="h-6 w-6 text-nsr-accent group-hover:text-nsr-light transition-colors" />
-                )}
-              </button>
+
 
               {/* Back Button */}
               <Link
@@ -175,21 +182,36 @@ export default function LuxuryAddCategoryPage() {
                   </label>
                   <input
                     type="text"
-                    name="title"
-                    value={formData.title}
+                    name="name"
+                    value={formData.name}
                     onChange={handleInputChange}
-                    className={`w-full px-6 py-5 bg-nsr-primary/20 border rounded-2xl text-nsr-light placeholder-nsr-light-200 focus:outline-none transition-all duration-300 text-xl ${errors.title
+                    className={`w-full px-6 py-5 bg-nsr-primary/20 border rounded-2xl text-nsr-light placeholder-nsr-light-200 focus:outline-none transition-all duration-300 text-xl ${errors.name
                       ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
                       : 'border-nsr-primary/30 focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20'
                       }`}
                     placeholder="مثال: أجهزة الكمبيوتر المكتبية"
                   />
-                  {errors.title && (
+                  {errors.name && (
                     <div className="flex items-center gap-2 text-red-400 text-sm">
                       <AlertCircle className="w-4 h-4" />
-                      {errors.title}
+                      {errors.name}
                     </div>
                   )}
+                </div>
+
+                {/* Category Description */}
+                <div className="space-y-4">
+                  <label className="text-lg font-semibold text-nsr-light-200 flex items-center gap-2">
+                    وصف الفئة (اختياري)
+                  </label>
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    rows={4}
+                    className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-nsr-light placeholder-nsr-light-200 focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl resize-none"
+                    placeholder="أدخل وصفاً مختصراً للفئة..."
+                  />
                 </div>
               </div>
 

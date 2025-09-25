@@ -21,18 +21,23 @@ import {
   Moon
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useCategories } from "../../hooks/useCategoriesQuery";
+import { useCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from "../../hooks/useCategoriesQuery";
 
 export default function LuxuryCategoriesPage() {
-  const [isDark, setIsDark] = useState(true);
+  // ثيم دارك ثابت - لا حاجة لمتغير isDark
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterCategory, setFilterCategory] = useState("all");
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
   const [viewMode, setViewMode] = useState("grid");
 
   // Use categories from API
-  const { data: categories = [], isLoading, error } = useCategories();
+  const { data: categories = [] } = useCategories();
+  // eslint-disable-next-line no-unused-vars
+  const createCategoryMutation = useCreateCategory();
+  // eslint-disable-next-line no-unused-vars
+  const updateCategoryMutation = useUpdateCategory();
+  // eslint-disable-next-line no-unused-vars
+  const deleteCategoryMutation = useDeleteCategory();
 
   // Filter and sort categories
   const filteredAndSortedCategories = React.useMemo(() => {
@@ -41,16 +46,15 @@ export default function LuxuryCategoriesPage() {
     // Filter by search term
     if (searchTerm) {
       filtered = filtered.filter(category =>
-        category.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        category.titleEn.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         category.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // Filter by category type
-    if (filterCategory !== "all") {
-      filtered = filtered.filter(category => category.category === filterCategory);
-    }
+    // Filter by category type (removed since we don't have category field)
+    // if (filterCategory !== "all") {
+    //   filtered = filtered.filter(category => category.category === filterCategory);
+    // }
 
     // Sort categories
     filtered.sort((a, b) => {
@@ -58,20 +62,20 @@ export default function LuxuryCategoriesPage() {
 
       switch (sortBy) {
         case "name":
-          aValue = a.title;
-          bValue = b.title;
+          aValue = a.name;
+          bValue = b.name;
           break;
         case "products":
-          aValue = a.productCount;
-          bValue = b.productCount;
+          aValue = 0; // We don't have productCount yet
+          bValue = 0;
           break;
         case "date":
           aValue = new Date(a.createdAt);
           bValue = new Date(b.createdAt);
           break;
         default:
-          aValue = a.title;
-          bValue = b.title;
+          aValue = a.name;
+          bValue = b.name;
       }
 
       if (sortOrder === "asc") {
@@ -82,59 +86,35 @@ export default function LuxuryCategoriesPage() {
     });
 
     return filtered;
-  }, [searchTerm, filterCategory, sortBy, sortOrder]);
+  }, [categories, searchTerm, sortBy, sortOrder]);
 
-  const getCategoryBadge = (categoryType) => {
-    switch (categoryType) {
-      case "pc":
-        return { text: "أجهزة كمبيوتر", color: "from-blue-600 to-blue-800", textColor: "text-white" };
-      case "laptop":
-        return { text: "لابتوبات", color: "from-emerald-600 to-emerald-800", textColor: "text-white" };
-      case "accessories":
-        return { text: "إكسسوارات", color: "from-purple-600 to-purple-800", textColor: "text-white" };
-      default:
-        return { text: "فئة", color: "from-slate-600 to-slate-800", textColor: "text-white" };
-    }
-  };
 
   const toggleSort = () => setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-  const toggleTheme = () => setIsDark(!isDark);
 
   return (
-    <div className="min-h-screen bg-gradient-nsr-dark" dir="rtl">
+    <div className="min-h-screen bg-[#1a1a2e]" dir="rtl">
       {/* Header */}
-      <div className="relative bg-nsr-secondary/50 backdrop-blur-sm border-b border-nsr-primary/20">
-        <div className="absolute inset-0 bg-gradient-to-r from-nsr-accent/10 to-nsr-secondary/10"></div>
+      <div className="relative bg-[#F9F3EF]/5 backdrop-blur-sm border-b border-[#749BC2]/20">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
         <div className="relative px-8 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <div className="p-4 bg-gradient-nsr-elegant rounded-2xl">
+              <div className="p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-2xl">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-nsr-light">
+                <h1 className="text-4xl font-bold text-[#F9F3EF]">
                   فئات المنتجات
                 </h1>
-                <p className="text-nsr-light-200 mt-2 text-lg">إدارة شاملة لجميع فئات منتجاتك</p>
+                <p className="text-[#F9F3EF]/70 mt-2 text-lg">إدارة شاملة لجميع فئات منتجاتك</p>
               </div>
             </div>
 
             <div className="flex items-center gap-4">
-              {/* Theme Toggle */}
-              <button
-                onClick={toggleTheme}
-                className="group p-3 bg-nsr-primary/10 backdrop-blur-sm border border-nsr-primary/20 rounded-2xl hover:border-nsr-accent/30 transition-all duration-300"
-              >
-                {isDark ? (
-                  <Sun className="h-6 w-6 text-nsr-accent group-hover:text-nsr-light transition-colors" />
-                ) : (
-                  <Moon className="h-6 w-6 text-nsr-accent group-hover:text-nsr-light transition-colors" />
-                )}
-              </button>
 
               {/* Add Category Button */}
               <Link to="/categories/add">
-                <button className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 bg-gradient-nsr-elegant text-white shadow-lg shadow-nsr-accent/25 transition-all duration-500 hover:shadow-xl hover:shadow-nsr-accent/40 hover:scale-105">
+                <button className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105">
                   <Plus className="h-6 w-6 transition-all duration-500 group-hover:rotate-180" />
                   <span className="font-semibold text-lg">إضافة فئة جديدة</span>
                 </button>
@@ -149,9 +129,9 @@ export default function LuxuryCategoriesPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           {[
             { title: "إجمالي الفئات", value: categories.length, icon: Package, color: "from-purple-600 to-purple-800", change: "+12%" },
-            { title: "فئات الكمبيوتر", value: categories.filter(c => c.category === 'pc').length, icon: Monitor, color: "from-blue-600 to-blue-800", change: "+23%" },
-            { title: "فئات اللابتوب", value: categories.filter(c => c.category === 'laptop').length, icon: Laptop, color: "from-emerald-600 to-emerald-800", change: "+18%" },
-            { title: "الإكسسوارات", value: categories.filter(c => c.category === 'accessories').length, icon: MousePointer, color: "from-orange-600 to-orange-800", change: "+31%" }
+            { title: "الفئات النشطة", value: categories.length, icon: Monitor, color: "from-blue-600 to-blue-800", change: "+23%" },
+            { title: "الفئات الجديدة", value: categories.length, icon: Laptop, color: "from-emerald-600 to-emerald-800", change: "+18%" },
+            { title: "إجمالي المنتجات", value: 0, icon: MousePointer, color: "from-orange-600 to-orange-800", change: "+31%" }
           ].map((stat, index) => (
             <div key={index} className="group relative">
               <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl opacity-80 group-hover:opacity-90 transition-all duration-300`}></div>
@@ -193,17 +173,6 @@ export default function LuxuryCategoriesPage() {
 
             {/* Filter Controls */}
             <div className="flex flex-wrap gap-4">
-              {/* Category Filter */}
-              <select
-                value={filterCategory}
-                onChange={(e) => setFilterCategory(e.target.value)}
-                className="px-4 py-3 bg-slate-800/50 border border-slate-700/50 rounded-xl text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
-              >
-                <option value="all">جميع الفئات</option>
-                <option value="pc">أجهزة الكمبيوتر</option>
-                <option value="laptop">اللابتوبات</option>
-                <option value="accessories">الإكسسوارات</option>
-              </select>
 
               {/* Sort By */}
               <select
@@ -272,7 +241,6 @@ export default function LuxuryCategoriesPage() {
             <button
               onClick={() => {
                 setSearchTerm('');
-                setFilterCategory('all');
               }}
               className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-semibold transition-colors duration-300"
             >
@@ -285,44 +253,40 @@ export default function LuxuryCategoriesPage() {
             : "grid-cols-1"
             }`}>
             {filteredAndSortedCategories.map((category) => {
-              const badge = getCategoryBadge(category.category);
-              const IconComponent = category.icon;
-
               return (
                 <div key={category.id} className="group relative">
                   {/* Background Gradient */}
-                  <div className={`absolute inset-0 bg-gradient-to-r ${badge.color} rounded-2xl opacity-20 group-hover:opacity-30 transition-all duration-300`}></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-800 rounded-2xl opacity-20 group-hover:opacity-30 transition-all duration-300"></div>
 
                   {/* Main Card */}
                   <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:border-purple-500/30 transition-all duration-300 group-hover:transform group-hover:scale-[1.02]">
 
                     {/* Category Badge */}
                     <div className="absolute top-4 right-4 z-20">
-                      <div className={`px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${badge.color} ${badge.textColor}`}>
-                        {badge.text}
-                      </div>
-                    </div>
-
-                    {/* Growth Badge */}
-                    <div className="absolute top-4 left-4 z-20">
-                      <div className="px-2 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                        {category.growth}
+                      <div className="px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-purple-600 to-purple-800 text-white">
+                        فئة
                       </div>
                     </div>
 
                     {/* Image Container */}
                     <div className="relative overflow-hidden aspect-[4/3]">
-                      <img
-                        src={category.image}
-                        alt={category.title}
-                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                      />
+                      {category.image ? (
+                        <img
+                          src={category.image}
+                          alt={category.name}
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center">
+                          <Package className="w-16 h-16 text-white/50" />
+                        </div>
+                      )}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
 
                       {/* Icon Overlay */}
                       <div className="absolute bottom-4 right-4">
                         <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-                          <IconComponent className="w-6 h-6 text-white" />
+                          <Package className="w-6 h-6 text-white" />
                         </div>
                       </div>
                     </div>
@@ -331,15 +295,15 @@ export default function LuxuryCategoriesPage() {
                     <div className="p-6 space-y-4">
                       <div>
                         <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors duration-300">
-                          {category.title}
+                          {category.name}
                         </h3>
                         <p className="text-sm text-slate-400 line-clamp-2 mb-3">
-                          {category.description}
+                          {category.description || "لا يوجد وصف"}
                         </p>
                         <div className="flex items-center gap-4 text-sm">
                           <div className="flex items-center gap-2">
                             <Package className="w-4 h-4 text-blue-400" />
-                            <span className="text-slate-300">{category.productCount} منتج</span>
+                            <span className="text-slate-300">0 منتج</span>
                           </div>
                           <div className="text-slate-500">
                             {new Date(category.createdAt).toLocaleDateString('ar')}

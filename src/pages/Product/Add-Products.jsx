@@ -6,11 +6,20 @@ import { toast } from "react-toastify";
 import { motion as _motion } from "framer-motion";
 import { useTheme } from "../../contexts/ThemeContext.jsx";
 import { useCurrency } from "../../contexts/CurrencyContext.jsx";
+import { useCategories } from "../../hooks/useCategoriesQuery";
+import { useBrands } from "../../hooks/useBrandsQuery";
 
 export default function AddProduct() {
   const navigate = useNavigate();
   const { isDark } = useTheme();
   const { getCurrencySymbol } = useCurrency();
+
+  // Get categories and brands
+  const { data: categoriesData } = useCategories();
+  const { data: brandsData } = useBrands();
+
+  const categories = categoriesData || [];
+  const brands = brandsData || [];
 
   const [, setProductImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
@@ -19,8 +28,8 @@ export default function AddProduct() {
     description: "",
     price: "",
     originalPrice: "",
-    category: "laptops",
-    brand: "",
+    categoryId: "",
+    brandId: "",
     specifications: {
       processor: "",
       ram: "",
@@ -36,6 +45,10 @@ export default function AddProduct() {
     stock: 0,
     isNew: true,
     isBestSeller: false,
+    isFeatured: false,
+    discountPercentage: 0,
+    discountAmount: 0,
+    sortOrder: 0,
     tags: [],
     warranty: "",
     shipping: ""
@@ -69,22 +82,24 @@ export default function AddProduct() {
     setProductImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  // const handleAddTag = () => {
-  //   const newTag = prompt("أدخل العلامة الجديدة:");
-  //   if (newTag && newTag.trim()) {
-  //     setFormData(prev => ({
-  //       ...prev,
-  //       tags: [...prev.tags, newTag.trim()]
-  //     }));
-  //   }
-  // };
+  const [newTag, setNewTag] = useState("");
 
-  // const handleRemoveTag = (index) => {
-  //   setFormData(prev => ({
-  //     ...prev,
-  //     tags: prev.tags.filter((_, i) => i !== index)
-  //   }));
-  // };
+  const handleAddTag = () => {
+    if (newTag.trim() && !formData.tags.includes(newTag.trim())) {
+      setFormData(prev => ({
+        ...prev,
+        tags: [...prev.tags, newTag.trim()]
+      }));
+      setNewTag("");
+    }
+  };
+
+  const handleRemoveTag = (index) => {
+    setFormData(prev => ({
+      ...prev,
+      tags: prev.tags.filter((_, i) => i !== index)
+    }));
+  };
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -115,7 +130,7 @@ export default function AddProduct() {
       return;
     }
 
-    if (!formData.title || !formData.description || !formData.price) {
+    if (!formData.title || !formData.description || !formData.price || !formData.categoryId || !formData.brandId) {
       toast.error("يرجى ملء جميع الحقول المطلوبة", {
         position: "top-right",
         autoClose: 3000,
@@ -123,28 +138,71 @@ export default function AddProduct() {
       return;
     }
 
-    // في التطبيق الحقيقي، هنا ستكون API call
-    const newProduct = {
-      id: Date.now(), // ID مؤقت
-      ...formData,
-      images: imagePreviews,
-      price: parseFloat(formData.price),
-      originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : null,
-      stock: parseInt(formData.stock),
-      reviews: parseInt(formData.reviews),
-      rating: parseFloat(formData.rating)
-    };
+    try {
+      // Clean up the data before sending
+      const cleanSpecifications = {};
+      Object.keys(formData.specifications).forEach(key => {
+        if (formData.specifications[key] && formData.specifications[key].trim() !== '') {
+          cleanSpecifications[key] = formData.specifications[key];
+        }
+      });
 
-    console.log("New Product:", newProduct);
+      const newProduct = {
+        name: formData.title,  // مطلوب
+        title: formData.title, // اختياري
+        description: formData.description,
+        price: parseFloat(formData.price), // مطلوب
+        originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : null,
+        image: imagePreviews[0] || '', // صورة رئيسية
+        images: imagePreviews, // جميع الصور
+        stock: parseInt(formData.stock) || 0,
+        isActive: true,
+        isNew: formData.isNew,
+        isBestSeller: formData.isBestSeller,
+        isFeatured: formData.isFeatured,
+        discountPercentage: parseFloat(formData.discountPercentage) || 0,
+        discountAmount: parseFloat(formData.discountAmount) || 0,
+        sortOrder: parseInt(formData.sortOrder) || 0,
+        specifications: cleanSpecifications,
+        tags: formData.tags.filter(tag => tag.trim() !== ''),
+        categoryId: formData.categoryId, // Use real category ID
+        brandId: formData.brandId         // Use real brand ID
+      };
 
-    toast.success("تم إضافة المنتج بنجاح!", {
-      position: "top-right",
-      autoClose: 3000,
-    });
+      console.log("Creating product:", newProduct);
 
-    setTimeout(() => {
-      navigate("/products");
-    }, 2000);
+      // API call to create product
+      const response = await fetch('http://localhost:3000/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newProduct)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("API Error Response:", errorData);
+        throw new Error(`HTTP error! status: ${response.status} - ${errorData.message || 'Unknown error'}`);
+      }
+
+      const result = await response.json();
+      console.log("Product created successfully:", result);
+
+      toast.success("تم إضافة المنتج بنجاح!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+
+      // Navigate to products list
+      navigate('/products');
+    } catch (error) {
+      console.error("Error creating product:", error);
+      toast.error("حدث خطأ في إضافة المنتج", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-nsr-dark' : 'bg-gray-50'}`} dir="rtl">
@@ -215,16 +273,19 @@ export default function AddProduct() {
                   <label htmlFor="brand" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
                     الماركة *
                   </label>
-                  <input
-                    type="text"
-                    id="brand"
-                    value={formData.brand}
+                  <select
+                    id="brandId"
+                    name="brandId"
+                    value={formData.brandId}
                     onChange={handleInputChange}
-                    name="brand"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل الماركة"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
                     required
-                  />
+                  >
+                    <option value="">اختر الماركة</option>
+                    {brands.map(brand => (
+                      <option key={brand.id} value={brand.id}>{brand.name}</option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>
@@ -232,15 +293,17 @@ export default function AddProduct() {
                     الفئة *
                   </label>
                   <select
-                    id="category"
-                    name="category"
-                    value={formData.category}
+                    id="categoryId"
+                    name="categoryId"
+                    value={formData.categoryId}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
                     required
                   >
-                    <option value="laptops">لابتوبات</option>
-                    <option value="accessories">إكسسوارات</option>
+                    <option value="">اختر الفئة</option>
+                    {categories.map(category => (
+                      <option key={category.id} value={category.id}>{category.name}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -290,6 +353,54 @@ export default function AddProduct() {
                     required
                   />
                 </div>
+
+                <div>
+                  <label htmlFor="discountPercentage" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    نسبة الخصم (%)
+                  </label>
+                  <input
+                    type="number"
+                    id="discountPercentage"
+                    value={formData.discountPercentage}
+                    onChange={handleInputChange}
+                    name="discountPercentage"
+                    min="0"
+                    max="100"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل نسبة الخصم (0-100)"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="discountAmount" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    مبلغ الخصم ({getCurrencySymbol()})
+                  </label>
+                  <input
+                    type="number"
+                    id="discountAmount"
+                    value={formData.discountAmount}
+                    onChange={handleInputChange}
+                    name="discountAmount"
+                    min="0"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل مبلغ الخصم"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="sortOrder" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                    ترتيب العرض
+                  </label>
+                  <input
+                    type="number"
+                    id="sortOrder"
+                    value={formData.sortOrder}
+                    onChange={handleInputChange}
+                    name="sortOrder"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل ترتيب العرض (الأقل يظهر أولاً)"
+                  />
+                </div>
               </div>
 
               <div className="mt-6">
@@ -306,6 +417,53 @@ export default function AddProduct() {
                   placeholder="أدخل وصف المنتج"
                   required
                 />
+              </div>
+
+              {/* Product Features */}
+              <div className="mt-6">
+                <h3 className={`text-lg font-semibold mb-4 transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-gray-900'}`}>
+                  خصائص المنتج
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <label className="flex items-center space-x-3 space-x-reverse">
+                    <input
+                      type="checkbox"
+                      name="isNew"
+                      checked={formData.isNew}
+                      onChange={handleInputChange}
+                      className="w-5 h-5 text-nsr-accent bg-gray-100 border-gray-300 rounded focus:ring-nsr-accent focus:ring-2"
+                    />
+                    <span className={`text-sm font-medium transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                      منتج جديد
+                    </span>
+                  </label>
+
+                  <label className="flex items-center space-x-3 space-x-reverse">
+                    <input
+                      type="checkbox"
+                      name="isBestSeller"
+                      checked={formData.isBestSeller}
+                      onChange={handleInputChange}
+                      className="w-5 h-5 text-nsr-accent bg-gray-100 border-gray-300 rounded focus:ring-nsr-accent focus:ring-2"
+                    />
+                    <span className={`text-sm font-medium transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                      الأكثر مبيعاً
+                    </span>
+                  </label>
+
+                  <label className="flex items-center space-x-3 space-x-reverse">
+                    <input
+                      type="checkbox"
+                      name="isFeatured"
+                      checked={formData.isFeatured}
+                      onChange={handleInputChange}
+                      className="w-5 h-5 text-nsr-accent bg-gray-100 border-gray-300 rounded focus:ring-nsr-accent focus:ring-2"
+                    />
+                    <span className={`text-sm font-medium transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
+                      منتج مميز
+                    </span>
+                  </label>
+                </div>
               </div>
             </div>
 
@@ -374,6 +532,52 @@ export default function AddProduct() {
                     placeholder="أدخل نوع كرت الشاشة"
                   />
                 </div>
+              </div>
+            </div>
+
+            {/* Tags Section */}
+            <div>
+              <h2 className={`text-2xl font-bold mb-6 transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-gray-900'}`}>
+                العلامات (Tags)
+              </h2>
+              <div className="space-y-4">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+                    className={`flex-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                    placeholder="أدخل علامة جديدة واضغط Enter"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddTag}
+                    className="px-6 py-3 bg-gradient-to-r from-nsr-accent to-nsr-primary text-white rounded-xl hover:shadow-lg transition-all duration-300"
+                  >
+                    إضافة
+                  </button>
+                </div>
+
+                {formData.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {formData.tags.map((tag, index) => (
+                      <span
+                        key={index}
+                        className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-nsr-accent/20 to-nsr-primary/20 text-nsr-primary border border-nsr-accent/30 rounded-full text-sm"
+                      >
+                        {tag}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveTag(index)}
+                          className="text-red-500 hover:text-red-700 transition-colors"
+                        >
+                          <X size={14} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 

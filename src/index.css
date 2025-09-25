@@ -34,8 +34,8 @@ body {
   --nsr-turquoise: #2c6d90;
 }
 
-/* الوضع المظلم (الافتراضي) */
-.dark {
+/* الثيم الثابت - دارك فقط */
+:root {
   --bg-primary: var(--nsr-dark);
   --bg-secondary: var(--nsr-dark-800);
   --bg-tertiary: var(--nsr-dark-700);
@@ -46,20 +46,6 @@ body {
   --primary: var(--nsr-secondary);
   --border: var(--nsr-dark-700);
   --shadow: rgba(26, 26, 46, 0.3);
-}
-
-/* الوضع الفاتح */
-:root:not(.dark) {
-  --bg-primary: var(--nsr-light);
-  --bg-secondary: var(--nsr-light-100);
-  --bg-tertiary: #e8ddd2;
-  --text-primary: var(--nsr-dark);
-  --text-secondary: var(--nsr-dark-800);
-  --text-muted: #6c757d;
-  --accent: var(--nsr-accent);
-  --primary: var(--nsr-secondary);
-  --border: #ddd0c1;
-  --shadow: rgba(249, 243, 239, 0.3);
 }
 
 /* تطبيق الألوان على body */
@@ -411,7 +397,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.dark .bg-glass {
+.bg-glass {
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }

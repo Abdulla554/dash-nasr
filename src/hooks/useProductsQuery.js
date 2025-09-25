@@ -7,9 +7,26 @@ export const useProducts = (params = {}) => {
   return useQuery({
     queryKey: queryKeys.products.list(params),
     queryFn: async () => {
+      console.log("Fetching products with params:", params);
       const response = await api.getProducts(params);
+      console.log("Products API response:", response.data);
+
+      // Handle different response structures
+      let products = [];
+      if (Array.isArray(response.data)) {
+        products = response.data;
+      } else if (response.data.data) {
+        products = response.data.data;
+      } else if (response.data.products) {
+        products = response.data.products;
+      } else {
+        products = response.data;
+      }
+
+      console.log("Extracted products:", products);
+
       return {
-        data: response.data.data,
+        data: products,
         pagination: response.data.pagination || {},
       };
     },

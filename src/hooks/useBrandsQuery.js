@@ -8,9 +8,9 @@ export const useBrands = () => {
     queryKey: queryKeys.brands.lists(),
     queryFn: async () => {
       const response = await api.getBrands();
-      return response.data.data;
+      return response.data;
     },
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
     retry: (failureCount, error) => {
       if (error?.response?.status >= 400 && error?.response?.status < 500) {
         return false;
@@ -26,7 +26,7 @@ export const useBrand = (id) => {
     queryKey: queryKeys.brands.detail(id),
     queryFn: async () => {
       const response = await api.getBrand(id);
-      return response.data.data;
+      return response.data;
     },
     enabled: !!id,
     staleTime: 5 * 60 * 1000,
@@ -45,15 +45,14 @@ export const useCreateBrand = () => {
 
   return useMutation({
     mutationFn: async (brandData) => {
+      console.log("Creating brand:", brandData);
       const response = await api.createBrand(brandData);
+      console.log("Brand created successfully:", response.data);
       return response.data;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.brands.lists() });
-      queryClient.setQueryData(
-        queryKeys.brands.detail(data.data.id),
-        data.data
-      );
+      queryClient.setQueryData(queryKeys.brands.detail(data.id), data);
     },
     onError: (error) => {
       console.error("Failed to create brand:", error);
@@ -67,14 +66,13 @@ export const useUpdateBrand = () => {
 
   return useMutation({
     mutationFn: async ({ id, brandData }) => {
-      const response = await api.updateBrand(id, brandData);
+      console.log("Updating brand:", id, brandData);
+      const response = await api.patchBrand(id, brandData);
+      console.log("Brand updated successfully:", response.data);
       return response.data;
     },
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(
-        queryKeys.brands.detail(variables.id),
-        data.data
-      );
+      queryClient.setQueryData(queryKeys.brands.detail(variables.id), data);
       queryClient.invalidateQueries({ queryKey: queryKeys.brands.lists() });
     },
     onError: (error) => {

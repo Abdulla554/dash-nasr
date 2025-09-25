@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Upload, X } from "lucide-react";
 import { Link } from "react-router-dom";
-import axiosInstance from "../../lib/axios";
-import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useQueryClient } from "@tanstack/react-query";
+import { useCreateBrand } from "../../hooks/useBrandsQuery";
 // هاي المكتبه لتحميل الصور بدون حدود
 import imageCompression from "browser-image-compression";
 
 export default function AddBrand() {
-  const queryClient = useQueryClient();
   const [brandImage, setBrandImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isCompressing, setIsCompressing] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+  });
 
   const navigate = useNavigate();
+  const createBrandMutation = useCreateBrand();
 
   const compressImage = async (file) => {
     const options = {
@@ -80,70 +82,44 @@ export default function AddBrand() {
     setImagePreview(null);
   };
 
-  const mutation = useMutation({
-    mutationKey: ["addBrand"],
-    mutationFn: async (requestData) => {
-      try {
-        const response = await axiosInstance.post("/brands", requestData, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        return response.data;
-      } catch (error) {
-        console.error("API Error:", error.response?.data);
-        throw error;
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["brands"] });
-      toast.success("Brand added successfully", {
-        position: "top-center",
-        rtl: true,
-        theme: "colored",
-        autoClose: 2000,
-      });
-      console.log("Brand added successfully");
-      setTimeout(() => {
-        navigate("/brands");
-      }, 2000);
-    },
-    onError: (error) => {
-      const errorMessage =
-        error.response?.data?.message || "Failed to add brand";
-      toast.error(errorMessage, {
-        position: "top-center",
-        rtl: true,
-        theme: "colored",
-        autoClose: 2000,
-      });
-      console.error("Error details:", error.response?.data);
-    },
-  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!imagePreview) {
-      toast.error("Please select an image first");
+    if (!formData.name.trim()) {
+      toast.error("يرجى إدخال اسم الماركة");
       return;
     }
 
     if (isCompressing) {
-      toast.info("Please wait while the image is being processed...");
+      toast.info("يرجى الانتظار حتى انتهاء معالجة الصورة...");
       return;
     }
 
-    // Create a simple object with the image string
-    const requestData = {
-      image: imagePreview,
-    };
-
     try {
-      mutation.mutate(requestData);
+      const brandData = {
+        name: formData.name,
+        description: formData.description || "",
+        logo: imagePreview || ""
+      };
+
+      console.log("Creating brand:", brandData);
+
+      await createBrandMutation.mutateAsync(brandData);
+
+      toast.success("تم إضافة الماركة بنجاح!");
+
+      // Reset form
+      setFormData({ name: "", description: "" });
+      setImagePreview(null);
+      setBrandImage(null);
+
+      // Navigate back
+      navigate("/brands");
+
     } catch (error) {
-      console.error("Submission error:", error);
-      toast.error("Failed to submit the form. Please try again.");
+      console.error("Error creating brand:", error);
+      toast.error("حدث خطأ أثناء إضافة الماركة");
     }
   };
 
@@ -187,6 +163,37 @@ export default function AddBrand() {
                 Basic Information
               </h2>
               <div className="space-y-6">
+                {/* Brand Name */}
+                <div>
+                  <label className="block text-sm font-medium text-nsr-primary mb-3">
+                    اسم الماركة *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-3 bg-nsr-secondary/50 border border-nsr-accent/30 rounded-lg text-nsr-light placeholder-nsr-light/50 focus:outline-none focus:border-nsr-primary focus:ring-2 focus:ring-nsr-primary/20 transition-all duration-300"
+                    placeholder="أدخل اسم الماركة"
+                    required
+                  />
+                </div>
+
+                {/* Brand Description */}
+                <div>
+                  <label className="block text-sm font-medium text-nsr-primary mb-3">
+                    وصف الماركة
+                  </label>
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-nsr-secondary/50 border border-nsr-accent/30 rounded-lg text-nsr-light placeholder-nsr-light/50 focus:outline-none focus:border-nsr-primary focus:ring-2 focus:ring-nsr-primary/20 transition-all duration-300 resize-none"
+                    placeholder="أدخل وصفاً مختصراً للماركة..."
+                  />
+                </div>
+
                 {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-nsr-primary mb-3">

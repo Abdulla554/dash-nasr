@@ -7,9 +7,26 @@ export const useOrders = (params = {}) => {
   return useQuery({
     queryKey: queryKeys.orders.list(params),
     queryFn: async () => {
+      console.log("Fetching orders with params:", params);
       const response = await api.getOrders(params);
+      console.log("Orders API response:", response.data);
+
+      // Handle different response structures
+      let orders = [];
+      if (Array.isArray(response.data)) {
+        orders = response.data;
+      } else if (response.data.data) {
+        orders = response.data.data;
+      } else if (response.data.orders) {
+        orders = response.data.orders;
+      } else {
+        orders = response.data;
+      }
+
+      console.log("Extracted orders:", orders);
+
       return {
-        data: response.data.data,
+        data: orders,
         pagination: response.data.pagination || {},
       };
     },
@@ -29,9 +46,9 @@ export const useOrder = (id) => {
     queryKey: queryKeys.orders.detail(id),
     queryFn: async () => {
       const response = await api.getOrder(id);
-      return response.data.data;
+      return response.data;
     },
-    enabled: !!id, // Only run query if id exists
+    enabled: !!id,
     staleTime: 5 * 60 * 1000,
     retry: (failureCount, error) => {
       if (error?.response?.status >= 400 && error?.response?.status < 500) {
@@ -48,18 +65,14 @@ export const useCreateOrder = () => {
 
   return useMutation({
     mutationFn: async (orderData) => {
+      console.log("Creating order:", orderData);
       const response = await api.createOrder(orderData);
+      console.log("Order created successfully:", response.data);
       return response.data;
     },
     onSuccess: (data) => {
-      // Invalidate and refetch orders list
       queryClient.invalidateQueries({ queryKey: queryKeys.orders.lists() });
-
-      // Add the new order to the cache
-      queryClient.setQueryData(
-        queryKeys.orders.detail(data.data.id),
-        data.data
-      );
+      queryClient.setQueryData(queryKeys.orders.detail(data.id), data);
     },
     onError: (error) => {
       console.error("Failed to create order:", error);
@@ -73,17 +86,13 @@ export const useUpdateOrder = () => {
 
   return useMutation({
     mutationFn: async ({ id, orderData }) => {
-      const response = await api.updateOrder(id, orderData);
+      console.log("Updating order:", id, orderData);
+      const response = await api.patchOrder(id, orderData);
+      console.log("Order updated successfully:", response.data);
       return response.data;
     },
     onSuccess: (data, variables) => {
-      // Update the specific order in cache
-      queryClient.setQueryData(
-        queryKeys.orders.detail(variables.id),
-        data.data
-      );
-
-      // Invalidate orders list to refetch
+      queryClient.setQueryData(queryKeys.orders.detail(variables.id), data);
       queryClient.invalidateQueries({ queryKey: queryKeys.orders.lists() });
     },
     onError: (error) => {
@@ -98,14 +107,13 @@ export const useDeleteOrder = () => {
 
   return useMutation({
     mutationFn: async (id) => {
+      console.log("Deleting order:", id);
       await api.deleteOrder(id);
+      console.log("Order deleted successfully");
       return id;
     },
     onSuccess: (id) => {
-      // Remove from cache
       queryClient.removeQueries({ queryKey: queryKeys.orders.detail(id) });
-
-      // Invalidate orders list
       queryClient.invalidateQueries({ queryKey: queryKeys.orders.lists() });
     },
     onError: (error) => {
@@ -114,41 +122,19 @@ export const useDeleteOrder = () => {
   });
 };
 
-// Update order status mutation
-export const useUpdateOrderStatus = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({ id, status }) => {
-      const response = await api.updateOrderStatus(id, status);
-      return response.data;
-    },
-    onSuccess: (data, variables) => {
-      // Update the specific order in cache
-      queryClient.setQueryData(
-        queryKeys.orders.detail(variables.id),
-        (oldData) =>
-          oldData ? { ...oldData, status: variables.status } : oldData
-      );
-
-      // Invalidate orders list
-      queryClient.invalidateQueries({ queryKey: queryKeys.orders.lists() });
-    },
-    onError: (error) => {
-      console.error("Failed to update order status:", error);
-    },
-  });
-};
-
-// Order stats query
-export const useOrderStats = () => {
+// Orders by status query
+export const useOrdersByStatus = (status) => {
   return useQuery({
-    queryKey: [...queryKeys.orders.all, "stats"],
+    queryKey: [...queryKeys.orders.all, "status", status],
     queryFn: async () => {
-      const response = await api.getOrderStats();
-      return response.data.data;
+      const response = await api.getOrders({ status });
+      return {
+        data: response.data.data,
+        pagination: response.data.pagination || {},
+      };
     },
-    staleTime: 5 * 60 * 1000,
+    enabled: !!status,
+    staleTime: 1 * 60 * 1000, // 1 minute
     retry: (failureCount, error) => {
       if (error?.response?.status >= 400 && error?.response?.status < 500) {
         return false;

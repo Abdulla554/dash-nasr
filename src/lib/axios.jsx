@@ -17,11 +17,11 @@ const axiosInstance = axios.create({
 // Request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
+    console.log('Making API request:', config.method?.toUpperCase(), config.url, config.params);
     // Add timestamp to prevent caching
     if (config.method === 'get') {
       config.params = {
-        ...config.params,
-        _t: Date.now()
+        ...config.params, _t: Date.now()
       };
     }
 
@@ -45,6 +45,7 @@ axiosInstance.interceptors.request.use(
 // Response interceptor
 axiosInstance.interceptors.response.use(
   (response) => {
+    console.log('API response received:', response.status, response.config.url, response.data);
     // Handle successful responses
     if (response.data && response.data.message) {
       // Show success message if needed
@@ -123,7 +124,7 @@ axiosInstance.interceptors.response.use(
 
 // API methods
 export const api = {
-  // Products - Updated to match backend endpoints
+  // Products - Complete API
   getProducts: (params = {}) => axiosInstance.get('/products', { params }),
   getProduct: (id) => axiosInstance.get(`/products/${id}`),
   createProduct: (data) => axiosInstance.post('/products', data),
@@ -140,7 +141,7 @@ export const api = {
   getLowStockProducts: () => axiosInstance.get('/products/low-stock'),
   updateProductStock: (id, stock) => axiosInstance.put(`/products/${id}/stock`, { stock }),
 
-  // Categories - Updated to match backend endpoints
+  // Categories - Complete API
   getCategories: () => axiosInstance.get('/categories'),
   getCategory: (id) => axiosInstance.get(`/categories/${id}`),
   createCategory: (data) => axiosInstance.post('/categories', data),
@@ -148,7 +149,7 @@ export const api = {
   patchCategory: (id, data) => axiosInstance.patch(`/categories/${id}`, data),
   deleteCategory: (id) => axiosInstance.delete(`/categories/${id}`),
 
-  // Brands - Updated to match backend endpoints
+  // Brands - Complete API
   getBrands: () => axiosInstance.get('/brands'),
   getBrand: (id) => axiosInstance.get(`/brands/${id}`),
   createBrand: (data) => axiosInstance.post('/brands', data),

@@ -8,9 +8,9 @@ export const useCategories = () => {
     queryKey: queryKeys.categories.lists(),
     queryFn: async () => {
       const response = await api.getCategories();
-      return response.data.data;
+      return response.data;
     },
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
     retry: (failureCount, error) => {
       if (error?.response?.status >= 400 && error?.response?.status < 500) {
         return false;
@@ -26,7 +26,7 @@ export const useCategory = (id) => {
     queryKey: queryKeys.categories.detail(id),
     queryFn: async () => {
       const response = await api.getCategory(id);
-      return response.data.data;
+      return response.data;
     },
     enabled: !!id,
     staleTime: 5 * 60 * 1000,
@@ -45,15 +45,14 @@ export const useCreateCategory = () => {
 
   return useMutation({
     mutationFn: async (categoryData) => {
+      console.log("Creating category:", categoryData);
       const response = await api.createCategory(categoryData);
+      console.log("Category created successfully:", response.data);
       return response.data;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.categories.lists() });
-      queryClient.setQueryData(
-        queryKeys.categories.detail(data.data.id),
-        data.data
-      );
+      queryClient.setQueryData(queryKeys.categories.detail(data.id), data);
     },
     onError: (error) => {
       console.error("Failed to create category:", error);
@@ -67,14 +66,13 @@ export const useUpdateCategory = () => {
 
   return useMutation({
     mutationFn: async ({ id, categoryData }) => {
-      const response = await api.updateCategory(id, categoryData);
+      console.log("Updating category:", id, categoryData);
+      const response = await api.patchCategory(id, categoryData);
+      console.log("Category updated successfully:", response.data);
       return response.data;
     },
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(
-        queryKeys.categories.detail(variables.id),
-        data.data
-      );
+      queryClient.setQueryData(queryKeys.categories.detail(variables.id), data);
       queryClient.invalidateQueries({ queryKey: queryKeys.categories.lists() });
     },
     onError: (error) => {

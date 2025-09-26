@@ -8,6 +8,7 @@ import { useTheme } from "../../contexts/ThemeContext.jsx";
 import { useCurrency } from "../../contexts/CurrencyContext.jsx";
 import { useCategories } from "../../hooks/useCategoriesQuery";
 import { useBrands } from "../../hooks/useBrandsQuery";
+import { useUpload } from "../../hooks/useUpload";
 
 export default function AddProduct() {
   const navigate = useNavigate();
@@ -17,11 +18,12 @@ export default function AddProduct() {
   // Get categories and brands
   const { data: categoriesData } = useCategories();
   const { data: brandsData } = useBrands();
+  const { uploadProductImages, uploading } = useUpload();
 
   const categories = categoriesData || [];
   const brands = brandsData || [];
 
-  const [, setProductImages] = useState([]);
+  const [productImages, setProductImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
@@ -46,9 +48,6 @@ export default function AddProduct() {
     isNew: true,
     isBestSeller: false,
     isFeatured: false,
-    discountPercentage: 0,
-    discountAmount: 0,
-    sortOrder: 0,
     tags: [],
     warranty: "",
     shipping: ""
@@ -68,10 +67,15 @@ export default function AddProduct() {
     }
 
     files.forEach(file => {
+      console.log("Processing file:", file.name, file.type, file.size);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreviews(prev => [...prev, reader.result]);
-        setProductImages(prev => [...prev, file]);
+        setProductImages(prev => {
+          const newImages = [...prev, file];
+          console.log("Updated productImages:", newImages);
+          return newImages;
+        });
       };
       reader.readAsDataURL(file);
     });
@@ -122,7 +126,7 @@ export default function AddProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (imagePreviews.length === 0) {
+    if (imagePreviews.length === 0 || productImages.length === 0) {
       toast.error("يرجى رفع صورة واحدة على الأقل", {
         position: "top-right",
         autoClose: 3000,
@@ -139,7 +143,24 @@ export default function AddProduct() {
     }
 
     try {
-      // Clean up the data before sending
+      // 1. رفع جميع الصور إلى Cloudflare أولاً
+      toast.info("جاري رفع الصور إلى Cloudflare...", {
+        position: "top-right",
+        autoClose: 2000,
+      });
+
+      console.log("Product images to upload:", productImages);
+      const uploadedImages = await uploadProductImages(productImages);
+      console.log("Uploaded images response:", uploadedImages);
+
+      // استخراج URLs من الاستجابة
+      const imageUrls = uploadedImages.map(img => {
+        console.log("Processing image:", img);
+        return img.url || img;
+      });
+      console.log("Final image URLs:", imageUrls);
+
+      // 2. Clean up the data before sending
       const cleanSpecifications = {};
       Object.keys(formData.specifications).forEach(key => {
         if (formData.specifications[key] && formData.specifications[key].trim() !== '') {
@@ -147,31 +168,30 @@ export default function AddProduct() {
         }
       });
 
+      // 3. إنشاء المنتج مع URLs من Cloudflare
+      // الصورة الأولى هي الرئيسية، والباقي صور إضافية
       const newProduct = {
         name: formData.title,  // مطلوب
         title: formData.title, // اختياري
         description: formData.description,
         price: parseFloat(formData.price), // مطلوب
         originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : null,
-        image: imagePreviews[0] || '', // صورة رئيسية
-        images: imagePreviews, // جميع الصور
+        image: imageUrls[0] || '', // URL من Cloudflare
+        images: imageUrls, // URLs من Cloudflare
         stock: parseInt(formData.stock) || 0,
         isActive: true,
         isNew: formData.isNew,
         isBestSeller: formData.isBestSeller,
         isFeatured: formData.isFeatured,
-        discountPercentage: parseFloat(formData.discountPercentage) || 0,
-        discountAmount: parseFloat(formData.discountAmount) || 0,
-        sortOrder: parseInt(formData.sortOrder) || 0,
         specifications: cleanSpecifications,
         tags: formData.tags.filter(tag => tag.trim() !== ''),
         categoryId: formData.categoryId, // Use real category ID
         brandId: formData.brandId         // Use real brand ID
       };
 
-      console.log("Creating product:", newProduct);
+      console.log("Creating product with Cloudflare URLs:", newProduct);
 
-      // API call to create product
+      // 4. API call to create product
       const response = await fetch('http://localhost:3000/products', {
         method: 'POST',
         headers: {
@@ -354,53 +374,6 @@ export default function AddProduct() {
                   />
                 </div>
 
-                <div>
-                  <label htmlFor="discountPercentage" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    نسبة الخصم (%)
-                  </label>
-                  <input
-                    type="number"
-                    id="discountPercentage"
-                    value={formData.discountPercentage}
-                    onChange={handleInputChange}
-                    name="discountPercentage"
-                    min="0"
-                    max="100"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل نسبة الخصم (0-100)"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="discountAmount" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    مبلغ الخصم ({getCurrencySymbol()})
-                  </label>
-                  <input
-                    type="number"
-                    id="discountAmount"
-                    value={formData.discountAmount}
-                    onChange={handleInputChange}
-                    name="discountAmount"
-                    min="0"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل مبلغ الخصم"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="sortOrder" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    ترتيب العرض
-                  </label>
-                  <input
-                    type="number"
-                    id="sortOrder"
-                    value={formData.sortOrder}
-                    onChange={handleInputChange}
-                    name="sortOrder"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل ترتيب العرض (الأقل يظهر أولاً)"
-                  />
-                </div>
               </div>
 
               <div className="mt-6">
@@ -655,12 +628,25 @@ export default function AddProduct() {
             <div className="flex justify-center md:justify-end pt-6">
               <_motion.button
                 type="submit"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 bg-gradient-to-r from-nsr-accent to-nsr-primary text-white shadow-lg shadow-nsr-accent/25 transition-all duration-500 hover:shadow-xl hover:shadow-nsr-accent/40"
+                disabled={uploading}
+                whileHover={{ scale: uploading ? 1 : 1.05 }}
+                whileTap={{ scale: uploading ? 1 : 0.95 }}
+                className={`group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 text-white shadow-lg transition-all duration-500 ${uploading
+                  ? 'bg-gray-500 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-nsr-accent to-nsr-primary shadow-nsr-accent/25 hover:shadow-xl hover:shadow-nsr-accent/40'
+                  }`}
               >
-                <Save className="h-6 w-6 transition-all duration-500 group-hover:rotate-12" />
-                <span className="font-semibold text-lg">إضافة المنتج</span>
+                {uploading ? (
+                  <>
+                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span className="font-semibold text-lg">جاري رفع الصور...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-6 w-6 transition-all duration-500 group-hover:rotate-12" />
+                    <span className="font-semibold text-lg">إضافة المنتج</span>
+                  </>
+                )}
               </_motion.button>
             </div>
           </form>

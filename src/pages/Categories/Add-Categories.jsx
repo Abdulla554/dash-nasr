@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCreateCategory } from "../../hooks/useCategoriesQuery";
+import { useUpload } from "../../hooks/useUpload";
 import { toast } from "react-toastify";
 
 export default function LuxuryAddCategoryPage() {
@@ -27,6 +28,7 @@ export default function LuxuryAddCategoryPage() {
 
   // Add the create category mutation
   const createCategoryMutation = useCreateCategory();
+  const { uploadCategoryImage } = useUpload();
 
   const [errors, setErrors] = useState({});
 
@@ -92,10 +94,31 @@ export default function LuxuryAddCategoryPage() {
     setIsSubmitting(true);
 
     try {
+      let imageUrl = "";
+
+      // رفع الصورة إلى Cloudflare إذا كانت موجودة
+      if (imagePreview) {
+        toast.info("جاري رفع الصورة إلى Cloudflare...", {
+          position: "top-center",
+          rtl: true,
+          theme: "colored",
+          autoClose: 2000,
+        });
+
+        // تحويل base64 إلى File object للرفع
+        const response = await fetch(imagePreview);
+        const blob = await response.blob();
+        const file = new File([blob], 'category-image.jpg', { type: blob.type });
+
+        const uploadedImage = await uploadCategoryImage(file);
+        imageUrl = uploadedImage.url || uploadedImage;
+        console.log("Uploaded category image:", uploadedImage);
+      }
+
       const categoryData = {
         name: formData.name,
         description: formData.description || "",
-        image: imagePreview || ""
+        image: imageUrl // URL من Cloudflare
       };
 
       console.log("Creating category:", categoryData);

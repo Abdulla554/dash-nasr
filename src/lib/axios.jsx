@@ -18,16 +18,22 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     console.log('Making API request:', config.method?.toUpperCase(), config.url, config.params);
+
+    // Debug FormData requests
+    if (config.data instanceof FormData) {
+      console.log('FormData request detected:', {
+        url: config.url,
+        method: config.method,
+        formDataEntries: Array.from(config.data.entries())
+      });
+      delete config.headers["Content-Type"];
+    }
+
     // Add timestamp to prevent caching
     if (config.method === 'get') {
       config.params = {
         ...config.params, _t: Date.now()
       };
-    }
-
-    // Handle FormData
-    if (config.data instanceof FormData) {
-      delete config.headers["Content-Type"];
     }
 
     // Add loading indicator
@@ -175,13 +181,66 @@ export const api = {
   deleteBanner: (id) => axiosInstance.delete(`/banners/${id}`),
 
   // Upload - Updated to match backend endpoints
-  uploadImage: (formData) => axiosInstance.post('/upload/image', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }
+  uploadImage: (formData, config = {}) => axiosInstance.post('/upload/image', formData, {
+    ...config,
+    headers: {
+      ...config.headers,
+      // Let axios set the Content-Type automatically for FormData
+    }
   }),
-  uploadImages: (formData) => axiosInstance.post('/upload/images', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' }
+  uploadImages: (formData, config = {}) => axiosInstance.post('/upload/images', formData, {
+    ...config,
+    headers: {
+      ...config.headers,
+      // Let axios set the Content-Type automatically for FormData
+    }
+  }),
+  uploadProductImages: (formData, config = {}) => axiosInstance.post('/upload/product-images', formData, {
+    ...config,
+    headers: {
+      ...config.headers,
+      // Let axios set the Content-Type automatically for FormData
+    }
   }),
   deleteImage: (imageId) => axiosInstance.delete(`/upload/${imageId}`),
+
+  // Specific upload endpoints for different content types
+  uploadCategoryImage: (formData, config = {}) => axiosInstance.post('/upload/category-image', formData, {
+    ...config,
+    headers: {
+      ...config.headers,
+    }
+  }),
+  uploadBrandImage: (formData, config = {}) => axiosInstance.post('/upload/brand-image', formData, {
+    ...config,
+    headers: {
+      ...config.headers,
+    }
+  }),
+  uploadBannerImage: (formData, config = {}) => axiosInstance.post('/upload/banner-image', formData, {
+    ...config,
+    headers: {
+      ...config.headers,
+    }
+  }),
+  uploadProductImage: (formData, config = {}) => axiosInstance.post('/upload/product-image', formData, {
+    ...config,
+    headers: {
+      ...config.headers,
+    }
+  }),
+
+  // Cloud Storage endpoints
+  uploadToCloud: (formData, config = {}) => axiosInstance.post('/upload/cloud', formData, {
+    ...config,
+    headers: {
+      ...config.headers,
+    }
+  }),
+  getCloudImageUrl: (imageId, options = {}) => axiosInstance.get(`/upload/cloud/${imageId}/url`, {
+    params: options
+  }),
+  deleteCloudImage: (imageId) => axiosInstance.delete(`/upload/cloud/${imageId}`),
 
   // Dashboard - Updated to match backend endpoints
   getDashboardStats: () => axiosInstance.get('/dashboard/stats'),

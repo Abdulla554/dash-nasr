@@ -25,6 +25,25 @@ import { useProducts, useDeleteProduct } from "../../hooks/useProductsQuery";
 import { useBrands } from "../../hooks/useBrandsQuery";
 import { useCategories } from "../../hooks/useCategoriesQuery";
 
+// Helper function to get full image URL
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return '/logo.png';
+
+  // If it's already a full URL (starts with http), return as is
+  if (imagePath.startsWith('http')) {
+    return imagePath;
+  }
+
+  // If it's a data URL (base64), return as is
+  if (imagePath.startsWith('data:')) {
+    return imagePath;
+  }
+
+  // If it's a relative path, prepend the API base URL
+  const baseURL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  return `${baseURL}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
+};
+
 export default function LuxuryProductsPage() {
   // إزالة نظام الثيم - استخدام ألوان ثابتة فقط
   const { convertCurrency, getCurrencySymbol, getCurrencyCode, toggleCurrency } = useCurrency();
@@ -59,6 +78,16 @@ export default function LuxuryProductsPage() {
   console.log("Products length:", products.length);
   console.log("Brands:", brands);
   console.log("Categories:", categories);
+
+  // Debug image URLs
+  if (products.length > 0) {
+    console.log("First product image URLs:", {
+      image: products[0].image,
+      images: products[0].images,
+      fullImageUrl: getImageUrl(products[0].image),
+      fullImagesUrl: products[0].images?.[0] ? getImageUrl(products[0].images[0]) : 'No images array'
+    });
+  }
 
   // Use products from API
   const displayProducts = products;
@@ -391,9 +420,12 @@ export default function LuxuryProductsPage() {
                         <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
                           <div className="relative w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-lg sm:rounded-xl overflow-hidden group">
                             <img
-                              src={product.image || product.images?.[0] || '/placeholder.jpg'}
+                              src={getImageUrl(product.image || product.images?.[0])}
                               alt={product.name}
                               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                              onError={(e) => {
+                                e.target.src = '/logo.png';
+                              }}
                             />
                             {product.isNew && (
                               <span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded-full font-semibold">

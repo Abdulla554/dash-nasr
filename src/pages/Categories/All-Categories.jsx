@@ -303,7 +303,7 @@ export default function LuxuryCategoriesPage() {
                         <div className="flex items-center gap-4 text-sm">
                           <div className="flex items-center gap-2">
                             <Package className="w-4 h-4 text-blue-400" />
-                            <span className="text-slate-300">0 منتج</span>
+                            <span className="text-slate-300">{category._count.products} منتج</span>
                           </div>
                           <div className="text-slate-500">
                             {new Date(category.createdAt).toLocaleDateString('ar')}

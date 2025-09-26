@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useCreateBrand } from "../../hooks/useBrandsQuery";
+import { useUpload } from "../../hooks/useUpload";
 // هاي المكتبه لتحميل الصور بدون حدود
 import imageCompression from "browser-image-compression";
 
@@ -18,6 +19,7 @@ export default function AddBrand() {
 
   const navigate = useNavigate();
   const createBrandMutation = useCreateBrand();
+  const { uploadBrandImage } = useUpload();
 
   const compressImage = async (file) => {
     const options = {
@@ -97,10 +99,26 @@ export default function AddBrand() {
     }
 
     try {
+      let logoUrl = "";
+
+      // رفع الصورة إلى Cloudflare إذا كانت موجودة
+      if (brandImage) {
+        toast.info("جاري رفع الصورة إلى Cloudflare...", {
+          position: "top-center",
+          rtl: true,
+          theme: "colored",
+          autoClose: 2000,
+        });
+
+        const uploadedImage = await uploadBrandImage(brandImage);
+        logoUrl = uploadedImage.url || uploadedImage;
+        console.log("Uploaded brand logo:", uploadedImage);
+      }
+
       const brandData = {
         name: formData.name,
         description: formData.description || "",
-        logo: imagePreview || ""
+        logo: logoUrl // URL من Cloudflare
       };
 
       console.log("Creating brand:", brandData);

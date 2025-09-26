@@ -117,6 +117,7 @@ export default function AllBanner() {
         key={Banner.id}
         className="relative group "
       >
+        
         <div className="card-nsr relative overflow-hidden rounded-2xl border-2 border-nsr-primary border-dashed aspect-square bg-nsr-secondary">
           <div className="absolute inset-0 bg-gradient-to-br  from-black/20 to-black/40 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           <img

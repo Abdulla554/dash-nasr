@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const axiosInstance = axios.create({
-  baseURL: "http://po4kk80k4k8so4gkssws0o80.185.208.207.97.sslip.io/"  || "http://localhost:3000",
+  baseURL:  import.meta.env.VITE_API_URL || "http://localhost:3000",
   timeout: 10000, // 10 seconds timeout (reduced for faster fallback)
   headers: {
     "Content-Type": "application/json",

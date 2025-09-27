@@ -55,12 +55,12 @@ axiosInstance.interceptors.response.use(
     // Handle successful responses
     if (response.data && response.data.message) {
       // Show success message if needed
-      if (response.config.showSuccessMessage !== false) {
-        toast.success(response.data.message, {
-          position: "top-right",
-          autoClose: 3000,
-        });
-      }
+      // if (response.config.showSuccessMessage !== false) {
+      //   toast.success(response.data.message, {
+      //     position: "top-right",
+      //     autoClose: 3000,
+      //   });
+      // }
     }
     return response;
   },

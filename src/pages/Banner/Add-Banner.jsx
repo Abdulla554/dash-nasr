@@ -113,7 +113,7 @@ export default function AddBanner() {
       });
       console.log("Banner added successfully");
       setTimeout(() => {
-        navigate("/banners");
+        navigate("/banner");
       }, 2000);
     },
     onError: (error) => {

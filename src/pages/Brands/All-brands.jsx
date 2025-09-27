@@ -22,14 +22,19 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useBrands, useCreateBrand, useUpdateBrand, useDeleteBrand } from "../../hooks/useBrandsQuery";
+import ConfirmationModal from "../../components/ConfirmationModal";
+import ClipLoader from "react-spinners/ClipLoader";
 export default function AllBrands() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
   const [viewMode, setViewMode] = useState("grid");
-
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [showBrandModal, setShowBrandModal] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedBrandId, setSelectedBrandId] = useState(null);
   // Use brands from API
-  const { data: brands = [] } = useBrands();
+  const { data: brands = [], isLoading } = useBrands();
   // eslint-disable-next-line no-unused-vars
   const createBrandMutation = useCreateBrand();
   // eslint-disable-next-line no-unused-vars
@@ -79,8 +84,52 @@ export default function AllBrands() {
 
   const toggleSort = () => setSortOrder(sortOrder === "asc" ? "desc" : "asc");
 
+  // Handle brand operations
+  const handleViewBrand = (brand) => {
+    setSelectedBrand(brand);
+    setShowBrandModal(true);
+  };
+
+  const handleEditBrand = (brandId) => {
+    // Navigate to edit page
+    window.location.href = `/banner/edit/${brandId}`;
+  };
+
+  const handleDeleteBrand = async (brand) => {
+      setSelectedBrandId(brand.id);
+    setDeleteModalOpen(true);
+  };
+  
+
+  const closeBrandModal = () => {
+    setShowBrandModal(false);
+    setSelectedBrand(null);
+  };
+  const handleConfirmDelete = () => {
+    if (selectedBrandId) {
+      deleteBrandMutation.mutate(selectedBrandId);
+    }
+  };
+  if (isLoading) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center min-h-[120px] bg-nsr-dark">
+        <ClipLoader color={"#1A73E8"} size={48} speedMultiplier={1.2} />
+        <span className="text-nsr-primary font-bold text-lg mt-3">
+          جاري التحميل...
+        </span>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#1a1a2e]" dir="rtl">
+    <div className="min-h-screen bg-[#1a1a2e]"  >
+     <ConfirmationModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this banner? This action cannot be undone."
+      />
       {/* Header */}
       <div className="relative bg-[#F9F3EF]/5 backdrop-blur-sm border-b border-[#749BC2]/20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
@@ -299,15 +348,27 @@ export default function AllBrands() {
                       {/* Action Buttons */}
                       <div className="flex items-center justify-between pt-4 border-t border-white/10">
                         <div className="flex items-center gap-2">
-                          <button className="group/btn p-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 rounded-xl hover:bg-blue-500/30 transition-all duration-300 hover:scale-110">
+                          <button 
+                            onClick={() => handleViewBrand(brand)}
+                            className="group/btn p-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 rounded-xl hover:bg-blue-500/30 transition-all duration-300 hover:scale-110"
+                            title="عرض التفاصيل"
+                          >
                             <Eye size={16} className="group-hover/btn:scale-110 transition-transform" />
                           </button>
-                          <button className="group/btn p-2 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/30 transition-all duration-300 hover:scale-110">
+                          <button 
+                            onClick={() => handleEditBrand(brand.id)}
+                            className="group/btn p-2 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/30 transition-all duration-300 hover:scale-110"
+                            title="تعديل الماركة"
+                          >
                             <Edit size={16} className="group-hover/btn:scale-110 transition-transform" />
                           </button>
                         </div>
 
-                        <button className="group/btn p-2 bg-red-500/20 border border-red-500/30 text-red-300 rounded-xl hover:bg-red-500/30 transition-all duration-300 hover:scale-110">
+                        <button 
+                          onClick={() => handleDeleteBrand(brand)}
+                          className="group/btn p-2 bg-red-500/20 border border-red-500/30 text-red-300 rounded-xl hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
+                          title="حذف الماركة"
+                        >
                           <Trash2 size={16} className="group-hover/btn:scale-110 transition-transform" />
                         </button>
                       </div>
@@ -326,6 +387,114 @@ export default function AllBrands() {
           <p className="text-slate-500 text-sm">© 2025 نظام إدارة الماركات الفخم - جميع الحقوق محفوظة</p>
         </div>
       </div>
+
+      {/* Brand Details Modal */}
+      {showBrandModal && selectedBrand && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="relative bg-[#1a1a2e] border border-white/10 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="relative bg-gradient-to-r from-purple-600/20 to-purple-800/20 border-b border-white/10 p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-gradient-to-r from-purple-600 to-purple-800 rounded-xl">
+                    <Package className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">تفاصيل الماركة</h2>
+                    <p className="text-purple-400">معلومات شاملة عن الماركة</p>
+                  </div>
+                </div>
+                <button
+                  onClick={closeBrandModal}
+                  className="p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-colors duration-300"
+                >
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-6">
+              {/* Brand Logo */}
+              <div className="flex justify-center">
+                {selectedBrand.logo ? (
+                  <div className="relative">
+                    <img
+                      src={selectedBrand.logo}
+                      alt={selectedBrand.name}
+                      className="w-32 h-32 object-cover rounded-2xl border-2 border-purple-500/30"
+                    />
+                    <div className="absolute -bottom-2 -right-2 p-2 bg-purple-600 rounded-xl border-2 border-[#1a1a2e]">
+                      <Package className="w-4 h-4 text-white" />
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 bg-gradient-to-br from-purple-600 to-purple-800 rounded-2xl flex items-center justify-center border-2 border-purple-500/30">
+                    <Package className="w-16 h-16 text-white/50" />
+                  </div>
+                )}
+              </div>
+
+              {/* Brand Information */}
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm text-slate-400 block mb-2">اسم الماركة</label>
+                  <div className="p-4 bg-slate-800/50 border border-slate-700/50 rounded-xl">
+                    <p className="text-xl font-bold text-white">{selectedBrand.name}</p>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="text-sm text-slate-400 block mb-2">الوصف</label>
+                  <div className="p-4 bg-slate-800/50 border border-slate-700/50 rounded-xl">
+                    <p className="text-slate-300 leading-relaxed">
+                      {selectedBrand.description || "لا يوجد وصف متاح"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm text-slate-400 block mb-2">تاريخ الإنشاء</label>
+                    <div className="p-4 bg-slate-800/50 border border-slate-700/50 rounded-xl">
+                      <p className="text-slate-300">{new Date(selectedBrand.createdAt).toLocaleDateString('ar-SA')}</p>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-sm text-slate-400 block mb-2">آخر تحديث</label>
+                    <div className="p-4 bg-slate-800/50 border border-slate-700/50 rounded-xl">
+                      <p className="text-slate-300">{new Date(selectedBrand.updatedAt || selectedBrand.createdAt).toLocaleDateString('ar-SA')}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-center gap-4 pt-6 border-t border-white/10">
+                <button
+                  onClick={() => handleEditBrand(selectedBrand.id)}
+                  className="flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold transition-colors duration-300"
+                >
+                  <Edit size={18} />
+                  تعديل الماركة
+                </button>
+                <button
+                  onClick={() => {
+                    closeBrandModal();
+                    handleDeleteBrand(selectedBrand);
+                  }}
+                  className="flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition-colors duration-300"
+                >
+                  <Trash2 size={18} />
+                  حذف الماركة
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

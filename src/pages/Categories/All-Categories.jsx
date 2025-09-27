@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from "../../hooks/useCategoriesQuery";
+import ConfirmationModal from "../../components/ConfirmationModal";
 
 export default function LuxuryCategoriesPage() {
   // ثيم دارك ثابت - لا حاجة لمتغير isDark
@@ -29,9 +30,10 @@ export default function LuxuryCategoriesPage() {
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
   const [viewMode, setViewMode] = useState("grid");
-
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   // Use categories from API
-  const { data: categories = [] } = useCategories();
+  const { data: categories = [], isLoading } = useCategories();
   // eslint-disable-next-line no-unused-vars
   const createCategoryMutation = useCreateCategory();
   // eslint-disable-next-line no-unused-vars
@@ -91,8 +93,26 @@ export default function LuxuryCategoriesPage() {
 
   const toggleSort = () => setSortOrder(sortOrder === "asc" ? "desc" : "asc");
 
-  return (
-    <div className="min-h-screen bg-[#1a1a2e]" dir="rtl">
+  const handleConfirmDelete = () => {
+    if (selectedCategoryId) {
+      deleteCategoryMutation.mutate(selectedCategoryId);
+    }
+  };
+
+  const handleDelete = (id) => {
+    setSelectedCategoryId(id);
+    setDeleteModalOpen(true);
+  };
+
+    return (
+    <div className="min-h-screen bg-[#1a1a2e]"  >
+      <ConfirmationModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this category? This action cannot be undone."
+        />
       {/* Header */}
       <div className="relative bg-[#F9F3EF]/5 backdrop-blur-sm border-b border-[#749BC2]/20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
@@ -322,7 +342,7 @@ export default function LuxuryCategoriesPage() {
                           </button>
                         </div>
 
-                        <button className="group/btn p-2 bg-red-500/20 border border-red-500/30 text-red-300 rounded-xl hover:bg-red-500/30 transition-all duration-300 hover:scale-110">
+                        <button onClick={() => handleDelete(category.id)} className="group/btn p-2 bg-red-500/20 border border-red-500/30 text-red-300 rounded-xl hover:bg-red-500/30 transition-all duration-300 hover:scale-110">
                           <Trash2 size={16} className="group-hover/btn:scale-110 transition-transform" />
                         </button>
                       </div>

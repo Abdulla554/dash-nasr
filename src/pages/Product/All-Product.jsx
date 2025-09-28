@@ -40,7 +40,7 @@ const getImageUrl = (imagePath) => {
   }
 
   // If it's a relative path, prepend the API base URL
-  const baseURL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  const baseURL = import.meta.env.VITE_API_URL ;
   return `${baseURL}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
 };
 

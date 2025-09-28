@@ -9,6 +9,7 @@ import { useCurrency } from "../../contexts/CurrencyContext.jsx";
 import { useCategories } from "../../hooks/useCategoriesQuery";
 import { useBrands } from "../../hooks/useBrandsQuery";
 import { useUpload } from "../../hooks/useUpload";
+import { api } from "../../lib/axios";
 
 export default function AddProduct() {
   const navigate = useNavigate();
@@ -192,15 +193,9 @@ export default function AddProduct() {
       console.log("Creating product with Cloudflare URLs:", newProduct);
 
       // 4. API call to create product
-      const response = await fetch('http://localhost:3000/products', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newProduct)
-      });
+      const response = await api.createProduct(newProduct);
 
-      if (!response.ok) {
+      if (!response.data.success) {
         const errorData = await response.json().catch(() => ({}));
         console.error("API Error Response:", errorData);
         throw new Error(`HTTP error! status: ${response.status} - ${errorData.message || 'Unknown error'}`);

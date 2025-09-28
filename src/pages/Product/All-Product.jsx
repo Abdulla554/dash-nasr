@@ -17,7 +17,8 @@ import {
   Moon,
   DollarSign
 } from "lucide-react";
-import { motion as _motion } from "framer-motion";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 
 // إزالة useTheme - استخدام ألوان ثابتة
 import { useCurrency } from "../../contexts/CurrencyContext.jsx";
@@ -40,7 +41,7 @@ const getImageUrl = (imagePath) => {
   }
 
   // If it's a relative path, prepend the API base URL
-  const baseURL = import.meta.env.VITE_API_URL ;
+  const baseURL = import.meta.env.VITE_API_URL;
   return `${baseURL}${imagePath.startsWith('/') ? '' : '/'}${imagePath}`;
 };
 
@@ -224,24 +225,28 @@ export default function LuxuryProductsPage() {
 
       {/* Header */}
       <div className="relative backdrop-blur-sm border-b bg-[#F9F3EF]/5 border-[#749BC2]/20">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-transparent"></div>
-        <div className="relative px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 lg:gap-0">
-            <div className="flex items-center gap-3 sm:gap-4 lg:gap-6">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
+        <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
               <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl">
                 <ShoppingCart className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">
-                  إدارة المنتجات
-                </h1>
-                <p className="mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg text-[#F9F3EF]/70">إدارة شاملة لجميع منتجاتك</p>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">إدارة المنتجات</h1>
+                <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">إدارة شاملة لجميع منتجاتك</p>
               </div>
             </div>
-
             <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
-              {/* Currency Toggle */}
-              <_motion.button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.location.href = '/products/add'}
+                className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
+              >
+                <span className="font-semibold text-sm sm:text-base lg:text-lg">إضافة منتج جديد</span>
+              </motion.button>
+              <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleCurrency}
@@ -249,19 +254,7 @@ export default function LuxuryProductsPage() {
               >
                 <DollarSign className="h-5 w-5 sm:h-6 sm:w-6 transition-colors text-[#2C6D90] group-hover:text-[#F9F3EF]" />
                 <span className="font-semibold text-sm sm:text-base transition-colors text-[#2C6D90] group-hover:text-[#F9F3EF]">{getCurrencyCode()}</span>
-              </_motion.button>
-
-              {/* Add Product Button */}
-              <Link to="/products/add" className="flex-1 lg:flex-none">
-                <_motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 w-full lg:w-auto"
-                >
-                  <Plus className="h-5 w-5 sm:h-6 sm:w-6 transition-all duration-500 group-hover:rotate-180" />
-                  <span className="font-semibold text-sm sm:text-base lg:text-lg">إضافة منتج جديد</span>
-                </_motion.button>
-              </Link>
+              </motion.button>
             </div>
           </div>
         </div>
@@ -398,16 +391,16 @@ export default function LuxuryProductsPage() {
         ) : (
           <div className="backdrop-blur-sm border rounded-xl sm:rounded-2xl overflow-hidden bg-[#F9F3EF]/5 border-[#749BC2]/20">
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[800px]">
+              <table className="w-full min-w-[600px] sm:min-w-[800px]">
                 <thead className="bg-gradient-to-r from-[#1a1a2e] to-[#2C6D90]/20">
                   <tr>
-                    <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الصورة</th>
-                    <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">معلومات المنتج</th>
-                    <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">المواصفات</th>
-                    <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">السعر</th>
-                    <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">المخزون</th>
-                    <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الحالة</th>
-                    <th className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الإجراءات</th>
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الصورة</th>
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">معلومات المنتج</th>
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden sm:table-cell">المواصفات</th>
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">السعر</th>
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden md:table-cell">المخزون</th>
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden lg:table-cell">الحالة</th>
+                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الإجراءات</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#749BC2]/10">
@@ -417,8 +410,8 @@ export default function LuxuryProductsPage() {
                     return (
                       <tr key={product.id} className="hover:bg-[#F9F3EF]/5 transition-colors duration-300">
                         {/* الصورة */}
-                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
-                          <div className="relative w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-lg sm:rounded-xl overflow-hidden group">
+                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
+                          <div className="relative w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-lg sm:rounded-xl overflow-hidden group">
                             <img
                               src={getImageUrl(product.image || product.images?.[0])}
                               alt={product.name}
@@ -436,14 +429,14 @@ export default function LuxuryProductsPage() {
                         </td>
 
                         {/* معلومات المنتج */}
-                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
                           <div className="space-y-1 sm:space-y-2">
                             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
                               <span className="text-xs sm:text-sm font-medium px-1 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-[#2C6D90] bg-[#2C6D90]/10">
                                 {brands.find(b => b.id === product.brandId)?.name || 'Unknown Brand'}
                               </span>
                               <div className="flex items-center gap-1">
-                                <Star size={10} className="text-yellow-400 fill-current sm:w-3 sm:h-3" />
+                                <Star size={8} className="text-yellow-400 fill-current sm:w-3 sm:h-3" />
                                 <span className="text-xs text-[#F9F3EF]/70">{product.rating}</span>
                                 <span className="text-xs text-[#F9F3EF]/70">({product.reviews})</span>
                               </div>
@@ -451,7 +444,7 @@ export default function LuxuryProductsPage() {
                             <h3 className="font-semibold text-xs sm:text-sm max-w-xs text-[#F9F3EF]">
                               {product.name}
                             </h3>
-                            <div className="flex flex-wrap gap-1 mb-2">
+                            <div className="flex flex-wrap gap-1 mb-1 sm:mb-2">
                               {product.isNew && (
                                 <span className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-green-500/20 text-green-300 border border-green-500/30">
                                   جديد
@@ -470,7 +463,7 @@ export default function LuxuryProductsPage() {
                             </div>
                             <div className="flex flex-wrap gap-1">
                               {product.tags && product.tags.length > 0 ? (
-                                product.tags.slice(0, 3).map((tag, tagIndex) => (
+                                product.tags.slice(0, 2).map((tag, tagIndex) => (
                                   <span key={tagIndex} className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-[#749BC2]/20 text-[#F9F3EF]/70">
                                     #{tag}
                                   </span>
@@ -483,7 +476,7 @@ export default function LuxuryProductsPage() {
                         </td>
 
                         {/* المواصفات */}
-                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 hidden sm:table-cell">
                           <div className="space-y-1 text-xs">
                             {product.specifications.processor && (
                               <div className="text-[#F9F3EF]/70">
@@ -504,7 +497,7 @@ export default function LuxuryProductsPage() {
                         </td>
 
                         {/* السعر */}
-                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
                           <div className="space-y-1">
                             <div className="text-sm sm:text-base lg:text-lg font-bold text-[#2C6D90]">
                               {getCurrencySymbol()}{convertCurrency(product.price).toLocaleString()}
@@ -523,7 +516,7 @@ export default function LuxuryProductsPage() {
                         </td>
 
                         {/* المخزون */}
-                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 hidden md:table-cell">
                           <div className="flex items-center gap-2">
                             <div className={`w-2 h-2 rounded-full ${getStockColor(product.stock)}`}></div>
                             <span className="text-xs sm:text-sm font-medium text-[#F9F3EF]">
@@ -534,7 +527,7 @@ export default function LuxuryProductsPage() {
                         </td>
 
                         {/* الحالة */}
-                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
+                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 hidden lg:table-cell">
                           <div className="flex flex-col gap-1">
                             <span className={`text-xs sm:text-sm font-medium px-2 py-1 rounded-md ${product.isActive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
                               {product.isActive ? 'نشط' : 'غير نشط'}
@@ -547,21 +540,9 @@ export default function LuxuryProductsPage() {
                           </div>
                         </td>
 
-                        {/* الإجراءات */}
-                        <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
-                          <div className="flex items-center gap-1 sm:gap-2">
-                            <button
-                              className="p-1 sm:p-2 text-[#2C6D90] hover:text-[#F9F3EF] hover:bg-[#2C6D90]/20 rounded-lg transition-colors duration-300"
-                              title="عرض"
-                            >
-                              <Eye size={14} className="sm:w-4 sm:h-4" />
-                            </button>
-                            <button
-                              className="p-1 sm:p-2 text-[#749BC2] hover:text-[#F9F3EF] hover:bg-[#749BC2]/20 rounded-lg transition-colors duration-300"
-                              title="تعديل"
-                            >
-                              <Edit size={14} className="sm:w-4 sm:h-4" />
-                            </button>
+                        {/* الإجراءات - Only Delete Button */}
+                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
+                          <div className="flex items-center justify-center">
                             <button
                               onClick={() => handleDelete(product.id)}
                               className="p-1 sm:p-2 text-red-500 hover:text-white hover:bg-red-500 rounded-lg transition-colors duration-300"

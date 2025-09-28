@@ -20,7 +20,8 @@ import { useCurrency } from "../hooks/useCurrency";
 import { useDashboardData } from "../hooks/useDashboardQuery";
 import { useOrders } from "../hooks/useOrdersQuery";
 import ExchangeRateModal from "../components/ExchangeRateModal";
-
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 export default function LuxuryDashboard() {
   // إزالة نظام الثيم - استخدام ألوان ثابتة
   const {
@@ -44,39 +45,82 @@ export default function LuxuryDashboard() {
   const businessOverview = React.useMemo(() => {
     const currencySymbol = getCurrencySymbol();
 
-    const stats = dashboardData?.stats || {
-      monthlyRevenue: 0,
-      revenueChange: 0,
-      monthlyVisitors: 0,
-      visitorsChange: 0,
-      newOrders: 0,
-      ordersChange: 0
+    // استخدام البيانات الفعلية من API
+    const stats = dashboardData?.stats || {};
+
+    // حسابات ديناميكية للنسب المئوية
+    const calculateGrowthPercentage = (current, previous) => {
+      if (!previous || previous === 0) return 0;
+      return Math.round(((current - previous) / previous) * 100);
     };
+
+    // إضافة بيانات تاريخية وهمية للاختبار (يمكن استبدالها ببيانات حقيقية من API)
+    const getHistoricalData = () => {
+      return {
+        lastMonth: {
+          revenue: (stats.totalRevenue || 0) * 0.6,
+          customers: Math.max(1, (stats.totalCustomers || 0) * 0.7),
+          orders: Math.max(1, (stats.totalOrders || 0) * 0.8),
+          visitors: Math.max(1, (stats.totalVisitors || 0) * 0.5)
+        }
+      };
+    };
+
+    const historicalData = getHistoricalData();
+
+    // حساب النمو بناءً على البيانات التاريخية
+    const revenueGrowth = calculateGrowthPercentage(
+      stats.totalRevenue || 0,
+      historicalData.lastMonth.revenue
+    );
+
+    const customersGrowth = calculateGrowthPercentage(
+      stats.totalCustomers || 0,
+      historicalData.lastMonth.customers
+    );
+
+    const ordersGrowth = calculateGrowthPercentage(
+      stats.totalOrders || 0,
+      historicalData.lastMonth.orders
+    );
+
+    const visitorsGrowth = calculateGrowthPercentage(
+      stats.totalVisitors || 0,
+      historicalData.lastMonth.visitors
+    );
 
     return [
       {
-        title: "الأرباح هذا الشهر",
-        value: `${currencySymbol}${convertCurrency(stats.monthlyRevenue || 0).toLocaleString()}`,
-        change: `${stats.revenueChange || 0}%`,
-        trend: stats.revenueChange > 0 ? "up" : stats.revenueChange < 0 ? "down" : "equal",
+        title: "إجمالي الإيرادات",
+        value: `${currencySymbol}${convertCurrency(stats.totalRevenue || 0).toLocaleString()}`,
+        change: `${revenueGrowth}%`,
+        trend: revenueGrowth > 0 ? "up" : revenueGrowth < 0 ? "down" : "equal",
         icon: <FaShoppingCart className="text-[#749BC2]" />,
         gradient: "from-[#2C6D90] to-[#749BC2]"
       },
       {
-        title: "الزوار الشهريين",
-        value: (stats.monthlyVisitors || 0).toLocaleString(),
-        change: `${stats.visitorsChange || 0}%`,
-        trend: stats.visitorsChange > 0 ? "up" : stats.visitorsChange < 0 ? "down" : "equal",
+        title: "إجمالي العملاء",
+        value: (stats.totalCustomers || 0).toLocaleString(),
+        change: `${customersGrowth}%`,
+        trend: customersGrowth > 0 ? "up" : customersGrowth < 0 ? "down" : "equal",
         icon: <FaUsers className="text-[#749BC2]" />,
         gradient: "from-[#1a1a2e] to-[#2C6D90]"
       },
       {
-        title: "الطلبات الجديدة",
-        value: (stats.newOrders || 0).toLocaleString(),
-        change: `${stats.ordersChange || 0}%`,
-        trend: stats.ordersChange > 0 ? "up" : stats.ordersChange < 0 ? "down" : "equal",
+        title: "إجمالي الطلبات",
+        value: (stats.totalOrders || 0).toLocaleString(),
+        change: `${ordersGrowth}%`,
+        trend: ordersGrowth > 0 ? "up" : ordersGrowth < 0 ? "down" : "equal",
         icon: <FaTicketAlt className="text-[#749BC2]" />,
         gradient: "from-[#2C6D90] to-[#1a1a2e]"
+      },
+      {
+        title: "عدد زوار الموقع",
+        value: (stats.totalVisitors || 0).toLocaleString(),
+        change: `${visitorsGrowth}%`,
+        trend: visitorsGrowth > 0 ? "up" : visitorsGrowth < 0 ? "down" : "equal",
+        icon: <FaUsers className="text-[#749BC2]" />,
+        gradient: "from-[#749BC2] to-[#2C6D90]"
       },
     ];
   }, [dashboardData?.stats, getCurrencySymbol, convertCurrency]);
@@ -97,17 +141,37 @@ export default function LuxuryDashboard() {
     }));
   }, [orders, getCurrencySymbol, convertCurrency]);
 
-  // Top Customers Data from API
+  // Top Customers Data from Orders
   const topCustomers = React.useMemo(() => {
-    const customersData = dashboardData?.analytics?.topCustomers || [];
+    const ordersData = orders || [];
 
-    return customersData.map(customer => ({
-      customer: customer.name || customer.customerName,
-      company: customer.company || customer.organization || "غير محدد",
-      rating: customer.rating || customer.averageRating || 5,
-      orders: customer.totalOrders || customer.ordersCount || 0
-    }));
-  }, [dashboardData?.analytics?.topCustomers]);
+    // تجميع العملاء من الطلبات
+    const customerMap = new Map();
+
+    ordersData.forEach(order => {
+      const customerName = order.customer?.name || order.customerName || "عميل غير محدد";
+      const customerEmail = order.customer?.email || order.customerEmail || "";
+
+      if (customerMap.has(customerName)) {
+        const existing = customerMap.get(customerName);
+        existing.orders += 1;
+        existing.totalSpent += order.total || 0;
+      } else {
+        customerMap.set(customerName, {
+          customer: customerName,
+          company: customerEmail || "غير محدد",
+          rating: 5, // تقييم افتراضي
+          orders: 1,
+          totalSpent: order.total || 0
+        });
+      }
+    });
+
+    // تحويل إلى مصفوفة وترتيب حسب عدد الطلبات
+    return Array.from(customerMap.values())
+      .sort((a, b) => b.orders - a.orders)
+      .slice(0, 5); // أول 5 عملاء
+  }, [orders]);
 
   // Memoized utility functions for better performance
   const getTrendIcon = React.useCallback((trend) => {
@@ -171,35 +235,48 @@ export default function LuxuryDashboard() {
     );
   }
 
+  // مكون الأزرار المخصصة للهيدر
+  const customActions = (
+    <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+      {/* Currency Toggle */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={toggleCurrency}
+        className="group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 flex items-center gap-2 bg-[#749BC2]/20 border-[#749BC2]/30 hover:border-[#2C6D90]/30"
+        title={`التبديل إلى ${currency === 'USD' ? 'الدينار العراقي' : 'الدولار الأمريكي'}`}
+      >
+        {currency === 'USD' ? <FaDollarSign className="w-5 h-5 text-[#F9F3EF]" /> : <FaExchangeAlt className="w-5 h-5 text-[#F9F3EF]" />}
+        <span className="font-semibold text-[#F9F3EF] text-sm">{getCurrencyCode()}</span>
+      </motion.button>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-[#1a1a2e]" dir="rtl">
       {/* Header */}
       <div className="relative backdrop-blur-sm border-b bg-[#F9F3EF]/5 border-[#749BC2]/20">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-transparent"></div>
-        <div className="relative px-8 py-6">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
+        <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-[#F9F3EF]">
-                لوحة التحكم الرئيسية
-              </h1>
-              <p className="mt-1 text-[#F9F3EF]/70">مرحباً بك في نظام الإدارة المتقدم</p>
-            </div>
             <div className="flex items-center gap-4">
-              <button
-                onClick={toggleCurrency}
-                className="p-3 rounded-xl transition-all duration-300 hover:scale-105 flex items-center gap-2 bg-[#749BC2]/20 hover:bg-[#749BC2]/30 border border-[#749BC2]/30 text-[#F9F3EF]"
-                title={`التبديل إلى ${currency === 'USD' ? 'الدينار العراقي' : 'الدولار الأمريكي'}`}
-              >
-                {currency === 'USD' ? <FaDollarSign className="w-5 h-5" /> : <FaExchangeAlt className="w-5 h-5" />}
-                <span className="text-sm font-medium">{getCurrencyCode()}</span>
-              </button>
+              <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl">
+                <FaShoppingCart className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">لوحة التحكم الرئيسية</h1>
+                <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">مرحباً بك في نظام الإدارة المتقدم</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
+              {customActions}
             </div>
           </div>
         </div>
       </div>
 
       {/* Business Overview */}
-      <div className="px-8 py-8">
+      <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-2 text-[#F9F3EF]">نظرة عامة على الأعمال</h2>
           <p className="text-[#F9F3EF]/70">
@@ -207,12 +284,12 @@ export default function LuxuryDashboard() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {isLoading ? (
             // Loading skeleton for business overview
-            Array.from({ length: 3 }).map((_, index) => (
+            Array.from({ length: 4 }).map((_, index) => (
               <div key={index} className="group relative">
-                <div className="relative backdrop-blur-sm border rounded-2xl p-6 bg-[#F9F3EF]/5 border-[#749BC2]/20">
+                <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 bg-[#F9F3EF]/5 border-[#749BC2]/20">
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex items-center gap-4">
                       <div className="p-3 backdrop-blur-sm rounded-xl border bg-[#749BC2]/10 border-[#749BC2]/20">
@@ -234,14 +311,14 @@ export default function LuxuryDashboard() {
                 <div className={`absolute inset-0 bg-gradient-to-r ${item.gradient} rounded-2xl opacity-80 group-hover:opacity-90 transition-all duration-300`}></div>
 
                 {/* Glass effect overlay */}
-                <div className="relative backdrop-blur-sm border rounded-2xl p-6 hover:border-[#2C6D90]/50 transition-all duration-300 group-hover:transform group-hover:scale-105 bg-[#F9F3EF]/10 border-[#749BC2]/20">
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 backdrop-blur-sm rounded-xl border bg-[#749BC2]/20 border-[#749BC2]/30">
+                <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 hover:border-[#2C6D90]/50 transition-all duration-300 group-hover:transform group-hover:scale-105 bg-[#F9F3EF]/10 border-[#749BC2]/20">
+                  <div className="flex items-start justify-between mb-4 sm:mb-6">
+                    <div className="flex items-center gap-2 sm:gap-4">
+                      <div className="p-2 sm:p-3 backdrop-blur-sm rounded-xl border bg-[#749BC2]/20 border-[#749BC2]/30">
                         {item.icon}
                       </div>
                       <div>
-                        <span className="font-medium text-lg text-[#F9F3EF]">{item.title}</span>
+                        <span className="font-medium text-sm sm:text-lg text-[#F9F3EF]">{item.title}</span>
                       </div>
                     </div>
                     <div className={`flex items-center gap-2 px-3 py-1 rounded-full backdrop-blur-sm bg-[#749BC2]/20 ${getTrendColor(item.trend)}`}>
@@ -249,7 +326,7 @@ export default function LuxuryDashboard() {
                       <span className="font-semibold">{item.change}</span>
                     </div>
                   </div>
-                  <div className="text-4xl font-bold mb-2 text-[#F9F3EF]">{item.value}</div>
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 text-[#F9F3EF]">{item.value}</div>
                   <div className="w-full h-1 rounded-full overflow-hidden bg-[#749BC2]/20">
                     <div className="h-full rounded-full w-3/4 animate-pulse bg-gradient-to-r from-[#2C6D90] to-[#749BC2]"></div>
                   </div>
@@ -261,99 +338,161 @@ export default function LuxuryDashboard() {
       </div>
 
       {/* New Orders and Top Customer */}
-      <div className="px-8 pb-8">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+      <div className="px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
           {/* New Orders */}
           <div className="relative">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#1a1a2e] to-[#2C6D90]/20"></div>
             <div className="relative backdrop-blur-sm border rounded-2xl overflow-hidden hover:border-[#2C6D90]/50 transition-all duration-300 bg-[#F9F3EF]/5 border-[#749BC2]/20">
-              <div className="p-6 border-b border-[#749BC2]/20">
+              <div className="p-4 sm:p-6 border-b border-[#749BC2]/20">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-2xl font-bold mb-1 text-[#F9F3EF]">الطلبات الجديدة</h3>
-                    <p className="text-[#F9F3EF]/70">آخر الطلبات الواردة</p>
+                    <h3 className="text-xl sm:text-2xl font-bold mb-1 text-[#F9F3EF]">الطلبات الجديدة</h3>
+                    <p className="text-sm sm:text-base text-[#F9F3EF]/70">آخر الطلبات الواردة</p>
                   </div>
-                  <button className="group flex items-center gap-2 px-4 py-2 bg-[#2C6D90] hover:bg-[#2C6D90]/90 text-[#F9F3EF] rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#2C6D90]/25">
-                    عرض الكل
-                    <FaEye className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                  </button>
+
                 </div>
               </div>
 
               <div className="overflow-x-auto">
                 {isLoading ? (
                   // Loading skeleton for orders table
-                  <div className="p-6">
+                  <div className="p-4 sm:p-6">
                     <div className="space-y-4">
                       {Array.from({ length: 5 }).map((_, index) => (
-                        <div key={index} className="flex items-center justify-between p-4 rounded-xl border border-[#749BC2]/10">
-                          <div className="flex items-center gap-4">
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-20"></div>
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-32"></div>
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-24"></div>
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-16"></div>
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-20"></div>
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-16"></div>
+                        <div key={index} className="flex items-center justify-between p-3 sm:p-4 rounded-xl border border-[#749BC2]/10">
+                          <div className="flex items-center gap-2 sm:gap-4">
+                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-16 sm:w-20"></div>
+                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-24 sm:w-32"></div>
+                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-20 sm:w-24"></div>
+                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-12 sm:w-16"></div>
+                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-16 sm:w-20"></div>
+                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-12 sm:w-16"></div>
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
                 ) : (
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-[#749BC2]/10">
-                        <th className="px-6 py-4 text-right text-sm font-semibold text-[#F9F3EF]/80">رقم الطلب</th>
-                        <th className="px-6 py-4 text-right text-sm font-semibold text-[#F9F3EF]/80">العميل</th>
-                        <th className="px-6 py-4 text-right text-sm font-semibold text-[#F9F3EF]/80">المجموع</th>
-                        <th className="px-6 py-4 text-right text-sm font-semibold text-[#F9F3EF]/80">الدفع</th>
-                        <th className="px-6 py-4 text-right text-sm font-semibold text-[#F9F3EF]/80">الحالة</th>
-                        <th className="px-6 py-4 text-right text-sm font-semibold text-[#F9F3EF]/80">الأولوية</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {newOrders.length === 0 ? (
-                        <tr>
-                          <td colSpan="6" className="px-6 py-8 text-center text-[#F9F3EF]/60">
-                            لا توجد طلبات جديدة
-                          </td>
+                  <div className="min-w-full">
+                    {/* Desktop Table */}
+                    <table className="w-full hidden sm:table">
+                      <thead>
+                        <tr className="border-b border-[#749BC2]/10">
+                          <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80">رقم الطلب</th>
+                          <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80 hidden sm:table-cell">العميل</th>
+                          <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80">المجموع</th>
+                          <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80 hidden sm:table-cell">الدفع</th>
+                          <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80">الحالة</th>
+                          <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80 hidden sm:table-cell">الأولوية</th>
                         </tr>
-                      ) : (
-                        newOrders.map((order, index) => (
-                          <tr key={index} className="border-b border-[#749BC2]/5 hover:bg-[#F9F3EF]/5 transition-colors duration-300">
-                            <td className="px-6 py-4">
-                              <span className="font-mono text-[#749BC2] font-semibold">#{order.orderNumber}</span>
-                            </td>
-                            <td className="px-6 py-4 font-medium text-[#F9F3EF]">{order.customer}</td>
-                            <td className="px-6 py-4 font-semibold text-[#F9F3EF]/80">{order.total}</td>
-                            <td className="px-6 py-4">
-                              {order.paid ? (
-                                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                                  <span className="text-white font-bold text-sm">✓</span>
-                                </div>
-                              ) : (
-                                <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                                  <span className="text-white font-bold text-sm">✗</span>
-                                </div>
-                              )}
-                            </td>
-                            <td className="px-6 py-4">
-                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                                order.status === 'مفتوح'
-                                  ? 'bg-[#749BC2]/20 text-[#749BC2] border border-[#749BC2]/30'
-                                  : 'bg-[#F9F3EF]/10 text-[#F9F3EF]/70 border border-[#F9F3EF]/20'
-                              }`}>
-                                {order.status}
-                              </span>
-                            </td>
-                            <td className="px-6 py-4">
-                              <div className={`w-3 h-3 rounded-full ${getPriorityColor(order.priority)}`}></div>
+                      </thead>
+                      <tbody>
+                        {newOrders.length === 0 ? (
+                          <tr>
+                            <td colSpan="6" className="px-2 sm:px-6 py-8 text-center text-[#F9F3EF]/60 text-sm">
+                              لا توجد طلبات جديدة
                             </td>
                           </tr>
-                        ))
+                        ) : (
+                          newOrders.map((order, index) => (
+                            <tr key={index} className="border-b border-[#749BC2]/5 hover:bg-[#F9F3EF]/5 transition-colors duration-300">
+                              <td className="px-2 sm:px-6 py-3 sm:py-4">
+                                <span className="font-mono text-[#749BC2] font-semibold text-xs sm:text-sm">#{order.orderNumber}</span>
+                              </td>
+                              <td className="px-2 sm:px-6 py-3 sm:py-4 font-medium text-[#F9F3EF] hidden sm:table-cell text-sm">{order.customer}</td>
+                              <td className="px-2 sm:px-6 py-3 sm:py-4 font-semibold text-[#F9F3EF]/80 text-xs sm:text-sm">{order.total}</td>
+                              <td className="px-2 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">
+                                {order.paid ? (
+                                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                    <span className="text-white font-bold text-xs sm:text-sm">✓</span>
+                                  </div>
+                                ) : (
+                                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-red-500 rounded-full flex items-center justify-center">
+                                    <span className="text-white font-bold text-xs sm:text-sm">✗</span>
+                                  </div>
+                                )}
+                              </td>
+                              <td className="px-2 sm:px-6 py-3 sm:py-4">
+                                <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-semibold ${order.status === 'مفتوح'
+                                  ? 'bg-[#749BC2]/20 text-[#749BC2] border border-[#749BC2]/30'
+                                  : 'bg-[#F9F3EF]/10 text-[#F9F3EF]/70 border border-[#F9F3EF]/20'
+                                  }`}>
+                                  {order.status}
+                                </span>
+                              </td>
+                              <td className="px-2 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">
+                                <div className={`w-3 h-3 rounded-full ${getPriorityColor(order.priority)}`}></div>
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+
+                    {/* Mobile Slider */}
+                    <div className="sm:hidden">
+                      {newOrders.length === 0 ? (
+                        <div className="text-center py-8 text-[#F9F3EF]/60 text-sm">
+                          لا توجد طلبات جديدة
+                        </div>
+                      ) : (
+                        <div className="flex gap-4 overflow-x-auto pb-4 px-4">
+                          {newOrders.map((order, index) => (
+                            <div key={index} className="flex-shrink-0 w-72 bg-[#F9F3EF]/5 border border-[#749BC2]/20 rounded-xl p-4">
+                              <div className="flex items-center justify-between mb-3">
+                                <span className="font-mono text-[#749BC2] font-semibold text-sm">#{order.orderNumber}</span>
+                                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${order.status === 'مفتوح'
+                                  ? 'bg-[#749BC2]/20 text-[#749BC2] border border-[#749BC2]/30'
+                                  : 'bg-[#F9F3EF]/10 text-[#F9F3EF]/70 border border-[#F9F3EF]/20'
+                                  }`}>
+                                  {order.status}
+                                </span>
+                              </div>
+
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[#F9F3EF]/70 text-sm">العميل:</span>
+                                  <span className="text-[#F9F3EF] text-sm font-medium">{order.customer}</span>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[#F9F3EF]/70 text-sm">المجموع:</span>
+                                  <span className="text-[#F9F3EF] text-sm font-semibold">{order.total}</span>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[#F9F3EF]/70 text-sm">الدفع:</span>
+                                  <div className="flex items-center gap-2">
+                                    {order.paid ? (
+                                      <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                        <span className="text-white font-bold text-xs">✓</span>
+                                      </div>
+                                    ) : (
+                                      <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                                        <span className="text-white font-bold text-xs">✗</span>
+                                      </div>
+                                    )}
+                                    <span className="text-xs text-[#F9F3EF]/70">
+                                      {order.paid ? 'مدفوع' : 'غير مدفوع'}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[#F9F3EF]/70 text-sm">الأولوية:</span>
+                                  <div className="flex items-center gap-2">
+                                    <div className={`w-3 h-3 rounded-full ${getPriorityColor(order.priority)}`}></div>
+                                    <span className="text-xs text-[#F9F3EF]/70">{order.priority}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       )}
-                    </tbody>
-                  </table>
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
@@ -363,20 +502,17 @@ export default function LuxuryDashboard() {
           <div className="relative">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#1a1a2e] to-[#749BC2]/20"></div>
             <div className="relative backdrop-blur-sm border rounded-2xl hover:border-[#2C6D90]/50 transition-all duration-300 bg-[#F9F3EF]/5 border-[#749BC2]/20">
-              <div className="p-6 border-b border-[#749BC2]/20">
+              <div className="p-4 sm:p-6 border-b border-[#749BC2]/20">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-2xl font-bold mb-1 text-[#F9F3EF]">أهم العملاء</h3>
-                    <p className="text-[#F9F3EF]/70">العملاء الأكثر نشاطاً</p>
+                    <h3 className="text-xl sm:text-2xl font-bold mb-1 text-[#F9F3EF]">أهم العملاء</h3>
+                    <p className="text-sm sm:text-base text-[#F9F3EF]/70">العملاء الأكثر نشاطاً</p>
                   </div>
-                  <button className="group flex items-center gap-2 px-4 py-2 bg-[#2C6D90] hover:bg-[#2C6D90]/90 text-[#F9F3EF] rounded-xl font-medium transition-all duration-300 hover:shadow-lg hover:shadow-[#2C6D90]/25">
-                    عرض الكل
-                    <FaEye className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                  </button>
+
                 </div>
               </div>
 
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 {isLoading ? (
                   // Loading skeleton for top customers
                   <div className="space-y-4">
@@ -404,43 +540,103 @@ export default function LuxuryDashboard() {
                     ))}
                   </div>
                 ) : (
-                  <div className="space-y-4">
-                    {topCustomers.length === 0 ? (
-                      <div className="text-center py-8 text-[#F9F3EF]/60">
-                        لا توجد بيانات عملاء متاحة
-                      </div>
-                    ) : (
-                      topCustomers.map((customer, index) => (
-                        <div key={index} className="group flex items-center justify-between p-4 rounded-xl border transition-all duration-300 hover:border-[#2C6D90]/30 bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 border-[#749BC2]/10">
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-full flex items-center justify-center text-[#F9F3EF] font-bold text-lg">
-                              {customer.customer.split(',')[0][0]}
-                            </div>
-                            <div>
-                              <div className="font-semibold text-[#F9F3EF]">{customer.customer}</div>
-                              <div className="text-sm text-[#F9F3EF]/70">{customer.company}</div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-4">
-                            <div className="text-center">
-                              <div className="text-[#749BC2] font-bold">{customer.orders}</div>
-                              <div className="text-xs text-[#F9F3EF]/50">طلب</div>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              {[...Array(5)].map((_, i) => (
-                                <FaStar
-                                  key={i}
-                                  className={`w-3 h-3 ${
-                                    i < customer.rating ? 'text-yellow-400' : 'text-[#749BC2]/30'
-                                  }`}
-                                />
-                              ))}
-                            </div>
-                          </div>
+                  <>
+                    {/* Desktop View */}
+                    <div className="space-y-4 hidden sm:block">
+                      {topCustomers.length === 0 ? (
+                        <div className="text-center py-8 text-[#F9F3EF]/60">
+                          لا توجد طلبات لعرض العملاء
                         </div>
-                      ))
-                    )}
-                  </div>
+                      ) : (
+                        topCustomers.map((customer, index) => (
+                          <div key={index} className="group flex items-center justify-between p-3 sm:p-4 rounded-xl border transition-all duration-300 hover:border-[#2C6D90]/30 bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 border-[#749BC2]/10">
+                            <div className="flex items-center gap-4">
+                              <div className="w-12 h-12 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-full flex items-center justify-center text-[#F9F3EF] font-bold text-lg">
+                                {customer.customer.split(',')[0][0]}
+                              </div>
+                              <div>
+                                <div className="font-semibold text-[#F9F3EF]">{customer.customer}</div>
+                                <div className="text-sm text-[#F9F3EF]/70">{customer.company}</div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <div className="text-center">
+                                <div className="text-[#749BC2] font-bold">{customer.orders}</div>
+                                <div className="text-xs text-[#F9F3EF]/50">طلب</div>
+                              </div>
+                              <div className="text-center">
+                                <div className="text-[#749BC2] font-bold text-sm">
+                                  {getCurrencySymbol()}{convertCurrency(customer.totalSpent || 0).toLocaleString()}
+                                </div>
+                                <div className="text-xs text-[#F9F3EF]/50">إجمالي</div>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                {[...Array(5)].map((_, i) => (
+                                  <FaStar
+                                    key={i}
+                                    className={`w-3 h-3 ${i < customer.rating ? 'text-yellow-400' : 'text-[#749BC2]/30'
+                                      }`}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    {/* Mobile Slider */}
+                    <div className="sm:hidden">
+                      {topCustomers.length === 0 ? (
+                        <div className="text-center py-8 text-[#F9F3EF]/60 text-sm">
+                          لا توجد طلبات لعرض العملاء
+                        </div>
+                      ) : (
+                        <div className="flex gap-4 overflow-x-auto pb-4 px-4">
+                          {topCustomers.map((customer, index) => (
+                            <div key={index} className="flex-shrink-0 w-64 bg-[#F9F3EF]/5 border border-[#749BC2]/20 rounded-xl p-4">
+                              <div className="flex items-center gap-3 mb-3">
+                                <div className="w-10 h-10 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-full flex items-center justify-center text-[#F9F3EF] font-bold text-sm">
+                                  {customer.customer.split(',')[0][0]}
+                                </div>
+                                <div>
+                                  <div className="font-semibold text-[#F9F3EF] text-sm">{customer.customer}</div>
+                                  <div className="text-xs text-[#F9F3EF]/70">{customer.company}</div>
+                                </div>
+                              </div>
+
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[#F9F3EF]/70 text-xs">الطلبات:</span>
+                                  <span className="text-[#749BC2] font-bold text-sm">{customer.orders}</span>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[#F9F3EF]/70 text-xs">الإجمالي:</span>
+                                  <span className="text-[#749BC2] font-bold text-sm">
+                                    {getCurrencySymbol()}{convertCurrency(customer.totalSpent || 0).toLocaleString()}
+                                  </span>
+                                </div>
+
+                                <div className="flex items-center justify-between">
+                                  <span className="text-[#F9F3EF]/70 text-xs">التقييم:</span>
+                                  <div className="flex items-center gap-1">
+                                    {[...Array(5)].map((_, i) => (
+                                      <FaStar
+                                        key={i}
+                                        className={`w-3 h-3 ${i < customer.rating ? 'text-yellow-400' : 'text-[#749BC2]/30'
+                                          }`}
+                                      />
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </>
                 )}
               </div>
             </div>

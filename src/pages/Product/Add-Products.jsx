@@ -3,8 +3,8 @@ import { Upload, X, Plus, Trash, ArrowLeft, Save } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { motion as _motion } from "framer-motion";
-import { useTheme } from "../../contexts/ThemeContext.jsx";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 import { useCurrency } from "../../contexts/CurrencyContext.jsx";
 import { useCategories } from "../../hooks/useCategoriesQuery";
 import { useBrands } from "../../hooks/useBrandsQuery";
@@ -13,7 +13,6 @@ import { api } from "../../lib/axios";
 
 export default function AddProduct() {
   const navigate = useNavigate();
-  const { isDark } = useTheme();
   const { getCurrencySymbol } = useCurrency();
 
   // Get categories and brands
@@ -33,16 +32,7 @@ export default function AddProduct() {
     originalPrice: "",
     categoryId: "",
     brandId: "",
-    specifications: {
-      processor: "",
-      ram: "",
-      storage: "",
-      graphics: "",
-      display: "",
-      weight: "",
-      battery: "",
-      os: ""
-    },
+    specifications: {},
     rating: 4.5,
     reviews: 0,
     stock: 0,
@@ -88,6 +78,102 @@ export default function AddProduct() {
   };
 
   const [newTag, setNewTag] = useState("");
+  const [newSpecKey, setNewSpecKey] = useState("");
+  const [newSpecValue, setNewSpecValue] = useState("");
+  const [selectedCategorySpecs, setSelectedCategorySpecs] = useState({});
+
+  // قاعدة بيانات المواصفات حسب الفئة
+  const categorySpecifications = {
+    "حاسبات": {
+      "المعالج": "",
+      "الذاكرة": "",
+      "التخزين": "",
+      "كرت الشاشة": "",
+      "الشاشة": "",
+      "الوزن": "",
+      "البطارية": "",
+      "نظام التشغيل": ""
+    },
+    "شاشات": {
+      "الحجم": "",
+      "الدقة": "",
+      "معدل التحديث": "",
+      "نوع اللوحة": "",
+      "المنحنى": "",
+      "زمن الاستجابة": "",
+      "السطوع": "",
+      "المنافذ": "",
+      "الضمان": "",
+      "البلد": "",
+      "الأبعاد": "",
+      "الوزن": ""
+    },
+    "كيبوردات": {
+      "النوع": "",
+      "التوصيل": "",
+      "المفاتيح": "",
+      "البطارية": "",
+      "الوزن": "",
+      "الأبعاد": "",
+      "التوافق": "",
+      "الضمان": "",
+      "البلد": "",
+      "الإضاءة الخلفية": "",
+      "عدد المفاتيح": ""
+    },
+    "سماعات": {
+      "النوع": "",
+      "التوصيل": "",
+      "البطارية": "",
+      "الوزن": "",
+      "حجم السماعة": "",
+      "التردد": "",
+      "المقاومة": "",
+      "إلغاء الضوضاء": "",
+      "الضمان": "",
+      "البلد": "",
+      "الشحن": "",
+      "الشحن السريع": ""
+    },
+    "فأرات": {
+      "النوع": "",
+      "التوصيل": "",
+      "المستشعر": "",
+      "الدقة": "",
+      "الوزن": "",
+      "الأزرار": "",
+      "الضمان": "",
+      "البلد": "",
+      "الكابل": "",
+      "الأقدام": ""
+    },
+    "كراسي": {
+      "المادة": "",
+      "اللون": "",
+      "الوزن": "",
+      "الأبعاد": "",
+      "الوزن الأقصى": "",
+      "الارتفاع": "",
+      "الضمان": "",
+      "المميزات": "",
+      "البلد": "",
+      "الانحناء": ""
+    },
+    "هواتف": {
+      "الشاشة": "",
+      "المعالج": "",
+      "التخزين": "",
+      "الذاكرة": "",
+      "الكاميرا": "",
+      "البطارية": "",
+      "الوزن": "",
+      "الأبعاد": "",
+      "الضمان": "",
+      "البلد": "",
+      "الألوان": "",
+      "التوصيل": ""
+    }
+  };
 
   const handleAddTag = () => {
     if (newTag.trim() && !formData.tags.includes(newTag.trim())) {
@@ -105,24 +191,60 @@ export default function AddProduct() {
       tags: prev.tags.filter((_, i) => i !== index)
     }));
   };
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
+
+  const handleAddSpecification = () => {
+    if (newSpecKey.trim() && newSpecValue.trim()) {
+      setFormData(prev => ({
+        ...prev,
+        specifications: {
+          ...prev.specifications,
+          [newSpecKey.trim()]: newSpecValue.trim()
+        }
+      }));
+      setNewSpecKey("");
+      setNewSpecValue("");
+    }
   };
 
-  const handleSpecificationChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    // إذا تم تغيير الفئة، قم بتحديث المواصفات
+    if (name === 'categoryId') {
+      const selectedCategory = categories.find(cat => cat.id === value);
+      if (selectedCategory && categorySpecifications[selectedCategory.name]) {
+        setSelectedCategorySpecs(categorySpecifications[selectedCategory.name]);
+        setFormData(prev => ({
+          ...prev,
+          [name]: value,
+          specifications: categorySpecifications[selectedCategory.name]
+        }));
+      } else {
+        setSelectedCategorySpecs({});
+        setFormData(prev => ({
+          ...prev,
+          [name]: value,
+          specifications: {}
+        }));
+      }
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value,
+      }));
+    }
+  };
+
+  const handleSpecificationChange = (specKey, value) => {
+    setFormData(prev => ({
       ...prev,
       specifications: {
         ...prev.specifications,
-        [name]: value,
-      },
+        [specKey]: value
+      }
     }));
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -170,15 +292,15 @@ export default function AddProduct() {
       });
 
       // 3. إنشاء المنتج مع URLs من Cloudflare
-      // الصورة الأولى هي الرئيسية، والباقي صور إضافية
+      // الصورة الأولى (index 0) هي الصورة الأساسية دائماً
       const newProduct = {
         name: formData.title,  // مطلوب
         title: formData.title, // اختياري
         description: formData.description,
         price: parseFloat(formData.price), // مطلوب
         originalPrice: formData.originalPrice ? parseFloat(formData.originalPrice) : null,
-        image: imageUrls[0] || '', // URL من Cloudflare
-        images: imageUrls, // URLs من Cloudflare
+        image: imageUrls[0] || '', // الصورة الأولى هي الأساسية دائماً
+        images: imageUrls, // جميع URLs من Cloudflare
         stock: parseInt(formData.stock) || 0,
         isActive: true,
         isNew: formData.isNew,
@@ -196,12 +318,11 @@ export default function AddProduct() {
       const response = await api.createProduct(newProduct);
 
       if (!response.data.success) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error("API Error Response:", errorData);
-        throw new Error(`HTTP error! status: ${response.status} - ${errorData.message || 'Unknown error'}`);
+        console.error("API Error Response:", response.data);
+        throw new Error(`HTTP error! status: ${response.status} - ${response.data.message || 'Unknown error'}`);
       }
 
-      const result = await response.json();
+      const result = response.data;
       console.log("Product created successfully:", result);
 
       toast.success("تم إضافة المنتج بنجاح!", {
@@ -209,8 +330,35 @@ export default function AddProduct() {
         autoClose: 3000,
       });
 
-      // Navigate to products list
-      navigate('/products');
+      // Reset form
+      setFormData({
+        title: "",
+        description: "",
+        price: "",
+        originalPrice: "",
+        categoryId: "",
+        brandId: "",
+        specifications: {},
+        rating: 4.5,
+        reviews: 0,
+        stock: 0,
+        isNew: true,
+        isBestSeller: false,
+        isFeatured: false,
+        tags: [],
+        warranty: "",
+        shipping: ""
+      });
+      setProductImages([]);
+      setImagePreviews([]);
+      setNewSpecKey("");
+      setNewSpecValue("");
+      setSelectedCategorySpecs({});
+
+      // Navigate to products list after a short delay
+      setTimeout(() => {
+        navigate('/products');
+      }, 1500);
     } catch (error) {
       console.error("Error creating product:", error);
       toast.error("حدث خطأ في إضافة المنتج", {
@@ -220,431 +368,515 @@ export default function AddProduct() {
     }
   };
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-nsr-dark' : 'bg-gray-50'}`} dir="rtl">
-      <div className="mx-auto max-w-7xl px-6 py-8">
-        {/* Header */}
-        <div className={`relative backdrop-blur-sm border-b transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/20' : 'bg-white/80 border-gray-200 shadow-sm'}`}>
-          <div className="absolute inset-0 bg-gradient-to-r from-nsr-accent/10 to-transparent"></div>
-          <div className="relative px-8 py-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-6">
-                <div className="p-4 bg-gradient-to-r from-nsr-accent to-nsr-primary rounded-2xl">
-                  <Plus className="w-8 h-8 text-white" />
-                </div>
-                <div>
-                  <h1 className={`text-4xl font-bold transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-black'}`}>
-                    إضافة منتج جديد
-                  </h1>
-                  <p className={`mt-2 text-lg transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-gray-600'}`}>أضف منتج جديد إلى المخزن</p>
-                </div>
+    <div className="min-h-screen bg-gradient-nsr-dark" dir="rtl">
+      {/* Header */}
+      <div className="relative backdrop-blur-sm border-b bg-[#F9F3EF]/5 border-[#749BC2]/20">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
+        <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl">
+                <Plus className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
               </div>
-
-              <Link to="/products">
-                <_motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="group flex items-center gap-3 px-6 py-3 rounded-2xl transition-all duration-300"
-                  style={{
-                    background: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
-                    border: isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.1)'
-                  }}
-                >
-                  <ArrowLeft className={`w-5 h-5 transition-colors duration-300 ${isDark ? 'text-nsr-accent group-hover:text-nsr-primary' : 'text-black group-hover:text-gray-800'}`} />
-                  <span className={`font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-black group-hover:text-gray-800'}`}>
-                    العودة للمنتجات
-                  </span>
-                </_motion.button>
-              </Link>
+              <div>
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">إضافة منتج جديد</h1>
+                <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">أضف منتج جديد إلى المخزن</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.location.href = '/products'}
+                className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
+              >
+                <span className="font-semibold text-sm sm:text-base lg:text-lg">العودة للمنتجات</span>
+              </motion.button>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Form */}
-        <div className={`backdrop-blur-sm border rounded-2xl p-8 mt-8 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30 border-nsr-primary/20' : 'bg-white/70 border-gray-200 shadow-sm'}`}>
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Basic Information Section */}
-            <div>
-              <h2 className={`text-2xl font-bold mb-6 transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-gray-900'}`}>
-                المعلومات الأساسية
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="title" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    اسم المنتج *
-                  </label>
-                  <input
-                    type="text"
-                    id="title"
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    name="title"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل اسم المنتج"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="brand" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    الماركة *
-                  </label>
-                  <select
-                    id="brandId"
-                    name="brandId"
-                    value={formData.brandId}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    required
-                  >
-                    <option value="">اختر الماركة</option>
-                    {brands.map(brand => (
-                      <option key={brand.id} value={brand.id}>{brand.name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="category" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    الفئة *
-                  </label>
-                  <select
-                    id="categoryId"
-                    name="categoryId"
-                    value={formData.categoryId}
-                    onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    required
-                  >
-                    <option value="">اختر الفئة</option>
-                    {categories.map(category => (
-                      <option key={category.id} value={category.id}>{category.name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="price" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    السعر ({getCurrencySymbol()}) *
-                  </label>
-                  <input
-                    type="number"
-                    id="price"
-                    value={formData.price}
-                    onChange={handleInputChange}
-                    name="price"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل السعر"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="originalPrice" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    السعر الأصلي ({getCurrencySymbol()})
-                  </label>
-                  <input
-                    type="number"
-                    id="originalPrice"
-                    value={formData.originalPrice}
-                    onChange={handleInputChange}
-                    name="originalPrice"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل السعر الأصلي (اختياري)"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="stock" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    الكمية في المخزن *
-                  </label>
-                  <input
-                    type="number"
-                    id="stock"
-                    value={formData.stock}
-                    onChange={handleInputChange}
-                    name="stock"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل الكمية"
-                    required
-                  />
-                </div>
-
-              </div>
-
-              <div className="mt-6">
-                <label htmlFor="description" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                  الوصف *
-                </label>
-                <textarea
-                  id="description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                  placeholder="أدخل وصف المنتج"
-                  required
-                />
-              </div>
-
-              {/* Product Features */}
-              <div className="mt-6">
-                <h3 className={`text-lg font-semibold mb-4 transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-gray-900'}`}>
-                  خصائص المنتج
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <label className="flex items-center space-x-3 space-x-reverse">
-                    <input
-                      type="checkbox"
-                      name="isNew"
-                      checked={formData.isNew}
-                      onChange={handleInputChange}
-                      className="w-5 h-5 text-nsr-accent bg-gray-100 border-gray-300 rounded focus:ring-nsr-accent focus:ring-2"
-                    />
-                    <span className={`text-sm font-medium transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                      منتج جديد
-                    </span>
-                  </label>
-
-                  <label className="flex items-center space-x-3 space-x-reverse">
-                    <input
-                      type="checkbox"
-                      name="isBestSeller"
-                      checked={formData.isBestSeller}
-                      onChange={handleInputChange}
-                      className="w-5 h-5 text-nsr-accent bg-gray-100 border-gray-300 rounded focus:ring-nsr-accent focus:ring-2"
-                    />
-                    <span className={`text-sm font-medium transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                      الأكثر مبيعاً
-                    </span>
-                  </label>
-
-                  <label className="flex items-center space-x-3 space-x-reverse">
-                    <input
-                      type="checkbox"
-                      name="isFeatured"
-                      checked={formData.isFeatured}
-                      onChange={handleInputChange}
-                      className="w-5 h-5 text-nsr-accent bg-gray-100 border-gray-300 rounded focus:ring-nsr-accent focus:ring-2"
-                    />
-                    <span className={`text-sm font-medium transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                      منتج مميز
-                    </span>
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            {/* Specifications Section */}
-            <div>
-              <h2 className={`text-2xl font-bold mb-6 transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-gray-900'}`}>
-                المواصفات التقنية
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="processor" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    المعالج
-                  </label>
-                  <input
-                    type="text"
-                    id="processor"
-                    value={formData.specifications.processor}
-                    onChange={handleSpecificationChange}
-                    name="processor"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل نوع المعالج"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="ram" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    الذاكرة
-                  </label>
-                  <input
-                    type="text"
-                    id="ram"
-                    value={formData.specifications.ram}
-                    onChange={handleSpecificationChange}
-                    name="ram"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل حجم الذاكرة"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="storage" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    التخزين
-                  </label>
-                  <input
-                    type="text"
-                    id="storage"
-                    value={formData.specifications.storage}
-                    onChange={handleSpecificationChange}
-                    name="storage"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل مساحة التخزين"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="graphics" className={`block text-sm font-medium mb-3 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-700'}`}>
-                    كرت الشاشة
-                  </label>
-                  <input
-                    type="text"
-                    id="graphics"
-                    value={formData.specifications.graphics}
-                    onChange={handleSpecificationChange}
-                    name="graphics"
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل نوع كرت الشاشة"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Tags Section */}
-            <div>
-              <h2 className={`text-2xl font-bold mb-6 transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-gray-900'}`}>
-                العلامات (Tags)
-              </h2>
-              <div className="space-y-4">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newTag}
-                    onChange={(e) => setNewTag(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                    className={`flex-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
-                    placeholder="أدخل علامة جديدة واضغط Enter"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddTag}
-                    className="px-6 py-3 bg-gradient-to-r from-nsr-accent to-nsr-primary text-white rounded-xl hover:shadow-lg transition-all duration-300"
-                  >
-                    إضافة
-                  </button>
-                </div>
-
-                {formData.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {formData.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-nsr-accent/20 to-nsr-primary/20 text-nsr-primary border border-nsr-accent/30 rounded-full text-sm"
-                      >
-                        {tag}
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveTag(index)}
-                          className="text-red-500 hover:text-red-700 transition-colors"
-                        >
-                          <X size={14} />
-                        </button>
-                      </span>
-                    ))}
+      {/* Main Form */}
+      <div className="px-8 py-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-nsr-secondary/30 backdrop-blur-sm border border-nsr-primary/20 rounded-3xl overflow-hidden shadow-2xl">
+            {/* Form Container */}
+            <div className="p-8 space-y-10">
+              <form onSubmit={handleSubmit} className="space-y-10">
+                {/* Basic Information Section */}
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4 pb-4 border-b border-nsr-primary/20">
+                    <div className="p-3 bg-gradient-nsr-elegant/20 rounded-2xl border border-nsr-accent/30">
+                      <Save className="h-6 w-6 text-nsr-accent" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-white">المعلومات الأساسية</h2>
+                      <p className="text-nsr-light-200 mt-1">أدخل تفاصيل المنتج الأساسية</p>
+                    </div>
                   </div>
-                )}
-              </div>
-            </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div>
+                      <label htmlFor="title" className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+                        اسم المنتج
+                        <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        id="title"
+                        value={formData.title}
+                        onChange={handleInputChange}
+                        name="title"
+                        className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-black placeholder-nsr-light-200 focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl"
+                        placeholder="أدخل اسم المنتج"
+                        required
+                      />
+                    </div>
 
-            {/* Images Upload */}
-            <div>
-              <h2 className={`text-2xl font-bold mb-6 transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-gray-900'}`}>
-                صور المنتج (حتى 5 صور)
-              </h2>
-              <div>
-                {imagePreviews.length === 0 ? (
-                  <div className={`relative border-2 border-dashed rounded-xl py-16 px-6 transition-all duration-300 flex items-center justify-center cursor-pointer ${isDark ? 'border-nsr-primary/40 hover:border-nsr-accent bg-nsr-secondary/20' : 'border-gray-300 hover:border-nsr-accent bg-gray-50'}`}>
-                    <input
-                      type="file"
-                      id="product-images"
-                      className="hidden"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageChange}
+                    <div>
+                      <label htmlFor="brand" className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+                        الماركة
+                        <span className="text-red-400">*</span>
+                      </label>
+                      <select
+                        id="brandId"
+                        name="brandId"
+                        value={formData.brandId}
+                        onChange={handleInputChange}
+                        className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-black focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl"
+                        required
+                      >
+                        <option value="">اختر الماركة</option>
+                        {brands.map(brand => (
+                          <option key={brand.id} value={brand.id}>{brand.name}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label htmlFor="category" className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+                        الفئة
+                        <span className="text-red-400">*</span>
+                      </label>
+                      <select
+                        id="categoryId"
+                        name="categoryId"
+                        value={formData.categoryId}
+                        onChange={handleInputChange}
+                        className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-black focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl"
+                        required
+                      >
+                        <option value="">اختر الفئة</option>
+                        {categories.map(category => (
+                          <option key={category.id} value={category.id}>{category.name}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label htmlFor="price" className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+                        السعر ({getCurrencySymbol()})
+                        <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        id="price"
+                        value={formData.price}
+                        onChange={handleInputChange}
+                        name="price"
+                        className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-black placeholder-nsr-light-200 focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl"
+                        placeholder="أدخل السعر"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="originalPrice" className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+                        السعر الأصلي ({getCurrencySymbol()})
+                      </label>
+                      <input
+                        type="number"
+                        id="originalPrice"
+                        value={formData.originalPrice}
+                        onChange={handleInputChange}
+                        name="originalPrice"
+                        className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-black placeholder-nsr-light-200 focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl"
+                        placeholder="أدخل السعر الأصلي (اختياري)"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="stock" className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+                        الكمية في المخزن
+                        <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        id="stock"
+                        value={formData.stock}
+                        onChange={handleInputChange}
+                        name="stock"
+                        className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-black placeholder-nsr-light-200 focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl"
+                        placeholder="أدخل الكمية"
+                        required
+                      />
+                    </div>
+
+                  </div>
+
+                  <div className="mt-6">
+                    <label htmlFor="description" className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+                      الوصف
+                      <span className="text-red-400">*</span>
+                    </label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      rows={4}
+                      className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-black placeholder-nsr-light-200 focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl resize-none"
+                      placeholder="أدخل وصف المنتج"
+                      required
                     />
-                    <label htmlFor="product-images" className="cursor-pointer">
-                      <div className="text-center">
-                        <Upload className={`mx-auto h-12 w-12 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-500'}`} />
-                        <div className={`mt-4 text-sm transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-600'}`}>
-                          <span className="hover:underline">اضغط لرفع الصور</span>
-                          <p className="mt-1">أو اسحب وأفلت الصور هنا</p>
+                  </div>
+
+                  {/* Product Features */}
+                  <div className="mt-8">
+                    <h3 className="text-xl font-bold text-nsr-light mb-6">
+                      خصائص المنتج
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <label className="flex items-center space-x-3 space-x-reverse p-4 bg-nsr-primary/10 rounded-2xl border border-nsr-primary/20 hover:bg-nsr-primary/20 transition-all duration-300 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          name="isNew"
+                          checked={formData.isNew}
+                          onChange={handleInputChange}
+                          className="w-6 h-6 text-nsr-accent bg-nsr-primary/20 border-nsr-primary/30 rounded focus:ring-nsr-accent focus:ring-2"
+                        />
+                        <span className="text-lg font-medium text-nsr-light">
+                          منتج جديد
+                        </span>
+                      </label>
+
+                      <label className="flex items-center space-x-3 space-x-reverse p-4 bg-nsr-primary/10 rounded-2xl border border-nsr-primary/20 hover:bg-nsr-primary/20 transition-all duration-300 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          name="isBestSeller"
+                          checked={formData.isBestSeller}
+                          onChange={handleInputChange}
+                          className="w-6 h-6 text-nsr-accent bg-nsr-primary/20 border-nsr-primary/30 rounded focus:ring-nsr-accent focus:ring-2"
+                        />
+                        <span className="text-lg font-medium text-nsr-light">
+                          الأكثر مبيعاً
+                        </span>
+                      </label>
+
+                      <label className="flex items-center space-x-3 space-x-reverse p-4 bg-nsr-primary/10 rounded-2xl border border-nsr-primary/20 hover:bg-nsr-primary/20 transition-all duration-300 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          name="isFeatured"
+                          checked={formData.isFeatured}
+                          onChange={handleInputChange}
+                          className="w-6 h-6 text-nsr-accent bg-nsr-primary/20 border-nsr-primary/30 rounded focus:ring-nsr-accent focus:ring-2"
+                        />
+                        <span className="text-lg font-medium text-nsr-light">
+                          منتج مميز
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Specifications Section */}
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4 pb-4 border-b border-nsr-primary/20">
+                    <div className="p-3 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-2xl border border-blue-500/30">
+                      <Save className="h-6 w-6 text-blue-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-nsr-light">المواصفات التقنية</h2>
+                      <p className="text-nsr-light-200 mt-1">
+                        {Object.keys(selectedCategorySpecs).length > 0
+                          ? `مواصفات مخصصة لـ ${categories.find(cat => cat.id === formData.categoryId)?.name || 'الفئة المختارة'}`
+                          : 'اختر فئة أولاً لعرض المواصفات المناسبة'
+                        }
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Display Category-Specific Specifications */}
+                  {Object.keys(selectedCategorySpecs).length > 0 ? (
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {Object.keys(selectedCategorySpecs).map((specKey) => (
+                          <div key={specKey}>
+                            <label className="text-lg font-semibold text-nsr-light-200 mb-3">
+                              {specKey}
+                            </label>
+                            <input
+                              type="text"
+                              value={formData.specifications[specKey] || ''}
+                              onChange={(e) => handleSpecificationChange(specKey, e.target.value)}
+                              className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-black placeholder-nsr-light-200 focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl"
+                              placeholder={`أدخل ${specKey.toLowerCase()}`}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <div className="p-6 bg-nsr-primary/10 rounded-3xl border border-nsr-primary/20">
+                        <div className="w-16 h-16 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                          <Save className="h-8 w-8 text-blue-400" />
                         </div>
-                        <p className={`text-xs mt-2 transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-gray-500'}`}>
-                          PNG, JPG, GIF حتى 10MB لكل صورة
+                        <h3 className="text-xl font-bold text-nsr-light mb-2">اختر فئة أولاً</h3>
+                        <p className="text-nsr-light-200">
+                          بعد اختيار الفئة، ستظهر المواصفات المناسبة لتلك الفئة
                         </p>
                       </div>
-                    </label>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                    {imagePreviews.map((preview, index) => (
-                      <div key={index} className="relative group">
-                        <img
-                          src={preview}
-                          alt={`Product ${index + 1}`}
-                          className="w-full h-32 object-cover rounded-xl border-2 border-gray-200"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteImage(index)}
-                          className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
-                        >
-                          <X size={16} />
-                        </button>
+                    </div>
+                  )}
+
+                  {/* Add Custom Specifications */}
+                  {Object.keys(selectedCategorySpecs).length > 0 && (
+                    <div className="space-y-6 border-t border-nsr-primary/20 pt-8">
+                      <h3 className="text-xl font-bold text-nsr-light">إضافة مواصفات إضافية</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-lg font-semibold text-nsr-light-200 mb-3">
+                            اسم المواصفة الإضافية
+                          </label>
+                          <input
+                            type="text"
+                            value={newSpecKey}
+                            onChange={(e) => setNewSpecKey(e.target.value)}
+                            className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-black placeholder-nsr-light-200 focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl"
+                            placeholder="مثال: الضمان، الشحن، إلخ"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-lg font-semibold text-nsr-light-200 mb-3">
+                            القيمة
+                          </label>
+                          <input
+                            type="text"
+                            value={newSpecValue}
+                            onChange={(e) => setNewSpecValue(e.target.value)}
+                            className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-black placeholder-nsr-light-200 focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl"
+                            placeholder="مثال: 3 سنوات، مجاني، إلخ"
+                          />
+                        </div>
                       </div>
-                    ))}
-                    {imagePreviews.length < 5 && (
-                      <div className={`border-2 border-dashed rounded-xl h-32 flex items-center justify-center cursor-pointer transition-all duration-300 ${isDark ? 'border-nsr-primary/40 hover:border-nsr-accent bg-nsr-secondary/20' : 'border-gray-300 hover:border-nsr-accent bg-gray-50'}`}>
+                      <button
+                        type="button"
+                        onClick={handleAddSpecification}
+                        className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl hover:shadow-lg hover:shadow-green-500/25 transition-all duration-300 font-semibold text-lg hover:scale-105"
+                      >
+                        إضافة المواصفة الإضافية
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Tags Section */}
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4 pb-4 border-b border-nsr-primary/20">
+                    <div className="p-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-2xl border border-green-500/30">
+                      <Save className="h-6 w-6 text-green-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-nsr-light">العلامات (Tags)</h2>
+                      <p className="text-nsr-light-200 mt-1">أضف علامات لتصنيف المنتج</p>
+                    </div>
+                  </div>
+                  <div className="space-y-6">
+                    <div className="flex gap-4">
+                      <input
+                        type="text"
+                        value={newTag}
+                        onChange={(e) => setNewTag(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
+                        className="flex-1 px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-black placeholder-nsr-light-200 focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl"
+                        placeholder="أدخل علامة جديدة واضغط Enter"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleAddTag}
+                        className="px-8 py-5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl hover:shadow-lg hover:shadow-green-500/25 transition-all duration-300 font-semibold text-lg hover:scale-105"
+                      >
+                        إضافة
+                      </button>
+                    </div>
+
+                    {formData.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-3">
+                        {formData.tags.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="inline-flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 border border-green-500/30 rounded-2xl text-lg font-medium hover:bg-gradient-to-r hover:from-green-500/30 hover:to-emerald-500/30 transition-all duration-300"
+                          >
+                            {tag}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveTag(index)}
+                              className="text-red-400 hover:text-red-300 transition-colors hover:scale-110"
+                            >
+                              <X size={18} />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Images Upload */}
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4 pb-4 border-b border-nsr-primary/20">
+                    <div className="p-3 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl border border-purple-500/30">
+                      <Upload className="h-6 w-6 text-purple-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-nsr-light">صور المنتج (حتى 5 صور)</h2>
+                      <p className="text-nsr-light-200 mt-1">
+                        ارفع صور عالية الجودة للمنتج
+                      </p>
+                      <div className="mt-2 flex items-center gap-2 text-sm text-yellow-400">
+                        <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                        <span>الصورة الأولى ستكون الأساسية وتظهر في قائمة المنتجات</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    {imagePreviews.length === 0 ? (
+                      <div className="relative border-2 border-dashed rounded-3xl py-20 px-6 transition-all duration-300 bg-slate-800/20 hover:bg-slate-800/40 cursor-pointer group border-slate-700/50 hover:border-purple-500/50">
                         <input
                           type="file"
-                          id="add-more-images"
+                          id="product-images"
                           className="hidden"
                           accept="image/*"
                           multiple
                           onChange={handleImageChange}
                         />
-                        <label htmlFor="add-more-images" className="cursor-pointer text-center">
-                          <Plus className={`mx-auto h-8 w-8 transition-colors duration-300 ${isDark ? 'text-nsr-accent' : 'text-gray-500'}`} />
-                          <p className={`text-xs mt-1 transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-gray-500'}`}>
-                            إضافة المزيد
-                          </p>
+                        <label htmlFor="product-images" className="cursor-pointer w-full">
+                          <div className="text-center space-y-6">
+                            <div className="mx-auto w-24 h-24 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-3xl flex items-center justify-center group-hover:from-purple-500/30 group-hover:to-pink-500/30 transition-all duration-300 group-hover:scale-110 border border-purple-500/20">
+                              <Upload className="h-12 w-12 text-purple-400 group-hover:text-purple-300 transition-colors" />
+                            </div>
+                            <div className="space-y-3">
+                              <p className="text-2xl font-bold text-white group-hover:text-purple-400 transition-colors">
+                                انقر لرفع الصور أو اسحبها هنا
+                              </p>
+                              <p className="text-slate-400 text-lg">
+                                PNG, JPG, GIF حتى 10 ميجابايت
+                              </p>
+                              <p className="text-slate-500 text-sm">
+                                الحد الأقصى: 5 صور
+                              </p>
+                            </div>
+                          </div>
                         </label>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                        {imagePreviews.map((preview, index) => (
+                          <div key={index} className="relative group">
+                            <div className={`relative overflow-hidden rounded-3xl border-2 shadow-2xl transition-all duration-300 ${index === 0
+                              ? 'border-yellow-500/50 shadow-yellow-500/20 ring-2 ring-yellow-500/30'
+                              : 'border-purple-500/30 shadow-purple-500/10'
+                              }`}>
+                              <img
+                                src={preview}
+                                alt={`Product ${index + 1}`}
+                                className="w-full h-40 object-cover"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+                              {/* Cover Image Badge */}
+                              {index === 0 && (
+                                <div className="absolute top-3 right-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                                  الصورة الأساسية
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="absolute top-3 left-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteImage(index)}
+                                className="p-2 bg-red-500 text-white rounded-2xl hover:bg-red-600 transition-all duration-300 hover:scale-110 shadow-lg"
+                              >
+                                <X size={16} />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                        {imagePreviews.length < 5 && (
+                          <div className="border-2 border-dashed rounded-3xl h-40 flex items-center justify-center cursor-pointer transition-all duration-300 bg-slate-800/20 hover:bg-slate-800/40 border-slate-700/50 hover:border-purple-500/50">
+                            <input
+                              type="file"
+                              id="add-more-images"
+                              className="hidden"
+                              accept="image/*"
+                              multiple
+                              onChange={handleImageChange}
+                            />
+                            <label htmlFor="add-more-images" className="cursor-pointer text-center">
+                              <Plus className="mx-auto h-10 w-10 text-purple-400" />
+                              <p className="text-sm mt-2 text-slate-400">
+                                إضافة المزيد
+                              </p>
+                            </label>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
-                )}
-              </div>
-            </div>
+                </div>
 
-            {/* Submit Button */}
-            <div className="flex justify-center md:justify-end pt-6">
-              <_motion.button
-                type="submit"
-                disabled={uploading}
-                whileHover={{ scale: uploading ? 1 : 1.05 }}
-                whileTap={{ scale: uploading ? 1 : 0.95 }}
-                className={`group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl px-8 py-4 text-white shadow-lg transition-all duration-500 ${uploading
-                  ? 'bg-gray-500 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-nsr-accent to-nsr-primary shadow-nsr-accent/25 hover:shadow-xl hover:shadow-nsr-accent/40'
-                  }`}
-              >
-                {uploading ? (
-                  <>
-                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span className="font-semibold text-lg">جاري رفع الصور...</span>
-                  </>
-                ) : (
-                  <>
-                    <Save className="h-6 w-6 transition-all duration-500 group-hover:rotate-12" />
-                    <span className="font-semibold text-lg">إضافة المنتج</span>
-                  </>
-                )}
-              </_motion.button>
+                {/* Submit Buttons */}
+                <div className="flex flex-col sm:flex-row gap-6 justify-end pt-8 border-t border-slate-700/50">
+                  <button
+                    type="button"
+                    className="px-8 py-4 border-2 border-slate-600 text-slate-300 rounded-2xl hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300 font-semibold text-lg hover:scale-105"
+                  >
+                    إلغاء
+                  </button>
+
+                  <_motion.button
+                    type="submit"
+                    disabled={uploading}
+                    whileHover={{ scale: uploading ? 1 : 1.05 }}
+                    whileTap={{ scale: uploading ? 1 : 0.95 }}
+                    className={`relative px-10 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-2xl hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-300 font-semibold shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-4 hover:scale-105 text-lg ${uploading ? 'cursor-not-allowed' : ''}`}
+                  >
+                    {uploading ? (
+                      <>
+                        <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        جاري رفع الصور...
+                      </>
+                    ) : (
+                      <>
+                        <Save className="h-6 w-6" />
+                        إضافة المنتج الجديد
+                      </>
+                    )}
+                  </_motion.button>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="px-8 pb-6">
+        <div className="text-center">
+          <p className="text-slate-500 text-sm">© 2025 نظام إدارة المنتجات المتطور - تم التصميم بعناية فائقة</p>
         </div>
       </div>
     </div>

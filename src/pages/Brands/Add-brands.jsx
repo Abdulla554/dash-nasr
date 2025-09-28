@@ -1,5 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import { Upload, X } from "lucide-react";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -145,30 +148,30 @@ export default function AddBrand() {
     <div className="min-h-screen pb-10 bg-nsr-dark">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="py-8 flex pt-10 justify-between items-center">
-          <h1 className="text-3xl font-bold font-serif text-white">
-            Add New Brand
-          </h1>
-          <div className="hover:scale-105 active:scale-95 transition-transform">
-            <Link to="/brands">
-              <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-nsr-secondary/80 border-2 border-nsr-accent text-nsr-primary hover:bg-nsr-primary/5 transition-all duration-300 shadow-sm hover:shadow-md group">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 transform transition-transform group-hover:translate-x-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+        <div className="relative backdrop-blur-sm border-b bg-[#F9F3EF]/5 border-[#749BC2]/20">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
+          <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl">
+                  <Upload className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">إضافة ماركة جديدة</h1>
+                  <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">أضف ماركة جديدة إلى متجرك</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => window.location.href = '/brands'}
+                  className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-                Back to Brands
-              </button>
-            </Link>
+                  <span className="font-semibold text-sm sm:text-base lg:text-lg">العودة للماركات</span>
+                </motion.button>
+              </div>
+            </div>
           </div>
         </div>
 

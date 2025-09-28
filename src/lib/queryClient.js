@@ -40,6 +40,7 @@ export const queryKeys = {
     revenue: () => [...queryKeys.dashboard.all, "revenue"],
     ordersChart: () => [...queryKeys.dashboard.all, "ordersChart"],
     productsChart: () => [...queryKeys.dashboard.all, "productsChart"],
+    visitors: () => [...queryKeys.dashboard.all, "visitors"],
   },
   // Orders queries
   orders: {

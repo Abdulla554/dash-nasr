@@ -72,6 +72,23 @@ export const useProductsChart = () => {
   });
 };
 
+export const useVisitorsStats = () => {
+  return useQuery({
+    queryKey: queryKeys.dashboard.visitors(),
+    queryFn: async () => {
+      const response = await api.getVisitorsStats();
+      return response.data.data;
+    },
+    staleTime: 5 * 60 * 1000,
+    retry: (failureCount, error) => {
+      if (error?.response?.status >= 400 && error?.response?.status < 500) {
+        return false;
+      }
+      return failureCount < 2;
+    },
+  });
+};
+
 // Combined dashboard data hook
 export const useDashboardData = () => {
   const queries = useQueries({
@@ -132,11 +149,30 @@ export const useDashboardData = () => {
           return failureCount < 2;
         },
       },
+      {
+        queryKey: queryKeys.dashboard.visitors(),
+        queryFn: async () => {
+          const response = await api.getVisitorsStats();
+          return response.data.data;
+        },
+        staleTime: 5 * 60 * 1000,
+        retry: (failureCount, error) => {
+          if (error?.response?.status >= 400 && error?.response?.status < 500) {
+            return false;
+          }
+          return failureCount < 2;
+        },
+      },
     ],
   });
 
-  const [statsQuery, revenueQuery, ordersChartQuery, productsChartQuery] =
-    queries;
+  const [
+    statsQuery,
+    revenueQuery,
+    ordersChartQuery,
+    productsChartQuery,
+    visitorsQuery,
+  ] = queries;
 
   return {
     dashboardData: {
@@ -144,6 +180,7 @@ export const useDashboardData = () => {
       revenue: revenueQuery.data,
       ordersChart: ordersChartQuery.data,
       productsChart: productsChartQuery.data,
+      visitors: visitorsQuery.data,
     },
     loading: queries.some((query) => query.isLoading),
     error: queries.find((query) => query.error)?.error || null,
@@ -157,6 +194,7 @@ export const useDashboardData = () => {
       revenue: revenueQuery,
       ordersChart: ordersChartQuery,
       productsChart: productsChartQuery,
+      visitors: visitorsQuery,
     },
   };
 };

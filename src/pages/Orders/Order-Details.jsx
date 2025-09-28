@@ -218,51 +218,44 @@ export default function OrderDetails() {
             />
 
             {/* Header */}
-            <div className="bg-nsr-secondary/50 backdrop-blur-lg border-b border-nsr-primary/20">
-                <div className="mx-auto max-w-7xl px-6 py-4">
-                    <div className="flex items-center justify-between">
+            <PageHeader
+                title={`تفاصيل الطلب #${order?.orderNumber || order?.id}`}
+                subtitle="عرض تفاصيل الطلب الكاملة"
+                icon={Package}
+                showBackButton={true}
+                backTo="/orders"
+                customActions={
+                    <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
                         <_motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            onClick={() => navigate('/orders')}
-                            className={`flex items-center gap-2 transition-colors duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={toggleCurrency}
+                            className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 flex items-center gap-2 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
                         >
-                            <ArrowLeft size={20} />
-                            <span>العودة للطلبات</span>
+                            <DollarSign size={20} />
+                            <span className="text-sm font-semibold">{getCurrencyCode()}</span>
                         </_motion.button>
 
-                        <div className="flex items-center gap-4">
-                            <_motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                                onClick={toggleCurrency}
-                                className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 flex items-center gap-2 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
-                            >
-                                <DollarSign size={20} />
-                                <span className="text-sm font-semibold">{getCurrencyCode()}</span>
-                            </_motion.button>
+                        <_motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={handlePrint}
+                            className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
+                        >
+                            <Printer size={20} />
+                        </_motion.button>
 
-                            <_motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                                onClick={handlePrint}
-                                className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
-                            >
-                                <Printer size={20} />
-                            </_motion.button>
-
-                            <_motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                                onClick={handleShare}
-                                className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
-                            >
-                                <Share2 size={20} />
-                            </_motion.button>
-                        </div>
+                        <_motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={handleShare}
+                            className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
+                        >
+                            <Share2 size={20} />
+                        </_motion.button>
                     </div>
-                </div>
-            </div>
+                }
+            />
 
             {/* Order Details */}
             <div className="mx-auto max-w-7xl px-6 py-8">

@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const axiosInstance = axios.create({
-  baseURL:  import.meta.env.VITE_API_URL ,
+  baseURL: import.meta.env.VITE_API_URL,
   timeout: 10000, // 10 seconds timeout (reduced for faster fallback)
   headers: {
     "Content-Type": "application/json",
@@ -247,6 +247,7 @@ export const api = {
   getRevenueStats: () => axiosInstance.get('/dashboard/revenue'),
   getOrdersChart: () => axiosInstance.get('/dashboard/orders-chart'),
   getProductsChart: () => axiosInstance.get('/dashboard/products-chart'),
+  getVisitorsStats: () => axiosInstance.get('/dashboard/visitors'),
 
   // Analytics - Updated to match backend endpoints
   getAnalyticsOverview: () => axiosInstance.get('/analytics/overview'),

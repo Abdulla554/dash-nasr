@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { motion as _motion } from "framer-motion";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 import {
     ArrowLeft,
     User,
@@ -218,44 +219,61 @@ export default function OrderDetails() {
             />
 
             {/* Header */}
-            <PageHeader
-                title={`تفاصيل الطلب #${order?.orderNumber || order?.id}`}
-                subtitle="عرض تفاصيل الطلب الكاملة"
-                icon={Package}
-                showBackButton={true}
-                backTo="/orders"
-                customActions={
-                    <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
-                        <_motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={toggleCurrency}
-                            className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 flex items-center gap-2 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
-                        >
-                            <DollarSign size={20} />
-                            <span className="text-sm font-semibold">{getCurrencyCode()}</span>
-                        </_motion.button>
+            <div className="relative backdrop-blur-sm border-b bg-[#F9F3EF]/5 border-[#749BC2]/20">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
+                <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl">
+                                <Package className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                            </div>
+                            <div>
+                                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">تفاصيل الطلب #{order?.orderNumber || order?.id}</h1>
+                                <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">عرض تفاصيل الطلب الكاملة</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => window.location.href = '/orders'}
+                                className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
+                            >
+                                <span className="font-semibold text-sm sm:text-base lg:text-lg">العودة للطلبات</span>
+                            </motion.button>
+                            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+                                <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={toggleCurrency}
+                                    className="p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 flex items-center gap-2 text-nsr-light hover:text-nsr-accent"
+                                >
+                                    <DollarSign size={20} />
+                                    <span className="text-sm font-semibold">{getCurrencyCode()}</span>
+                                </motion.button>
 
-                        <_motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={handlePrint}
-                            className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
-                        >
-                            <Printer size={20} />
-                        </_motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={handlePrint}
+                                    className="p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 text-nsr-light hover:text-nsr-accent"
+                                >
+                                    <Printer size={20} />
+                                </motion.button>
 
-                        <_motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={handleShare}
-                            className={`p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 ${isDark ? 'text-nsr-light hover:text-nsr-accent' : 'text-nsr-dark hover:text-nsr-accent'}`}
-                        >
-                            <Share2 size={20} />
-                        </_motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={handleShare}
+                                    className="p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 text-nsr-light hover:text-nsr-accent"
+                                >
+                                    <Share2 size={20} />
+                                </motion.button>
+                            </div>
+                        </div>
                     </div>
-                }
-            />
+                </div>
+            </div>
 
             {/* Order Details */}
             <div className="mx-auto max-w-7xl px-6 py-8">
@@ -330,7 +348,7 @@ export default function OrderDetails() {
                                     </div>
                                     <div>
                                         <label className="text-sm text-nsr-neutral">العنوان</label>
-                                        <p className="text-nsr-primary">{order.customerAddress || 'غير محدد'}</p>
+                                        <p className="text-nsr-primary">{order.location || 'غير محدد'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -551,16 +569,16 @@ export default function OrderDetails() {
                             <h3 className="text-lg font-bold text-nsr-primary mb-4">إجراءات الإدارة</h3>
 
                             <div className="space-y-3">
-                                <_motion.button
+                                <motion.button
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     className="w-full bg-nsr-accent text-white py-3 px-4 rounded-xl font-semibold hover:bg-nsr-accent/90 transition-all duration-300 flex items-center justify-center gap-2"
                                 >
                                     <Edit size={20} />
                                     <span>تعديل الطلب</span>
-                                </_motion.button>
+                                </motion.button>
 
-                                <_motion.button
+                                <motion.button
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     onClick={handleDelete}
@@ -568,7 +586,7 @@ export default function OrderDetails() {
                                 >
                                     <Trash size={20} />
                                     <span>حذف الطلب</span>
-                                </_motion.button>
+                                </motion.button>
                             </div>
                         </div>
 

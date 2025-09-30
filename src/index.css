@@ -21,7 +21,7 @@ body {
   /* الألوان الأساسية الأربعة */
   --nsr-dark: #1a1a2e; /* 1️⃣ الأسود/الغامق */
   --nsr-light: #f9f3ef; /* 2️⃣ الأبيض/الفاتح */
-  --nsr-secondary: #749bc2; /* 3️⃣ الأزرق الباهت الفخم */
+  --nsr-secondary: #2D6685; /* 3️⃣ الأزرق الباهت الفخم */
   --nsr-accent: #2c6d90; /* 4️⃣ التركواز المعدني */
 
   /* ألوان إضافية */
@@ -30,7 +30,7 @@ body {
   --nsr-dark-700: #343a40;
   --nsr-light-cream: #f9f3ef;
   --nsr-light-100: #f5f0eb;
-  --nsr-blue-elegant: #749bc2;
+  --nsr-blue-elegant: #2D6685;
   --nsr-turquoise: #2c6d90;
 }
 
@@ -161,8 +161,8 @@ body {
 
 /* أنماط البطاقات المحدثة */
 .card-nsr {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
+  background: #141A23;
+  border: 1px solid #595d61;
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 4px 20px var(--shadow);

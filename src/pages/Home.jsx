@@ -95,15 +95,15 @@ export default function LuxuryDashboard() {
         value: `${currencySymbol}${convertCurrency(stats.totalRevenue || 0).toLocaleString()}`,
         change: `${revenueGrowth}%`,
         trend: revenueGrowth > 0 ? "up" : revenueGrowth < 0 ? "down" : "equal",
-        icon: <FaShoppingCart className="text-[#749BC2]" />,
-        gradient: "from-[#2C6D90] to-[#749BC2]"
+        icon: <FaShoppingCart className="text-[#2C6D90]" />,
+        gradient: "from-[#2C6D90] to-[#2C6D90]"
       },
       {
         title: "إجمالي العملاء",
         value: (stats.totalCustomers || 0).toLocaleString(),
         change: `${customersGrowth}%`,
         trend: customersGrowth > 0 ? "up" : customersGrowth < 0 ? "down" : "equal",
-        icon: <FaUsers className="text-[#749BC2]" />,
+        icon: <FaUsers className="text-[#2C6D90]" />,
         gradient: "from-[#1a1a2e] to-[#2C6D90]"
       },
       {
@@ -111,7 +111,7 @@ export default function LuxuryDashboard() {
         value: (stats.totalOrders || 0).toLocaleString(),
         change: `${ordersGrowth}%`,
         trend: ordersGrowth > 0 ? "up" : ordersGrowth < 0 ? "down" : "equal",
-        icon: <FaTicketAlt className="text-[#749BC2]" />,
+        icon: <FaTicketAlt className="text-[#2C6D90]" />,
         gradient: "from-[#2C6D90] to-[#1a1a2e]"
       },
       {
@@ -119,8 +119,8 @@ export default function LuxuryDashboard() {
         value: (stats.totalVisitors || 0).toLocaleString(),
         change: `${visitorsGrowth}%`,
         trend: visitorsGrowth > 0 ? "up" : visitorsGrowth < 0 ? "down" : "equal",
-        icon: <FaUsers className="text-[#749BC2]" />,
-        gradient: "from-[#749BC2] to-[#2C6D90]"
+        icon: <FaUsers className="text-[#2C6D90]" />,
+        gradient: "from-[#2C6D90] to-[#2C6D90]"
       },
     ];
   }, [dashboardData?.stats, getCurrencySymbol, convertCurrency]);
@@ -186,7 +186,7 @@ export default function LuxuryDashboard() {
     switch (trend) {
       case 'up': return 'text-green-400';
       case 'down': return 'text-red-400';
-      default: return 'text-[#749BC2]';
+      default: return 'text-[#2C6D90]';
     }
   }, []);
 
@@ -213,9 +213,9 @@ export default function LuxuryDashboard() {
   // Error Component (only show if no fallback data)
   if (showError) {
     return (
-      <div className="min-h-screen bg-[#1a1a2e]" dir="rtl">
+      <div className="min-h-screen bg-[#0A0A0A]" dir="rtl">
         <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center p-8 rounded-2xl backdrop-blur-sm border bg-[#F9F3EF]/10 border-[#749BC2]/20">
+          <div className="text-center p-8 rounded-2xl backdrop-blur-sm border bg-[#F9F3EF]/10 border-[#2C6D90]/20">
             <FaExclamationTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-2 text-[#F9F3EF]">
               خطأ في تحميل البيانات
@@ -243,7 +243,7 @@ export default function LuxuryDashboard() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={toggleCurrency}
-        className="group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 flex items-center gap-2 bg-[#749BC2]/20 border-[#749BC2]/30 hover:border-[#2C6D90]/30"
+        className="group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 flex items-center gap-2 bg-[#2C6D90]/20 border-[#2C6D90]/30 hover:border-[#2C6D90]/30"
         title={`التبديل إلى ${currency === 'USD' ? 'الدينار العراقي' : 'الدولار الأمريكي'}`}
       >
         {currency === 'USD' ? <FaDollarSign className="w-5 h-5 text-[#F9F3EF]" /> : <FaExchangeAlt className="w-5 h-5 text-[#F9F3EF]" />}
@@ -253,14 +253,14 @@ export default function LuxuryDashboard() {
   );
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e]" dir="rtl">
+    <div className="min-h-screen bg-[#0A0A0A]" dir="rtl">
       {/* Header */}
-      <div className="relative backdrop-blur-sm border-b bg-[#F9F3EF]/5 border-[#749BC2]/20">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
+      <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
         <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl">
+              <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
                 <FaShoppingCart className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
@@ -289,18 +289,18 @@ export default function LuxuryDashboard() {
             // Loading skeleton for business overview
             Array.from({ length: 4 }).map((_, index) => (
               <div key={index} className="group relative">
-                <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 bg-[#F9F3EF]/5 border-[#749BC2]/20">
+                <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 bg-[#F9F3EF]/5 border-[#2C6D90]/20">
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex items-center gap-4">
-                      <div className="p-3 backdrop-blur-sm rounded-xl border bg-[#749BC2]/10 border-[#749BC2]/20">
-                        <FaSpinner className="w-6 h-6 animate-spin text-[#749BC2]" />
+                      <div className="p-3 backdrop-blur-sm rounded-xl border bg-[#2C6D90]/10 border-[#2C6D90]/20">
+                        <FaSpinner className="w-6 h-6 animate-spin text-[#2C6D90]" />
                       </div>
-                      <div className="h-6 bg-[#749BC2]/20 rounded animate-pulse w-32"></div>
+                      <div className="h-6 bg-[#2C6D90]/20 rounded animate-pulse w-32"></div>
                     </div>
-                    <div className="h-8 bg-[#749BC2]/20 rounded-full animate-pulse w-16"></div>
+                    <div className="h-8 bg-[#2C6D90]/20 rounded-full animate-pulse w-16"></div>
                   </div>
-                  <div className="h-12 bg-[#749BC2]/20 rounded animate-pulse mb-2"></div>
-                  <div className="h-1 bg-[#749BC2]/20 rounded animate-pulse"></div>
+                  <div className="h-12 bg-[#2C6D90]/20 rounded animate-pulse mb-2"></div>
+                  <div className="h-1 bg-[#2C6D90]/20 rounded animate-pulse"></div>
                 </div>
               </div>
             ))
@@ -308,27 +308,29 @@ export default function LuxuryDashboard() {
             businessOverview.map((item, index) => (
               <div key={index} className="group relative">
                 {/* Background with gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-r ${item.gradient} rounded-2xl opacity-80 group-hover:opacity-90 transition-all duration-300`}></div>
-
+                <div className={`absolute inset-0 bg-gradient-to-r ${item.gradient} rounded-2xl opacity-30 group-hover:opacity-40 transition-all duration-300`}></div>
                 {/* Glass effect overlay */}
-                <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 hover:border-[#2C6D90]/50 transition-all duration-300 group-hover:transform group-hover:scale-105 bg-[#F9F3EF]/10 border-[#749BC2]/20">
+                <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 hover:border-[#2C6D90]/50 transition-all duration-300 group-hover:transform group-hover:scale-105  border-[#2C6D90]/20">
+
+                
+                
                   <div className="flex items-start justify-between mb-4 sm:mb-6">
                     <div className="flex items-center gap-2 sm:gap-4">
-                      <div className="p-2 sm:p-3 backdrop-blur-sm rounded-xl border bg-[#749BC2]/20 border-[#749BC2]/30">
+                      <div className="p-2 sm:p-3 backdrop-blur-sm rounded-xl border bg-[#2C6D90]/20 border-[#2C6D90]/30">
                         {item.icon}
                       </div>
                       <div>
                         <span className="font-medium text-sm sm:text-lg text-[#F9F3EF]">{item.title}</span>
                       </div>
                     </div>
-                    <div className={`flex items-center gap-2 px-3 py-1 rounded-full backdrop-blur-sm bg-[#749BC2]/20 ${getTrendColor(item.trend)}`}>
+                    <div className={`flex items-center gap-2 px-3 py-1 rounded-full backdrop-blur-sm bg-[#2C6D90]/20 ${getTrendColor(item.trend)}`}>
                       {getTrendIcon(item.trend)}
                       <span className="font-semibold">{item.change}</span>
                     </div>
                   </div>
                   <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 text-[#F9F3EF]">{item.value}</div>
-                  <div className="w-full h-1 rounded-full overflow-hidden bg-[#749BC2]/20">
-                    <div className="h-full rounded-full w-3/4 animate-pulse bg-gradient-to-r from-[#2C6D90] to-[#749BC2]"></div>
+                  <div className="w-full h-1 rounded-full overflow-hidden bg-[#2C6D90]/20">
+                    <div className="h-full rounded-full w-3/4 animate-pulse bg-gradient-to-r from-[#2C6D90] to-[#2C6D90]"></div>
                   </div>
                 </div>
               </div>
@@ -342,9 +344,9 @@ export default function LuxuryDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
           {/* New Orders */}
           <div className="relative">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#1a1a2e] to-[#2C6D90]/20"></div>
-            <div className="relative backdrop-blur-sm border rounded-2xl overflow-hidden hover:border-[#2C6D90]/50 transition-all duration-300 bg-[#F9F3EF]/5 border-[#749BC2]/20">
-              <div className="p-4 sm:p-6 border-b border-[#749BC2]/20">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#0C0C0E] via-[#0F1B24] to-[#11212D]"></div>
+            <div className="relative backdrop-blur-sm border rounded-2xl overflow-hidden hover:border-[#2C6D90]/50 transition-all duration-300 bg-[#F9F3EF]/5 border-[#2C6D90]/20">
+              <div className="p-4 sm:p-6 border-b border-[#2C6D90]/20">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-xl sm:text-2xl font-bold mb-1 text-[#F9F3EF]">الطلبات الجديدة</h3>
@@ -360,14 +362,14 @@ export default function LuxuryDashboard() {
                   <div className="p-4 sm:p-6">
                     <div className="space-y-4">
                       {Array.from({ length: 5 }).map((_, index) => (
-                        <div key={index} className="flex items-center justify-between p-3 sm:p-4 rounded-xl border border-[#749BC2]/10">
+                        <div key={index} className="flex items-center justify-between p-3 sm:p-4 rounded-xl border border-[#2C6D90]/10">
                           <div className="flex items-center gap-2 sm:gap-4">
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-16 sm:w-20"></div>
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-24 sm:w-32"></div>
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-20 sm:w-24"></div>
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-12 sm:w-16"></div>
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-16 sm:w-20"></div>
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-12 sm:w-16"></div>
+                            <div className="h-4 bg-[#2C6D90]/20 rounded animate-pulse w-16 sm:w-20"></div>
+                            <div className="h-4 bg-[#2C6D90]/20 rounded animate-pulse w-24 sm:w-32"></div>
+                            <div className="h-4 bg-[#2C6D90]/20 rounded animate-pulse w-20 sm:w-24"></div>
+                            <div className="h-4 bg-[#2C6D90]/20 rounded animate-pulse w-12 sm:w-16"></div>
+                            <div className="h-4 bg-[#2C6D90]/20 rounded animate-pulse w-16 sm:w-20"></div>
+                            <div className="h-4 bg-[#2C6D90]/20 rounded animate-pulse w-12 sm:w-16"></div>
                           </div>
                         </div>
                       ))}
@@ -378,7 +380,7 @@ export default function LuxuryDashboard() {
                     {/* Desktop Table */}
                     <table className="w-full hidden sm:table">
                       <thead>
-                        <tr className="border-b border-[#749BC2]/10">
+                        <tr className="border-b border-[#2C6D90]/10">
                           <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80">رقم الطلب</th>
                           <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80 hidden sm:table-cell">العميل</th>
                           <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80">المجموع</th>
@@ -396,9 +398,9 @@ export default function LuxuryDashboard() {
                           </tr>
                         ) : (
                           newOrders.map((order, index) => (
-                            <tr key={index} className="border-b border-[#749BC2]/5 hover:bg-[#F9F3EF]/5 transition-colors duration-300">
+                            <tr key={index} className="border-b border-[#2C6D90]/5 hover:bg-[#F9F3EF]/5 transition-colors duration-300">
                               <td className="px-2 sm:px-6 py-3 sm:py-4">
-                                <span className="font-mono text-[#749BC2] font-semibold text-xs sm:text-sm">#{order.orderNumber}</span>
+                                <span className="font-mono text-[#2C6D90] font-semibold text-xs sm:text-sm">#{order.orderNumber}</span>
                               </td>
                               <td className="px-2 sm:px-6 py-3 sm:py-4 font-medium text-[#F9F3EF] hidden sm:table-cell text-sm">{order.customer}</td>
                               <td className="px-2 sm:px-6 py-3 sm:py-4 font-semibold text-[#F9F3EF]/80 text-xs sm:text-sm">{order.total}</td>
@@ -415,7 +417,7 @@ export default function LuxuryDashboard() {
                               </td>
                               <td className="px-2 sm:px-6 py-3 sm:py-4">
                                 <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-semibold ${order.status === 'مفتوح'
-                                  ? 'bg-[#749BC2]/20 text-[#749BC2] border border-[#749BC2]/30'
+                                  ? 'bg-[#2C6D90]/20 text-[#2C6D90] border border-[#2C6D90]/30'
                                   : 'bg-[#F9F3EF]/10 text-[#F9F3EF]/70 border border-[#F9F3EF]/20'
                                   }`}>
                                   {order.status}
@@ -439,11 +441,11 @@ export default function LuxuryDashboard() {
                       ) : (
                         <div className="flex gap-4 overflow-x-auto pb-4 px-4">
                           {newOrders.map((order, index) => (
-                            <div key={index} className="flex-shrink-0 w-72 bg-[#F9F3EF]/5 border border-[#749BC2]/20 rounded-xl p-4">
+                            <div key={index} className="flex-shrink-0 w-72 bg-[#F9F3EF]/5 border border-[#2C6D90]/20 rounded-xl p-4">
                               <div className="flex items-center justify-between mb-3">
-                                <span className="font-mono text-[#749BC2] font-semibold text-sm">#{order.orderNumber}</span>
+                                <span className="font-mono text-[#2C6D90] font-semibold text-sm">#{order.orderNumber}</span>
                                 <span className={`px-2 py-1 rounded-full text-xs font-semibold ${order.status === 'مفتوح'
-                                  ? 'bg-[#749BC2]/20 text-[#749BC2] border border-[#749BC2]/30'
+                                  ? 'bg-[#2C6D90]/20 text-[#2C6D90] border border-[#2C6D90]/30'
                                   : 'bg-[#F9F3EF]/10 text-[#F9F3EF]/70 border border-[#F9F3EF]/20'
                                   }`}>
                                   {order.status}
@@ -500,9 +502,9 @@ export default function LuxuryDashboard() {
 
           {/* Top Customers */}
           <div className="relative">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#1a1a2e] to-[#749BC2]/20"></div>
-            <div className="relative backdrop-blur-sm border rounded-2xl hover:border-[#2C6D90]/50 transition-all duration-300 bg-[#F9F3EF]/5 border-[#749BC2]/20">
-              <div className="p-4 sm:p-6 border-b border-[#749BC2]/20">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#0C0C0E] via-[#0F1B24] to-[#11212D]"></div>
+            <div className="relative backdrop-blur-sm border rounded-2xl hover:border-[#2C6D90]/50 transition-all duration-300 bg-[#F9F3EF]/5 border-[#2C6D90]/20">
+              <div className="p-4 sm:p-6 border-b border-[#2C6D90]/20">
                 <div className="flex items-center justify-between">
                   <div>
                     <h3 className="text-xl sm:text-2xl font-bold mb-1 text-[#F9F3EF]">أهم العملاء</h3>
@@ -517,22 +519,22 @@ export default function LuxuryDashboard() {
                   // Loading skeleton for top customers
                   <div className="space-y-4">
                     {Array.from({ length: 5 }).map((_, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 rounded-xl border border-[#749BC2]/10">
+                      <div key={index} className="flex items-center justify-between p-4 rounded-xl border border-[#2C6D90]/10">
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-[#749BC2]/20 rounded-full animate-pulse"></div>
+                          <div className="w-12 h-12 bg-[#2C6D90]/20 rounded-full animate-pulse"></div>
                           <div>
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-32 mb-2"></div>
-                            <div className="h-3 bg-[#749BC2]/20 rounded animate-pulse w-24"></div>
+                            <div className="h-4 bg-[#2C6D90]/20 rounded animate-pulse w-32 mb-2"></div>
+                            <div className="h-3 bg-[#2C6D90]/20 rounded animate-pulse w-24"></div>
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="text-center">
-                            <div className="h-4 bg-[#749BC2]/20 rounded animate-pulse w-8 mb-1"></div>
-                            <div className="h-3 bg-[#749BC2]/20 rounded animate-pulse w-12"></div>
+                            <div className="h-4 bg-[#2C6D90]/20 rounded animate-pulse w-8 mb-1"></div>
+                            <div className="h-3 bg-[#2C6D90]/20 rounded animate-pulse w-12"></div>
                           </div>
                           <div className="flex items-center gap-1">
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <div key={i} className="w-3 h-3 bg-[#749BC2]/20 rounded animate-pulse"></div>
+                              <div key={i} className="w-3 h-3 bg-[#2C6D90]/20 rounded animate-pulse"></div>
                             ))}
                           </div>
                         </div>
@@ -549,9 +551,9 @@ export default function LuxuryDashboard() {
                         </div>
                       ) : (
                         topCustomers.map((customer, index) => (
-                          <div key={index} className="group flex items-center justify-between p-3 sm:p-4 rounded-xl border transition-all duration-300 hover:border-[#2C6D90]/30 bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 border-[#749BC2]/10">
+                          <div key={index} className="group flex items-center justify-between p-3 sm:p-4 rounded-xl border transition-all duration-300 hover:border-[#2C6D90]/30 bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 border-[#2C6D90]/10">
                             <div className="flex items-center gap-4">
-                              <div className="w-12 h-12 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-full flex items-center justify-center text-[#F9F3EF] font-bold text-lg">
+                              <div className="w-12 h-12 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-full flex items-center justify-center text-[#F9F3EF] font-bold text-lg">
                                 {customer.customer.split(',')[0][0]}
                               </div>
                               <div>
@@ -561,11 +563,11 @@ export default function LuxuryDashboard() {
                             </div>
                             <div className="flex items-center gap-4">
                               <div className="text-center">
-                                <div className="text-[#749BC2] font-bold">{customer.orders}</div>
+                                <div className="text-[#2C6D90] font-bold">{customer.orders}</div>
                                 <div className="text-xs text-[#F9F3EF]/50">طلب</div>
                               </div>
                               <div className="text-center">
-                                <div className="text-[#749BC2] font-bold text-sm">
+                                <div className="text-[#2C6D90] font-bold text-sm">
                                   {getCurrencySymbol()}{convertCurrency(customer.totalSpent || 0).toLocaleString()}
                                 </div>
                                 <div className="text-xs text-[#F9F3EF]/50">إجمالي</div>
@@ -574,7 +576,7 @@ export default function LuxuryDashboard() {
                                 {[...Array(5)].map((_, i) => (
                                   <FaStar
                                     key={i}
-                                    className={`w-3 h-3 ${i < customer.rating ? 'text-yellow-400' : 'text-[#749BC2]/30'
+                                    className={`w-3 h-3 ${i < customer.rating ? 'text-yellow-400' : 'text-[#2C6D90]/30'
                                       }`}
                                   />
                                 ))}
@@ -594,9 +596,9 @@ export default function LuxuryDashboard() {
                       ) : (
                         <div className="flex gap-4 overflow-x-auto pb-4 px-4">
                           {topCustomers.map((customer, index) => (
-                            <div key={index} className="flex-shrink-0 w-64 bg-[#F9F3EF]/5 border border-[#749BC2]/20 rounded-xl p-4">
+                            <div key={index} className="flex-shrink-0 w-64 bg-[#F9F3EF]/5 border border-[#2C6D90]/20 rounded-xl p-4">
                               <div className="flex items-center gap-3 mb-3">
-                                <div className="w-10 h-10 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-full flex items-center justify-center text-[#F9F3EF] font-bold text-sm">
+                                <div className="w-10 h-10 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-full flex items-center justify-center text-[#F9F3EF] font-bold text-sm">
                                   {customer.customer.split(',')[0][0]}
                                 </div>
                                 <div>
@@ -608,12 +610,12 @@ export default function LuxuryDashboard() {
                               <div className="space-y-2">
                                 <div className="flex items-center justify-between">
                                   <span className="text-[#F9F3EF]/70 text-xs">الطلبات:</span>
-                                  <span className="text-[#749BC2] font-bold text-sm">{customer.orders}</span>
+                                  <span className="text-[#2C6D90] font-bold text-sm">{customer.orders}</span>
                                 </div>
 
                                 <div className="flex items-center justify-between">
                                   <span className="text-[#F9F3EF]/70 text-xs">الإجمالي:</span>
-                                  <span className="text-[#749BC2] font-bold text-sm">
+                                  <span className="text-[#2C6D90] font-bold text-sm">
                                     {getCurrencySymbol()}{convertCurrency(customer.totalSpent || 0).toLocaleString()}
                                   </span>
                                 </div>
@@ -624,7 +626,7 @@ export default function LuxuryDashboard() {
                                     {[...Array(5)].map((_, i) => (
                                       <FaStar
                                         key={i}
-                                        className={`w-3 h-3 ${i < customer.rating ? 'text-yellow-400' : 'text-[#749BC2]/30'
+                                        className={`w-3 h-3 ${i < customer.rating ? 'text-yellow-400' : 'text-[#2C6D90]/30'
                                           }`}
                                       />
                                     ))}

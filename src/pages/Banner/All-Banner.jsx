@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Trash, Plus, Sparkles } from "lucide-react";
+import { Trash, Plus, Sparkles, Image } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, easeOut, easeInOut } from "framer-motion";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -129,9 +129,9 @@ export default function AllBanner() {
               onClick={() => handleDelete(Banner.id)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 sm:p-3 rounded-full bg-nsr-accent/10 backdrop-blur-lg border-2 border-nsr-accent border-dashed text-nsr-accent hover:bg-nsr-accent/20 transition-all duration-300"
+              className="p-2 sm:p-3 rounded-full bg-nsr-accent/10 backdrop-blur-lg border-2 border-red-600 border-dashed text-nsr-accent hover:bg-nsr-accent/20 transition-all duration-300"
             >
-              <Trash size={16} className="sm:w-5 sm:h-5" />
+              <Trash size={16} className="sm:w-5 sm:h-5 text-red-600" />
             </motion.button>
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -141,29 +141,29 @@ export default function AllBanner() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]">
+    <div className="min-h-screen bg-[#0A0A0A]" dir="rtl">
       <ConfirmationModal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Confirm Deletion"
-        message="Are you sure you want to delete this banner? This action cannot be undone."
+          title="تأكيد الحذف"
+        message="هل أنت متأكد من حذف هذا البانر؟ هذا الإجراء لا يمكن التراجع عنه."
       />
       {/* Header */}
       <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
         <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 lg:flex-row md:items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
-                <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                <Image className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">إدارة البانرات</h1>
                 <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">إدارة شاملة لجميع البانرات المعروضة في الموقع</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto mt-4 lg:mt-0">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -185,13 +185,13 @@ export default function AllBanner() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-center py-12 sm:py-16 lg:py-20 bg-[#F9F3EF]/5 backdrop-blur-lg rounded-2xl sm:rounded-3xl border border-[#2C6D90]/20"
+            className="text-center py-12 sm:py-16 lg:py-20 bg-[#F9F3EF]/5 backdrop-blur-lg rounded-2xl sm:rounded-3xl border border-[#2C6D90]/90"
             >
             <h3 className="text-xl sm:text-2xl font-bold text-[#F9F3EF] mb-2 sm:mb-3">
-                No Banner Found
+                لا يوجد بانرات
               </h3>
             <p className="text-[#F9F3EF]/70 text-sm sm:text-base">
-                Add your first Banner to get started
+                إضافة بانر جديد للبدء
               </p>
             </motion.div>
           ) : (

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { Upload, X } from "lucide-react";
+import { Upload, X, Plus } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -145,23 +145,23 @@ export default function AddBrand() {
   };
 
   return (
-    <div className="min-h-screen pb-10 bg-[#0A0A0A]">
+    <div className="min-h-screen pb-10 bg-[#0A0A0A]" dir="rtl">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
           <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
           <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4 lg:flex-row md:items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
-                  <Upload className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                  <Plus className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">إضافة ماركة جديدة</h1>
                   <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">أضف ماركة جديدة إلى متجرك</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
+              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto mt-4 lg:mt-0">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -176,7 +176,7 @@ export default function AddBrand() {
         </div>
 
         {/* Form */}
-        <div className="rounded-xl shadow-lg p-8 mt-5 mb-14 backdrop-blur-lg bg-[#F9F3EF]/5 border border-[#2C6D90]/20">
+        <div className="rounded-xl shadow-lg p-8 mt-5 mb-14 backdrop-blur-lg bg-[#F9F3EF]/5 border border-[#2C6D90]/90">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Information Section */}
             <div>
@@ -194,7 +194,7 @@ export default function AddBrand() {
                     name="name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-3 bg-nsr-secondary/50 border border-nsr-accent/30 rounded-lg text-nsr-light placeholder-nsr-light/50 focus:outline-none focus:border-nsr-primary focus:ring-2 focus:ring-nsr-primary/20 transition-all duration-300"
+                        className="w-full px-4 py-3 bg-nsr-secondary/20 border border-[#2C6D90]/90 rounded-lg text-nsr-light placeholder-nsr-light/50 focus:outline-none focus:border-nsr-primary focus:ring-2 focus:ring-nsr-primary/20 transition-all duration-300"
                     placeholder="أدخل اسم الماركة"
                     required
                   />
@@ -210,7 +210,7 @@ export default function AddBrand() {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={4}
-                    className="w-full px-4 py-3 bg-nsr-secondary/50 border border-nsr-accent/30 rounded-lg text-nsr-light placeholder-nsr-light/50 focus:outline-none focus:border-nsr-primary focus:ring-2 focus:ring-nsr-primary/20 transition-all duration-300 resize-none"
+                    className="w-full px-4 py-3 bg-nsr-secondary/20 border border-[#2C6D90]/90 rounded-lg text-nsr-light placeholder-nsr-light/50 focus:outline-none focus:border-nsr-primary focus:ring-2 focus:ring-nsr-primary/20 transition-all duration-300 resize-none"
                     placeholder="أدخل وصفاً مختصراً للماركة..."
                   />
                 </div>
@@ -221,7 +221,7 @@ export default function AddBrand() {
                     Brand Image
                   </label>
                   {!imagePreview ? (
-                    <div className="relative border-2 border-dashed rounded-lg py-16 px-6 border-nsr-accent/40 hover:border-nsr-primary transition-all duration-300 flex items-center justify-center cursor-pointer bg-nsr-secondary/50">
+                    <div className="relative border-2 border-dashed rounded-lg py-16 px-6 border-[#2C6D90]/40 hover:border-nsr-primary transition-all duration-300 flex items-center justify-center cursor-pointer bg-nsr-secondary/20">
                       <input
                         type="file"
                         id="Brand-image"
@@ -231,14 +231,14 @@ export default function AddBrand() {
                       />
                       <label htmlFor="Brand-image" className="cursor-pointer">
                         <div className="text-center">
-                          <Upload className="mx-auto h-12 w-12 text-[#8B6B43]" />
-                          <div className="mt-4 flex text-sm text-[#1e4b6b]">
-                            <span className="text-[#8B6B43] hover:text-[#ECB774]">
+                          <Plus className="mx-auto h-12 w-12 text-[#2C6D90]" />
+                          <div className="mt-4 flex text-sm text-[#2C6D90]">
+                            <span className="text-[#2C6D90] hover:text-[#ECB774]">
                               Upload a file
                             </span>
                             <p className="pl-1">or drag and drop</p>
                           </div>
-                          <p className="text-xs text-[#1e4b6b]/70 mt-2">
+                          <p className="text-xs text-[#2C6D90]/70 mt-2">
                             PNG, JPG, GIF up to 10MB
                           </p>
                         </div>
@@ -249,7 +249,7 @@ export default function AddBrand() {
                       <img
                         src={imagePreview}
                         alt="Brand preview"
-                        className="w-full h-64 object-contain rounded-lg border-2 border-[#ECB774]/40"
+                        className="w-full h-64 object-contain rounded-lg border-2 border-[#2C6D90]/90"
                       />
                       <button
                         type="button"
@@ -268,9 +268,9 @@ export default function AddBrand() {
             <div className="flex justify-center md:justify-end">
               <button
                 type="submit"
-                className="bg-gradient-to-r from-[#1e4b6b] to-[#8B6B43] text-white px-8 py-3 rounded-lg hover:shadow-lg hover:shadow-[#8B6B43]/25 transition-all duration-300 hover:scale-105"
+                className="bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] text-white px-8 py-3 rounded-lg hover:shadow-lg hover:shadow-[#2C6D90]/25 transition-all duration-300 hover:scale-105"
               >
-                Add Brand
+                إضافة الماركة
               </button>
             </div>
           </form>

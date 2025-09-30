@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -55,7 +55,14 @@ export default function LuxuryProductsPage() {
     priceRange: 'all',
     sortBy: 'newest'
   });
-
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  }, []);
+  
   // React Query hooks
   const { data: productsData } = useProducts({
     search: searchTerm,

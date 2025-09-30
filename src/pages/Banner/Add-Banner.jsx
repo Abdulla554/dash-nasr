@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Upload, X } from "lucide-react";
+import { Plus, Upload, X } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -169,23 +169,23 @@ export default function AddBanner() {
   };
 
   return (
-    <div className="min-h-screen pb-10 bg-[#0A0A0A]">
+    <div className="min-h-screen pb-10 bg-[#0A0A0A]" dir="rtl">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
           <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
           <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4 lg:flex-row md:items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
-                  <Upload className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                  <Plus className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">إضافة بانر جديد</h1>
                   <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">إنشاء بانرات مذهلة لعملك</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
+              <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto mt-4 lg:mt-0">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -328,11 +328,11 @@ export default function AddBanner() {
                     </>
                   ) : isCompressing ? (
                     <>
-                      <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white"></div>
+                      <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white text-white"></div>
                       <span className="text-sm sm:text-base">Processing Image...</span>
                     </>
                   ) : (
-                    <>
+                    <div className="flex items-center gap-2 sm:gap-3 justify-center text-center text-white font-semibold bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-4 w-4 sm:h-5 sm:w-5 transform transition-transform group-hover:rotate-12"
@@ -343,7 +343,7 @@ export default function AddBanner() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                       </svg>
                       <span className="text-sm sm:text-base">Create Banner</span>
-                    </>
+                    </div>
                   )}
                 </div>
               </button>

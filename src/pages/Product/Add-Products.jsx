@@ -14,7 +14,8 @@ import { api } from "../../lib/axios";
 export default function AddProduct() {
   const navigate = useNavigate();
   const { getCurrencySymbol } = useCurrency();
-
+ 
+  
   // Get categories and brands
   const { data: categoriesData } = useCategories();
   const { data: brandsData } = useBrands();
@@ -44,7 +45,11 @@ export default function AddProduct() {
     shipping: ""
   });
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
   }, []);
 
   const handleImageChange = (e) => {
@@ -373,7 +378,7 @@ export default function AddProduct() {
       <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
         <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 lg:flex-row md:items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
                 <Plus className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
@@ -383,7 +388,7 @@ export default function AddProduct() {
                 <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">أضف منتج جديد إلى المخزن</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto mt-4 lg:mt-0">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -400,14 +405,14 @@ export default function AddProduct() {
       {/* Main Form */}
       <div className="px-8 py-8 bg-gradient-to-r from-[#0C0C0E] via-[#0F1B24] to-[#11212D]">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-[#F9F3EF]/5 backdrop-blur-sm border border-[#2C6D90]/20 rounded-3xl overflow-hidden shadow-2xl">
+          <div className="bg-[#F9F3EF]/5 backdrop-blur-sm border border-[#2C6D90]/90 rounded-3xl overflow-hidden shadow-2xl">
             {/* Form Container */}
             <div className="p-8 space-y-10">
               <form onSubmit={handleSubmit} className="space-y-10">
                 {/* Basic Information Section */}
                 <div className="space-y-8">
-                  <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
-                    <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
+                  <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/90">
+                    <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/90">
                       <Save className="h-6 w-6 text-white" />
                     </div>
                     <div>
@@ -427,7 +432,7 @@ export default function AddProduct() {
                         value={formData.title}
                         onChange={handleInputChange}
                         name="title"
-                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
+                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
                         placeholder="أدخل اسم المنتج"
                         required
                       />
@@ -443,7 +448,7 @@ export default function AddProduct() {
                         name="brandId"
                         value={formData.brandId}
                         onChange={handleInputChange}
-                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
+                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
                         required
                       >
                         <option value="">اختر الماركة</option>
@@ -463,7 +468,7 @@ export default function AddProduct() {
                         name="categoryId"
                         value={formData.categoryId}
                         onChange={handleInputChange}
-                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
+                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
                         required
                       >
                         <option value="">اختر الفئة</option>
@@ -484,7 +489,7 @@ export default function AddProduct() {
                         value={formData.price}
                         onChange={handleInputChange}
                         name="price"
-                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
+                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
                         placeholder="أدخل السعر"
                         required
                       />
@@ -500,7 +505,7 @@ export default function AddProduct() {
                         value={formData.originalPrice}
                         onChange={handleInputChange}
                         name="originalPrice"
-                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
+                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
                         placeholder="أدخل السعر الأصلي (اختياري)"
                       />
                     </div>
@@ -516,7 +521,7 @@ export default function AddProduct() {
                         value={formData.stock}
                         onChange={handleInputChange}
                         name="stock"
-                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
+                        className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
                         placeholder="أدخل الكمية"
                         required
                       />
@@ -535,7 +540,7 @@ export default function AddProduct() {
                       value={formData.description}
                       onChange={handleInputChange}
                       rows={4}
-                      className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl resize-none"
+                      className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl resize-none"
                       placeholder="أدخل وصف المنتج"
                       required
                     />
@@ -592,7 +597,7 @@ export default function AddProduct() {
                 {/* Specifications Section */}
                 <div className="space-y-8">
                   <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
-                    <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
+                    <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/90">
                       <Save className="h-6 w-6 text-white" />
                     </div>
                     <div>
@@ -619,7 +624,7 @@ export default function AddProduct() {
                               type="text"
                               value={formData.specifications[specKey] || ''}
                               onChange={(e) => handleSpecificationChange(specKey, e.target.value)}
-                              className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
+                              className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
                               placeholder={`أدخل ${specKey.toLowerCase()}`}
                             />
                           </div>
@@ -653,7 +658,7 @@ export default function AddProduct() {
                             type="text"
                             value={newSpecKey}
                             onChange={(e) => setNewSpecKey(e.target.value)}
-                            className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
+                            className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
                             placeholder="مثال: الضمان، الشحن، إلخ"
                           />
                         </div>
@@ -665,7 +670,7 @@ export default function AddProduct() {
                             type="text"
                             value={newSpecValue}
                             onChange={(e) => setNewSpecValue(e.target.value)}
-                            className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
+                            className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
                             placeholder="مثال: 3 سنوات، مجاني، إلخ"
                           />
                         </div>
@@ -684,7 +689,7 @@ export default function AddProduct() {
                 {/* Tags Section */}
                 <div className="space-y-8">
                   <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
-                    <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
+                    <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/90">
                       <Save className="h-6 w-6 text-white" />
                     </div>
                     <div>
@@ -699,7 +704,7 @@ export default function AddProduct() {
                         value={newTag}
                         onChange={(e) => setNewTag(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                        className="flex-1 px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
+                        className="flex-1 px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl"
                         placeholder="أدخل علامة جديدة واضغط Enter"
                       />
                       <button
@@ -716,7 +721,7 @@ export default function AddProduct() {
                         {formData.tags.map((tag, index) => (
                           <span
                             key={index}
-                            className="inline-flex items-center gap-3 px-4 py-3 bg-[#F9F3EF]/5 text-[#F9F3EF] border border-[#2C6D90]/30 rounded-2xl text-lg font-medium hover:bg-[#F9F3EF]/10 transition-all duration-300"
+                            className="inline-flex items-center gap-3 px-4 py-3 bg-[#F9F3EF]/5 text-[#F9F3EF] border border-[#2C6D90]/90 rounded-2xl text-lg font-medium hover:bg-[#F9F3EF]/10 transition-all duration-300"
                           >
                             {tag}
                             <button
@@ -736,7 +741,7 @@ export default function AddProduct() {
                 {/* Images Upload */}
                 <div className="space-y-8">
                   <div className="flex items-center gap-4 pb-4 border-b border-nsr-primary/20">
-                    <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
+                    <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/90">
                       <Upload className="h-6 w-6 text-white" />
                     </div>
                     <div>
@@ -752,7 +757,7 @@ export default function AddProduct() {
                   </div>
                   <div>
                     {imagePreviews.length === 0 ? (
-                      <div className="relative border-2 border-dashed rounded-3xl py-20 px-6 transition-all duration-300 bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 cursor-pointer group border-[#2C6D90]/30 hover:border-[#2C6D90]/50">
+                      <div className="relative border-2 border-dashed rounded-3xl py-20 px-6 transition-all duration-300 bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 cursor-pointer group border-[#2C6D90]/90 hover:border-[#2C6D90]/50">
                         <input
                           type="file"
                           id="product-images"
@@ -786,7 +791,7 @@ export default function AddProduct() {
                           <div key={index} className="relative group">
                             <div className={`relative overflow-hidden rounded-3xl border-2 shadow-2xl transition-all duration-300 ${index === 0
                               ? 'border-yellow-500/50 shadow-yellow-500/20 ring-2 ring-yellow-500/30'
-                              : 'border-[#2C6D90]/30 shadow-[#2C6D90]/10'
+                              : 'border-[#2C6D90]/90 shadow-[#2C6D90]/10'
                               }`}>
                               <img
                                 src={preview}
@@ -816,7 +821,7 @@ export default function AddProduct() {
                           </div>
                         ))}
                         {imagePreviews.length < 5 && (
-                          <div className="border-2 border-dashed rounded-3xl h-40 flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 border-[#2C6D90]/30 hover:border-[#2C6D90]/50">
+                          <div className="border-2 border-dashed rounded-3xl h-40 flex items-center justify-center cursor-pointer transition-all duration-300 bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 border-[#2C6D90]/90 hover:border-[#2C6D90]/50">
                             <input
                               type="file"
                               id="add-more-images"
@@ -861,7 +866,7 @@ export default function AddProduct() {
                       </>
                     ) : (
                       <>
-                        <Save className="h-6 w-6" />
+                        <Save className="h-6 w-6 text-white" />
                         إضافة المنتج الجديد
                       </>
                     )}

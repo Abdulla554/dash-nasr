@@ -23,6 +23,7 @@ import ExchangeRateModal from "../components/ExchangeRateModal";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Home } from "lucide-react";
+import { useEffect } from "react";
 export default function LuxuryDashboard() {
   // إزالة نظام الثيم - استخدام ألوان ثابتة
   const {
@@ -252,7 +253,15 @@ export default function LuxuryDashboard() {
       </motion.button>
     </div>
   );
-
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  }, []);
+  
+  
   return (
     <div className="min-h-screen bg-[#0A0A0A]" dir="rtl">
       {/* Header */}

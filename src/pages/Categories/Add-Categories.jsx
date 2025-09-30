@@ -184,7 +184,7 @@ export default function LuxuryAddCategoryPage() {
               {/* Basic Information Section */}
               <div className="space-y-8">
                 <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
-                  <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
+                  <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/90">
                     <Save className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -206,7 +206,7 @@ export default function LuxuryAddCategoryPage() {
                     onChange={handleInputChange}
                     className={`w-full px-6 py-5 bg-[#F9F3EF]/5 border rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none transition-all duration-300 text-xl ${errors.name
                       ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                      : 'border-[#2C6D90]/30 focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20'
+                      : 'border-[#2C6D90]/90 focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20'
                       }`}
                     placeholder="مثال: أجهزة الكمبيوتر المكتبية"
                   />
@@ -228,7 +228,7 @@ export default function LuxuryAddCategoryPage() {
                     value={formData.description}
                     onChange={handleInputChange}
                     rows={4}
-                    className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl resize-none"
+                    className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/90 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl resize-none"
                     placeholder="أدخل وصفاً مختصراً للفئة..."
                   />
                 </div>
@@ -237,7 +237,7 @@ export default function LuxuryAddCategoryPage() {
               {/* Image Upload Section */}
               <div className="space-y-8">
                 <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
-                  <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
+                  <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/90">
                     <Image className="h-6 w-6 text-white" />
                   </div>
                   <div>
@@ -250,7 +250,7 @@ export default function LuxuryAddCategoryPage() {
                   {!imagePreview ? (
                     <div className={`relative border-2 border-dashed rounded-3xl py-20 px-6 transition-all duration-300 bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 cursor-pointer group ${errors.image
                       ? 'border-red-500/50'
-                      : 'border-[#2C6D90]/30 hover:border-[#2C6D90]/50'
+                      : 'border-[#2C6D90]/90 hover:border-[#2C6D90]/50'
                       }`}>
                       <input
                         type="file"
@@ -289,7 +289,7 @@ export default function LuxuryAddCategoryPage() {
                     </div>
                   ) : (
                     <div className="relative group">
-                      <div className="relative overflow-hidden rounded-3xl border-2 border-[#2C6D90]/30 shadow-2xl shadow-[#2C6D90]/10">
+                      <div className="relative overflow-hidden rounded-3xl border-2 border-[#2C6D90]/90 shadow-2xl shadow-[#2C6D90]/10">
                         <img
                           src={imagePreview}
                           alt="معاينة صورة الفئة"

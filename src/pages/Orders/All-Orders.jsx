@@ -200,7 +200,7 @@ export default function AllOrdersPage() {
     };
 
     return (
-        <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-nsr-dark' : 'bg-gray-50'}`} dir="rtl">
+        <div className="min-h-screen bg-[#0A0A0A]" dir="rtl">
             {/* Exchange Rate Modal */}
             <ExchangeRateModal
                 isOpen={showExchangeModal}
@@ -243,48 +243,21 @@ export default function AllOrdersPage() {
             )}
 
             {/* Header */}
-            <div className={`relative backdrop-blur-sm border-b transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/20' : 'bg-white/80 border-gray-200 shadow-sm'}`}>
-                <div className="absolute inset-0 bg-gradient-to-r from-nsr-accent/10 to-transparent"></div>
-                <div className="relative px-8 py-8">
+            <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
+                <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-6">
-                            <div className="p-4 bg-gradient-to-r from-nsr-accent to-nsr-primary rounded-2xl">
-                                <ShoppingCart className="w-8 h-8 text-white" />
+                            <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
+                                <ShoppingCart className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                             </div>
                             <div>
-                                <h1 className={`text-4xl font-bold transition-colors duration-300 ${isDark ? 'text-nsr-primary' : 'text-black'}`}>
-                                    إدارة الطلبات
-                                </h1>
-                                <p className={`mt-2 text-lg transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-gray-800'}`}>إدارة شاملة لجميع طلبات العملاء</p>
+                                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">إدارة الطلبات</h1>
+                                <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">إدارة شاملة لجميع طلبات العملاء</p>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-4">
-                            {/* Theme Toggle */}
-                            <_motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={toggleTheme}
-                                className={`group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-nsr-light-100 border-nsr-primary/20 hover:border-nsr-accent/30 shadow-sm'}`}
-                            >
-                                {isDark ? (
-                                    <Sun className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`} />
-                                ) : (
-                                    <Moon className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`} />
-                                )}
-                            </_motion.button>
-
-                            {/* Currency Toggle */}
-                            <_motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={toggleCurrency}
-                                className={`group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 flex items-center gap-2 ${isDark ? 'bg-nsr-primary/10 border-nsr-primary/20 hover:border-nsr-accent/30' : 'bg-nsr-light-100 border-nsr-primary/20 hover:border-nsr-accent/30 shadow-sm'}`}
-                            >
-                                <DollarSign className={`h-6 w-6 transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`} />
-                                <span className={`font-semibold transition-colors ${isDark ? 'text-nsr-accent group-hover:text-nsr-light' : 'text-nsr-dark group-hover:text-nsr-dark-800'}`}>{getCurrencyCode()}</span>
-                            </_motion.button>
-                        </div>
+                      
                     </div>
                 </div>
             </div>
@@ -322,18 +295,18 @@ export default function AllOrdersPage() {
 
             {/* Filters and Search */}
             <div className="px-8 pb-6">
-                <div className={`backdrop-blur-sm border rounded-2xl p-6 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30 border-nsr-primary/20' : 'bg-white/70 border-gray-200 shadow-sm'}`}>
+                <div className="backdrop-blur-sm border rounded-2xl p-6 bg-[#F9F3EF]/5 border-[#2C6D90]/20">
                     <div className="flex flex-col lg:flex-row gap-6">
                         {/* Search Bar */}
                         <div className="flex-1">
                             <div className="relative">
-                                <Search className={`absolute right-4 top-1/2 transform -translate-y-1/2 transition-colors duration-300 ${isDark ? 'text-nsr-neutral' : 'text-gray-700'}`} size={20} />
+                                <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#F9F3EF]/70" size={20} />
                                 <input
                                     type="text"
                                     placeholder="البحث في الطلبات..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className={`w-full pr-12 pl-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary placeholder-nsr-neutral focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black placeholder-gray-500 focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                                    className="w-full pr-12 pl-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] placeholder-[#F9F3EF]/50 focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
                                 />
                             </div>
                         </div>
@@ -344,7 +317,7 @@ export default function AllOrdersPage() {
                             <select
                                 value={filters.status}
                                 onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                                className={`px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                                className="px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
                             >
                                 <option value="all">جميع الحالات</option>
                                 <option value="PENDING">في الانتظار</option>
@@ -360,7 +333,7 @@ export default function AllOrdersPage() {
                             <select
                                 value={filters.sortBy}
                                 onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
-                                className={`px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 ${isDark ? 'bg-nsr-secondary/50 border-nsr-primary/30 text-nsr-primary focus:border-nsr-accent focus:ring-nsr-accent/20' : 'bg-white border-gray-300 text-black focus:border-nsr-accent focus:ring-nsr-accent/20 shadow-sm'}`}
+                                className="px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
                             >
                                 <option value="newest">الأحدث</option>
                                 <option value="oldest">الأقدم</option>
@@ -557,7 +530,7 @@ export default function AllOrdersPage() {
                                             {/* الإجراءات */}
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center gap-2">
-                                                    <Link to={`/orders/${order.id}`}>
+                                                    {/* <Link to={`/orders/${order.id}`}>
                                                         <_motion.button
                                                             whileHover={{ scale: 1.1 }}
                                                             whileTap={{ scale: 0.9 }}
@@ -573,7 +546,7 @@ export default function AllOrdersPage() {
                                                         className="group p-2 bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-500/30 transition-all duration-300"
                                                     >
                                                         <Edit size={16} className="group-hover:scale-110 transition-transform" />
-                                                    </_motion.button>
+                                                    </_motion.button> */}
 
                                                     <_motion.button
                                                         whileHover={{ scale: 1.1 }}

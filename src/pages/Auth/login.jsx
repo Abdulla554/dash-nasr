@@ -32,14 +32,14 @@ export default function Login() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
-      className="min-h-screen w-full flex items-center justify-center bg-nsr-dark p-4"
+      className="min-h-screen w-full flex items-center justify-center bg-[#0A0A0A] p-4"
     >
       <div className="relative w-full max-w-7xl">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex w-full items-center bg-[#1B3C73]/10 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden border border-nsr-primary/60"
+          className="flex w-full items-center bg-[#F9F3EF]/5 backdrop-blur-xl shadow-2xl rounded-3xl overflow-hidden border border-[#2C6D90]/30"
         >
           {/* Left Side - Image */}
           <div className="hidden lg:flex lg:w-1/2 rounded-3xl ml-10 overflow-hidden flex-col items-center justify-center relative">
@@ -103,7 +103,7 @@ export default function Login() {
                     repeat: Infinity,
                     repeatType: "reverse"
                   }}
-                  className="p-3 bg-nsr-primary/10 rounded-xl backdrop-blur-xl border border-nsr-primary/20"
+                  className="p-3 bg-[#2C6D90]/20 rounded-xl backdrop-blur-xl border border-[#2C6D90]/30"
                 >
                   <motion.div
                     animate={{ 
@@ -115,7 +115,7 @@ export default function Login() {
                       ease: "linear"
                     }}
                   >
-                    <Sparkles className="h-6 w-6 text-nsr-primary" />
+                    <Sparkles className="h-6 w-6 text-[#2C6D90]" />
                   </motion.div>
                 </motion.div>
                 <div>
@@ -123,7 +123,7 @@ export default function Login() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.8 }}
-                    className="text-3xl font-bold text-nsr-primary"
+                    className="text-3xl font-bold text-[#F9F3EF]"
                   >
                     Welcome to <span className="text-nsr-accent">NSR-PC</span>
                   </motion.h1>
@@ -131,7 +131,7 @@ export default function Login() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="text-nsr-neutral mt-2"
+                    className="text-[#F9F3EF]/70 mt-2"
                   >
                     Sign in to your admin dashboard
                   </motion.p>
@@ -163,7 +163,7 @@ export default function Login() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
                 >
-                  <label htmlFor="username" className="block text-sm font-medium text-nsr-primary mb-2">
+                  <label htmlFor="username" className="block text-sm font-medium text-[#F9F3EF] mb-2">
                     Username
                   </label>
                   <motion.input
@@ -172,7 +172,7 @@ export default function Login() {
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="input-nsr w-full px-4 py-3 rounded-xl border border-nsr-primary/20 focus:ring-2 focus:ring-nsr-accent focus:border-transparent transition-all bg-nsr-secondary/50 backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-[#2C6D90]/30 focus:ring-2 focus:ring-[#2C6D90] focus:border-transparent transition-all bg-[#F9F3EF]/10 backdrop-blur-sm text-[#F9F3EF] placeholder-[#F9F3EF]/50"
                     placeholder="Enter your username"
                   />
                 </motion.div>
@@ -182,7 +182,7 @@ export default function Login() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
                 >
-                  <label htmlFor="password" className="block text-sm font-medium text-nsr-primary mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-[#F9F3EF] mb-2">
                     Password
                   </label>
                   <motion.input
@@ -191,7 +191,7 @@ export default function Login() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="input-nsr w-full px-4 py-3 rounded-xl border border-nsr-primary/20 focus:ring-2 focus:ring-nsr-accent focus:border-transparent transition-all bg-nsr-secondary/50 backdrop-blur-sm"
+                    className="w-full px-4 py-3 rounded-xl border border-[#2C6D90]/30 focus:ring-2 focus:ring-[#2C6D90] focus:border-transparent transition-all bg-[#F9F3EF]/10 backdrop-blur-sm text-[#F9F3EF] placeholder-[#F9F3EF]/50"
                     placeholder="Enter your password"
                   />
                 </motion.div>
@@ -208,7 +208,7 @@ export default function Login() {
                     damping: 25
                   }}
                   type="submit"
-                  className="btn-primary w-full text-white py-3 rounded-xl hover:shadow-lg transition-all duration-300 font-medium mt-8"
+                  className="w-full bg-[#2C6D90] hover:bg-[#2C6D90]/90 text-white py-3 rounded-xl hover:shadow-lg transition-all duration-300 font-medium mt-8"
                 >
                   Sign In
                 </motion.button>

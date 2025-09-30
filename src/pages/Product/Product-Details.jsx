@@ -187,7 +187,7 @@ export default function ProductDetails() {
     };
 
     return (
-        <div className={`min-h-screen transition-colors duration-300 ${isDark ? 'bg-gradient-nsr-dark' : 'bg-gradient-nsr-light'}`}>
+        <div className="min-h-screen bg-[#0A0A0A]" dir="rtl">
             <ConfirmationModal
                 isOpen={deleteModalOpen}
                 onClose={() => setDeleteModalOpen(false)}
@@ -204,12 +204,12 @@ export default function ProductDetails() {
             />
 
             {/* Header */}
-            <div className="relative backdrop-blur-sm border-b bg-[#F9F3EF]/5 border-[#749BC2]/20">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
+            <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
                 <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                            <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl">
+                            <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
                                 <Package className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                             </div>
                             <div>
@@ -222,7 +222,7 @@ export default function ProductDetails() {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => window.location.href = '/products'}
-                                className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
+                                className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-[#2C6D90] hover:bg-[#2C6D90]/90 text-[#F9F3EF] shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
                             >
                                 <span className="font-semibold text-sm sm:text-base lg:text-lg">العودة للمنتجات</span>
                             </motion.button>
@@ -231,7 +231,7 @@ export default function ProductDetails() {
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={toggleCurrency}
-                                    className="p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 flex items-center gap-2 text-nsr-light hover:text-nsr-accent"
+                                    className="p-2 rounded-xl transition-all duration-300 flex items-center gap-2 bg-[#2C6D90]/20 border border-[#2C6D90]/30 text-[#F9F3EF] hover:bg-[#2C6D90]/30"
                                 >
                                     <DollarSign size={20} />
                                     <span className="text-sm font-semibold">{getCurrencyCode()}</span>
@@ -241,7 +241,7 @@ export default function ProductDetails() {
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={handleShare}
-                                    className="p-2 bg-nsr-primary/10 rounded-xl hover:bg-nsr-accent/10 transition-all duration-300 text-nsr-light hover:text-nsr-accent"
+                                    className="p-2 rounded-xl transition-all duration-300 bg-[#F9F3EF]/5 border border-[#2C6D90]/20 text-[#F9F3EF] hover:bg-[#F9F3EF]/10"
                                 >
                                     <Share2 size={20} />
                                 </motion.button>
@@ -257,7 +257,7 @@ export default function ProductDetails() {
                     {/* Images */}
                     <div className="space-y-6">
                         {/* Main Image */}
-                        <div className={`relative aspect-square rounded-3xl overflow-hidden transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/20' : 'bg-nsr-light-100/50'}`}>
+                        <div className="relative aspect-square rounded-3xl overflow-hidden bg-[#F9F3EF]/5 border border-[#2C6D90]/20">
                             <img
                                 src={product.images[selectedImage]}
                                 alt={product.title}
@@ -310,8 +310,8 @@ export default function ProductDetails() {
                                         key={index}
                                         onClick={() => setSelectedImage(index)}
                                         className={`aspect-square rounded-2xl overflow-hidden border-2 transition-all duration-300 ${selectedImage === index
-                                            ? 'border-nsr-accent'
-                                            : 'border-nsr-primary/30 hover:border-nsr-primary/60'
+                                            ? 'border-[#2C6D90]'
+                                            : 'border-[#2C6D90]/30 hover:border-[#2C6D90]/60'
                                             }`}
                                     >
                                         <img
@@ -340,22 +340,22 @@ export default function ProductDetails() {
                         </div>
 
                         {/* Title */}
-                        <h1 className={`text-4xl font-bold leading-tight transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>
+                        <h1 className="text-4xl font-bold leading-tight text-[#F9F3EF]">
                             {product.title}
                         </h1>
 
                         {/* Description */}
-                        <p className={`text-lg leading-relaxed transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
+                        <p className="text-lg leading-relaxed text-[#F9F3EF]/70">
                             {product.description}
                         </p>
 
                         {/* Price */}
                         <div className="flex items-center gap-4">
-                            <span className="text-4xl font-bold text-nsr-accent">
+                            <span className="text-4xl font-bold text-[#2C6D90]">
                                 {getCurrencySymbol()}{convertCurrency(product.price).toLocaleString()}
                             </span>
                             {product.originalPrice && (
-                                <span className={`text-2xl line-through transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
+                                <span className="text-2xl line-through text-[#F9F3EF]/70">
                                     {getCurrencySymbol()}{convertCurrency(product.originalPrice).toLocaleString()}
                                 </span>
                             )}
@@ -364,7 +364,7 @@ export default function ProductDetails() {
                         {/* Stock Status */}
                         <div className="flex items-center gap-3">
                             <div className={`w-4 h-4 rounded-full ${product.stock > 10 ? 'bg-green-500' : product.stock > 0 ? 'bg-yellow-500' : 'bg-red-500'}`}></div>
-                            <span className={`text-lg transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>
+                            <span className="text-lg text-[#F9F3EF]">
                                 {product.stock > 0 ? `${product.stock} متوفر في المخزن` : 'غير متوفر حالياً'}
                             </span>
                         </div>
@@ -372,31 +372,31 @@ export default function ProductDetails() {
                         {/* Admin Actions */}
                         <div className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div className={`rounded-2xl p-4 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
+                                <div className="rounded-2xl p-4 bg-[#F9F3EF]/5 border border-[#2C6D90]/20">
                                     <div className="flex items-center gap-3 mb-2">
-                                        <Package size={20} className="text-nsr-accent" />
-                                        <h4 className={`text-sm font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>المخزون الحالي</h4>
+                                        <Package size={20} className="text-[#2C6D90]" />
+                                        <h4 className="text-sm font-semibold text-[#F9F3EF]">المخزون الحالي</h4>
                                     </div>
-                                    <p className="text-2xl font-bold text-nsr-accent">{product.stock}</p>
-                                    <p className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>وحدة متوفرة</p>
+                                    <p className="text-2xl font-bold text-[#2C6D90]">{product.stock}</p>
+                                    <p className="text-xs text-[#F9F3EF]/70">وحدة متوفرة</p>
                                 </div>
 
-                                <div className={`rounded-2xl p-4 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
+                                <div className="rounded-2xl p-4 bg-[#F9F3EF]/5 border border-[#2C6D90]/20">
                                     <div className="flex items-center gap-3 mb-2">
-                                        <Calendar size={20} className="text-nsr-accent" />
-                                        <h4 className={`text-sm font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>تاريخ الإضافة</h4>
+                                        <Calendar size={20} className="text-[#2C6D90]" />
+                                        <h4 className="text-sm font-semibold text-[#F9F3EF]">تاريخ الإضافة</h4>
                                     </div>
-                                    <p className={`text-sm font-bold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>15 يناير 2024</p>
-                                    <p className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>منذ 3 أيام</p>
+                                    <p className="text-sm font-bold text-[#F9F3EF]">15 يناير 2024</p>
+                                    <p className="text-xs text-[#F9F3EF]/70">منذ 3 أيام</p>
                                 </div>
 
-                                <div className={`rounded-2xl p-4 transition-colors duration-300 ${isDark ? 'bg-nsr-secondary/30' : 'bg-nsr-light-100/50'}`}>
+                                <div className="rounded-2xl p-4 bg-[#F9F3EF]/5 border border-[#2C6D90]/20">
                                     <div className="flex items-center gap-3 mb-2">
-                                        <Tag size={20} className="text-nsr-accent" />
-                                        <h4 className={`text-sm font-semibold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>رقم المنتج</h4>
+                                        <Tag size={20} className="text-[#2C6D90]" />
+                                        <h4 className="text-sm font-semibold text-[#F9F3EF]">رقم المنتج</h4>
                                     </div>
-                                    <p className={`text-sm font-bold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>#{product.id.toString().padStart(6, '0')}</p>
-                                    <p className={`text-xs transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>معرف فريد</p>
+                                    <p className="text-sm font-bold text-[#F9F3EF]">#{product.id.toString().padStart(6, '0')}</p>
+                                    <p className="text-xs text-[#F9F3EF]/70">معرف فريد</p>
                                 </div>
                             </div>
 
@@ -424,12 +424,12 @@ export default function ProductDetails() {
 
                         {/* Features */}
                         <div className="space-y-4">
-                            <h3 className={`text-2xl font-bold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>المميزات الرئيسية</h3>
+                            <h3 className="text-2xl font-bold text-[#F9F3EF]">المميزات الرئيسية</h3>
                             <div className="grid grid-cols-1 gap-3">
                                 {product.features.map((feature, index) => (
                                     <div key={index} className="flex items-center gap-3">
                                         <Check size={20} className="text-green-500 flex-shrink-0" />
-                                        <span className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>{feature}</span>
+                                        <span className="text-[#F9F3EF]/70">{feature}</span>
                                     </div>
                                 ))}
                             </div>
@@ -437,10 +437,10 @@ export default function ProductDetails() {
 
                         {/* Tags */}
                         <div className="space-y-4">
-                            <h3 className={`text-2xl font-bold transition-colors duration-300 ${isDark ? 'text-nsr-light' : 'text-nsr-dark'}`}>العلامات</h3>
+                            <h3 className="text-2xl font-bold text-[#F9F3EF]">العلامات</h3>
                             <div className="flex flex-wrap gap-3">
                                 {product.tags.map((tag, index) => (
-                                    <span key={index} className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-300 ${isDark ? 'bg-nsr-primary/10 text-nsr-light' : 'bg-nsr-light-200 text-nsr-dark'}`}>
+                                    <span key={index} className="px-4 py-2 rounded-full text-sm font-medium bg-[#F9F3EF]/5 border border-[#2C6D90]/20 text-[#F9F3EF]">
                                         {tag}
                                     </span>
                                 ))}

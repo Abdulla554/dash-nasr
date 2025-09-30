@@ -169,15 +169,15 @@ export default function AddBanner() {
   };
 
   return (
-    <div className="min-h-screen pb-10 bg-nsr-dark">
+    <div className="min-h-screen pb-10 bg-[#0A0A0A]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="relative backdrop-blur-sm border-b bg-[#F9F3EF]/5 border-[#749BC2]/20">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
+        <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
           <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl">
+                <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
                   <Upload className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                 </div>
                 <div>
@@ -190,7 +190,7 @@ export default function AddBanner() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => window.location.href = '/banner'}
-                  className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
+                  className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-[#2C6D90] hover:bg-[#2C6D90]/90 text-[#F9F3EF] shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
                 >
                   <span className="font-semibold text-sm sm:text-base lg:text-lg">العودة للبانرات</span>
                 </motion.button>
@@ -200,38 +200,38 @@ export default function AddBanner() {
         </div>
 
         {/* Enhanced Form */}
-        <div className="card-nsr bg-nsr-secondary/80 backdrop-blur-lg rounded-2xl shadow-2xl p-6 sm:p-8 mt-6 sm:mt-8 mb-10 sm:mb-14 border border-nsr-accent/20">
+        <div className="rounded-2xl shadow-2xl p-6 sm:p-8 mt-6 sm:mt-8 mb-10 sm:mb-14 backdrop-blur-lg bg-[#F9F3EF]/5 border border-[#2C6D90]/20">
           <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
             {/* Active Status */}
-            <div className="flex items-center justify-center space-x-4 p-4 bg-nsr-secondary/20 rounded-xl border border-nsr-accent/20">
+            <div className="flex items-center justify-center space-x-4 p-4 bg-[#F9F3EF]/5 rounded-xl border border-[#2C6D90]/20">
               <input
                 type="checkbox"
                 id="isActive"
                 checked={formData.isActive}
                 onChange={(e) => setFormData(prev => ({ ...prev, isActive: e.target.checked }))}
-                className="w-5 h-5 text-nsr-primary bg-nsr-secondary border-nsr-accent rounded focus:ring-nsr-primary focus:ring-2 transition-all duration-300"
+                className="w-5 h-5 text-[#2C6D90] bg-transparent border-[#2C6D90]/40 rounded focus:ring-[#2C6D90] focus:ring-2 transition-all duration-300"
               />
-              <label htmlFor="isActive" className="text-sm font-semibold text-nsr-primary cursor-pointer">
+              <label htmlFor="isActive" className="text-sm font-semibold text-[#F9F3EF] cursor-pointer">
                 Active Banner
               </label>
             </div>
 
             {/* Image Upload Section */}
-            <div className="bg-nsr-secondary/30 rounded-xl p-4 sm:p-6 border border-nsr-accent/10">
-              <h2 className="text-xl sm:text-2xl font-semibold bg-gradient-to-r from-nsr-primary to-nsr-accent bg-clip-text text-transparent mb-6 sm:mb-8 flex items-center gap-3">
-                <div className="w-1 h-6 sm:h-8 bg-gradient-to-b from-nsr-primary to-nsr-accent rounded-full"></div>
+            <div className="bg-[#F9F3EF]/5 rounded-xl p-4 sm:p-6 border border-[#2C6D90]/20">
+              <h2 className="text-xl sm:text-2xl font-semibold text-[#F9F3EF] mb-6 sm:mb-8 flex items-center gap-3">
+                <div className="w-1 h-6 sm:h-8 bg-[#2C6D90] rounded-full"></div>
                 Banner Image
               </h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
                 {/* Upload Area */}
                 <div>
-                  <label className="flex text-sm font-semibold text-nsr-primary mb-3 sm:mb-4 items-center gap-2">
-                    <div className="w-2 h-2 bg-nsr-accent rounded-full"></div>
+                  <label className="flex text-sm font-semibold text-[#F9F3EF] mb-3 sm:mb-4 items-center gap-2">
+                    <div className="w-2 h-2 bg-[#2C6D90] rounded-full"></div>
                     Upload Image
                   </label>
                   {!imagePreview ? (
-                    <div className="relative border-2 border-dashed rounded-xl sm:rounded-2xl py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 border-nsr-accent/40 hover:border-nsr-primary transition-all duration-300 flex items-center justify-center cursor-pointer bg-nsr-secondary/30 hover:bg-nsr-secondary/50 group">
+                    <div className="relative border-2 border-dashed rounded-xl sm:rounded-2xl py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 border-[#2C6D90]/30 hover:border-[#2C6D90]/50 transition-all duration-300 flex items-center justify-center cursor-pointer bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 group">
                       <input
                         type="file"
                         id="Banner-image"
@@ -241,19 +241,19 @@ export default function AddBanner() {
                       />
                       <label htmlFor="Banner-image" className="cursor-pointer">
                         <div className="text-center">
-                          <Upload className="mx-auto h-12 w-12 sm:h-16 sm:w-16 text-nsr-accent group-hover:text-nsr-primary transition-colors duration-300" />
-                          <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row text-sm text-nsr-primary justify-center items-center gap-1">
-                            <span className="text-nsr-accent hover:text-nsr-primary font-semibold">
+                          <Upload className="mx-auto h-12 w-12 sm:h-16 sm:w-16 text-[#2C6D90] transition-colors duration-300" />
+                          <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row text-sm text-[#F9F3EF] justify-center items-center gap-1">
+                            <span className="text-[#2C6D90] font-semibold">
                               Upload a file
                             </span>
-                            <p className="text-nsr-primary/70">or drag and drop</p>
+                            <p className="text-[#F9F3EF]/70">or drag and drop</p>
                           </div>
-                          <p className="text-xs text-nsr-primary/60 mt-2 sm:mt-3">
+                          <p className="text-xs text-[#F9F3EF]/60 mt-2 sm:mt-3">
                             PNG, JPG, GIF up to 5MB
                           </p>
                           {isCompressing && (
-                            <div className="mt-3 sm:mt-4 flex items-center justify-center gap-2 text-nsr-accent">
-                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-nsr-accent"></div>
+                            <div className="mt-3 sm:mt-4 flex items-center justify-center gap-2 text-[#2C6D90]">
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#2C6D90]"></div>
                               <span className="text-sm">Compressing...</span>
                             </div>
                           )}
@@ -265,7 +265,7 @@ export default function AddBanner() {
                       <img
                         src={imagePreview}
                         alt="Banner preview"
-                        className="w-full h-48 sm:h-56 lg:h-64 object-cover rounded-xl sm:rounded-2xl border-2 border-nsr-accent/40 hover:border-nsr-primary transition-all duration-300"
+                        className="w-full h-48 sm:h-56 lg:h-64 object-cover rounded-xl sm:rounded-2xl border-2 border-[#2C6D90]/30 hover:border-[#2C6D90]/50 transition-all duration-300"
                       />
                       <button
                         type="button"
@@ -280,25 +280,25 @@ export default function AddBanner() {
 
                 {/* Banner Preview */}
                 <div>
-                  <label className="flex text-sm font-semibold text-nsr-primary mb-3 sm:mb-4 items-center gap-2">
-                    <div className="w-2 h-2 bg-nsr-accent rounded-full"></div>
+                  <label className="flex text-sm font-semibold text-[#F9F3EF] mb-3 sm:mb-4 items-center gap-2">
+                    <div className="w-2 h-2 bg-[#2C6D90] rounded-full"></div>
                     Banner Preview
                   </label>
-                  <div className="bg-nsr-secondary/20 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-nsr-accent/20 min-h-[150px] sm:min-h-[200px] flex items-center justify-center">
+                  <div className="bg-[#F9F3EF]/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#2C6D90]/20 min-h-[150px] sm:min-h-[200px] flex items-center justify-center">
                     {imagePreview ? (
                       <div className="text-center">
-                        <div className="w-full h-24 sm:h-32 bg-nsr-secondary/50 rounded-lg sm:rounded-xl border border-nsr-accent/30 flex items-center justify-center mb-3 sm:mb-4">
+                        <div className="w-full h-24 sm:h-32 bg-[#F9F3EF]/10 rounded-lg sm:rounded-xl border border-[#2C6D90]/30 flex items-center justify-center mb-3 sm:mb-4">
                           <img
                             src={imagePreview}
                             alt="Preview"
                             className="max-w-full max-h-full object-contain rounded-lg"
                           />
                         </div>
-                        <p className="text-xs sm:text-sm text-nsr-primary/70">Preview your banner</p>
+                        <p className="text-xs sm:text-sm text-[#F9F3EF]/70">Preview your banner</p>
                       </div>
                     ) : (
-                      <div className="text-center text-nsr-primary/50">
-                        <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 bg-nsr-secondary/50 rounded-lg sm:rounded-xl flex items-center justify-center">
+                      <div className="text-center text-[#F9F3EF]/60">
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 bg-[#F9F3EF]/10 rounded-lg sm:rounded-xl flex items-center justify-center">
                           <Upload className="h-6 w-6 sm:h-8 sm:w-8" />
                         </div>
                         <p className="text-xs sm:text-sm">Upload an image to see preview</p>

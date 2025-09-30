@@ -145,15 +145,15 @@ export default function AddBrand() {
   };
 
   return (
-    <div className="min-h-screen pb-10 bg-nsr-dark">
+    <div className="min-h-screen pb-10 bg-[#0A0A0A]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="relative backdrop-blur-sm border-b bg-[#F9F3EF]/5 border-[#749BC2]/20">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
+        <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
           <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl">
+                <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
                   <Upload className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                 </div>
                 <div>
@@ -166,7 +166,7 @@ export default function AddBrand() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => window.location.href = '/brands'}
-                  className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
+                  className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-[#2C6D90] hover:bg-[#2C6D90]/90 text-[#F9F3EF] shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
                 >
                   <span className="font-semibold text-sm sm:text-base lg:text-lg">العودة للماركات</span>
                 </motion.button>
@@ -176,7 +176,7 @@ export default function AddBrand() {
         </div>
 
         {/* Form */}
-        <div className="card-nsr bg-nsr-secondary/80 backdrop-blur-lg rounded-xl shadow-lg p-8 mt-5 mb-14 border border-nsr-accent/20">
+        <div className="rounded-xl shadow-lg p-8 mt-5 mb-14 backdrop-blur-lg bg-[#F9F3EF]/5 border border-[#2C6D90]/20">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Information Section */}
             <div>

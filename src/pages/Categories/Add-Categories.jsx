@@ -144,14 +144,14 @@ export default function LuxuryAddCategoryPage() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-nsr-dark" dir="rtl">
+    <div className="min-h-screen bg-[#0A0A0A]" dir="rtl">
       {/* Header */}
-      <div className="relative backdrop-blur-sm border-b bg-[#F9F3EF]/5 border-[#749BC2]/20">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
+      <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
         <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl">
+              <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
                 <Plus className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
@@ -164,7 +164,7 @@ export default function LuxuryAddCategoryPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => window.location.href = '/categories'}
-                className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
+                className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-[#2C6D90] hover:bg-[#2C6D90]/90 text-[#F9F3EF] shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
               >
                 <span className="font-semibold text-sm sm:text-base lg:text-lg">العودة للفئات</span>
               </motion.button>
@@ -176,26 +176,26 @@ export default function LuxuryAddCategoryPage() {
       {/* Main Form */}
       <div className="px-8 py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-nsr-secondary/30 backdrop-blur-sm border border-nsr-primary/20 rounded-3xl overflow-hidden shadow-2xl">
+          <div className="bg-[#F9F3EF]/5 backdrop-blur-sm border border-[#2C6D90]/20 rounded-3xl overflow-hidden shadow-2xl">
 
             {/* Form Container */}
             <div className="p-8 space-y-10">
 
               {/* Basic Information Section */}
               <div className="space-y-8">
-                <div className="flex items-center gap-4 pb-4 border-b border-nsr-primary/20">
-                  <div className="p-3 bg-gradient-nsr-elegant/20 rounded-2xl border border-nsr-accent/30">
-                    <Save className="h-6 w-6 text-nsr-accent" />
+                <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
+                  <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
+                    <Save className="h-6 w-6 text-[#2C6D90]" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-nsr-light">اسم الفئة</h2>
-                    <p className="text-nsr-light-200 mt-1">أدخل اسم الفئة الجديدة</p>
+                    <h2 className="text-2xl font-bold text-[#F9F3EF]">اسم الفئة</h2>
+                    <p className="text-[#F9F3EF]/70 mt-1">أدخل اسم الفئة الجديدة</p>
                   </div>
                 </div>
 
                 {/* Category Name */}
                 <div className="space-y-4">
-                  <label className="text-lg font-semibold text-nsr-light-200 flex items-center gap-2">
+                  <label className="text-lg font-semibold text-[#F9F3EF]/70 flex items-center gap-2">
                     اسم الفئة
                     <Star className="w-4 h-4 text-red-400" />
                   </label>
@@ -204,9 +204,9 @@ export default function LuxuryAddCategoryPage() {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className={`w-full px-6 py-5 bg-nsr-primary/20 border rounded-2xl text-nsr-light placeholder-nsr-light-200 focus:outline-none transition-all duration-300 text-xl ${errors.name
+                    className={`w-full px-6 py-5 bg-[#F9F3EF]/5 border rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none transition-all duration-300 text-xl ${errors.name
                       ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-                      : 'border-nsr-primary/30 focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20'
+                      : 'border-[#2C6D90]/30 focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20'
                       }`}
                     placeholder="مثال: أجهزة الكمبيوتر المكتبية"
                   />
@@ -220,7 +220,7 @@ export default function LuxuryAddCategoryPage() {
 
                 {/* Category Description */}
                 <div className="space-y-4">
-                  <label className="text-lg font-semibold text-nsr-light-200 flex items-center gap-2">
+                  <label className="text-lg font-semibold text-[#F9F3EF]/70 flex items-center gap-2">
                     وصف الفئة (اختياري)
                   </label>
                   <textarea
@@ -228,7 +228,7 @@ export default function LuxuryAddCategoryPage() {
                     value={formData.description}
                     onChange={handleInputChange}
                     rows={4}
-                    className="w-full px-6 py-5 bg-nsr-primary/20 border border-nsr-primary/30 rounded-2xl text-nsr-light placeholder-nsr-light-200 focus:outline-none focus:border-nsr-accent focus:ring-2 focus:ring-nsr-accent/20 transition-all duration-300 text-xl resize-none"
+                    className="w-full px-6 py-5 bg-[#F9F3EF]/5 border border-[#2C6D90]/30 rounded-2xl text-[#F9F3EF] placeholder-[#F9F3EF]/40 focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-xl resize-none"
                     placeholder="أدخل وصفاً مختصراً للفئة..."
                   />
                 </div>
@@ -236,21 +236,21 @@ export default function LuxuryAddCategoryPage() {
 
               {/* Image Upload Section */}
               <div className="space-y-8">
-                <div className="flex items-center gap-4 pb-4 border-b border-white/10">
-                  <div className="p-3 bg-gradient-to-r from-pink-500/20 to-rose-500/20 rounded-2xl border border-pink-500/30">
-                    <Image className="h-6 w-6 text-pink-400" />
+                <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
+                  <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
+                    <Image className="h-6 w-6 text-[#2C6D90]" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-white">صورة الفئة</h2>
-                    <p className="text-slate-400 mt-1">ارفع صورة جذابة وعالية الجودة</p>
+                    <h2 className="text-2xl font-bold text-[#F9F3EF]">صورة الفئة</h2>
+                    <p className="text-[#F9F3EF]/70 mt-1">ارفع صورة جذابة وعالية الجودة</p>
                   </div>
                 </div>
 
                 <div>
                   {!imagePreview ? (
-                    <div className={`relative border-2 border-dashed rounded-3xl py-20 px-6 transition-all duration-300 bg-slate-800/20 hover:bg-slate-800/40 cursor-pointer group ${errors.image
+                    <div className={`relative border-2 border-dashed rounded-3xl py-20 px-6 transition-all duration-300 bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 cursor-pointer group ${errors.image
                       ? 'border-red-500/50'
-                      : 'border-slate-700/50 hover:border-indigo-500/50'
+                      : 'border-[#2C6D90]/30 hover:border-[#2C6D90]/50'
                       }`}>
                       <input
                         type="file"
@@ -261,17 +261,17 @@ export default function LuxuryAddCategoryPage() {
                       />
                       <label htmlFor="category-image" className="cursor-pointer w-full">
                         <div className="text-center space-y-6">
-                          <div className="mx-auto w-24 h-24 bg-gradient-to-r from-indigo-500/20 to-purple-500/20 rounded-3xl flex items-center justify-center group-hover:from-indigo-500/30 group-hover:to-purple-500/30 transition-all duration-300 group-hover:scale-110 border border-indigo-500/20">
-                            <Upload className="h-12 w-12 text-indigo-400 group-hover:text-indigo-300 transition-colors" />
+                          <div className="mx-auto w-24 h-24 bg-[#2C6D90]/20 rounded-3xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 border border-[#2C6D90]/20">
+                            <Upload className="h-12 w-12 text-[#2C6D90]" />
                           </div>
                           <div className="space-y-3">
-                            <p className="text-2xl font-bold text-white group-hover:text-indigo-400 transition-colors">
+                            <p className="text-2xl font-bold text-[#F9F3EF]">
                               انقر لرفع صورة أو اسحبها هنا
                             </p>
-                            <p className="text-slate-400 text-lg">
+                            <p className="text-[#F9F3EF]/70 text-lg">
                               PNG, JPG, GIF حتى 10 ميجابايت
                             </p>
-                            <p className="text-slate-500 text-sm">
+                            <p className="text-[#F9F3EF]/50 text-sm">
                               الحد الأدنى للدقة: 800x600 بكسل
                             </p>
                           </div>
@@ -289,7 +289,7 @@ export default function LuxuryAddCategoryPage() {
                     </div>
                   ) : (
                     <div className="relative group">
-                      <div className="relative overflow-hidden rounded-3xl border-2 border-indigo-500/30 shadow-2xl shadow-indigo-500/10">
+                      <div className="relative overflow-hidden rounded-3xl border-2 border-[#2C6D90]/30 shadow-2xl shadow-[#2C6D90]/10">
                         <img
                           src={imagePreview}
                           alt="معاينة صورة الفئة"
@@ -329,10 +329,10 @@ export default function LuxuryAddCategoryPage() {
               </div>
 
               {/* Submit Buttons */}
-              <div className="flex flex-col sm:flex-row gap-6 justify-end pt-8 border-t border-slate-700/50">
+              <div className="flex flex-col sm:flex-row gap-6 justify-end pt-8 border-t border-[#2C6D90]/20">
                 <button
                   type="button"
-                  className="px-8 py-4 border-2 border-slate-600 text-slate-300 rounded-2xl hover:bg-slate-800/50 hover:border-slate-500 transition-all duration-300 font-semibold text-lg hover:scale-105"
+                  className="px-8 py-4 border-2 border-[#2C6D90]/40 text-[#F9F3EF]/80 rounded-2xl hover:bg-[#F9F3EF]/5 hover:border-[#2C6D90]/60 transition-all duration-300 font-semibold text-lg hover:scale-105"
                 >
                   إلغاء
                 </button>
@@ -341,7 +341,7 @@ export default function LuxuryAddCategoryPage() {
                   type="submit"
                   disabled={isSubmitting || isCompressing}
                   onClick={handleSubmit}
-                  className="relative px-10 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white rounded-2xl hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-300 font-semibold shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-4 hover:scale-105 text-lg"
+                  className="relative px-10 py-4 bg-[#2C6D90] hover:bg-[#2C6D90]/90 text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg shadow-[#2C6D90]/25 hover:shadow-xl hover:shadow-[#2C6D90]/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-4 hover:scale-105 text-lg"
                 >
                   {isSubmitting ? (
                     <>

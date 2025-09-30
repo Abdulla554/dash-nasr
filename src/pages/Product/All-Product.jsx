@@ -189,11 +189,11 @@ export default function LuxuryProductsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e]" dir="rtl">
+    <div className="min-h-screen bg-[#0A0A0A]" dir="rtl">
       {/* Delete Confirmation Modal */}
       {deleteModalOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="rounded-2xl p-8 max-w-md w-full mx-4 bg-[#F9F3EF]/10 border border-[#749BC2]/20">
+          <div className="rounded-2xl p-8 max-w-md w-full mx-4 bg-[#F9F3EF]/10 border border-[#2C6D90]/20">
             <div className="text-center">
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Trash className="w-8 h-8 text-red-600" />
@@ -207,7 +207,7 @@ export default function LuxuryProductsPage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => setDeleteModalOpen(false)}
-                  className="flex-1 py-3 px-4 rounded-xl font-semibold bg-[#749BC2]/20 text-[#749BC2] hover:bg-[#749BC2]/30 transition-colors duration-300"
+                  className="flex-1 py-3 px-4 rounded-xl font-semibold bg-[#2C6D90]/20 text-[#2C6D90] hover:bg-[#2C6D90]/30 transition-colors duration-300"
                 >
                   إلغاء
                 </button>
@@ -224,12 +224,12 @@ export default function LuxuryProductsPage() {
       )}
 
       {/* Header */}
-      <div className="relative backdrop-blur-sm border-b bg-[#F9F3EF]/5 border-[#749BC2]/20">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#749BC2]/10"></div>
+      <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
         <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl">
+              <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
                 <ShoppingCart className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
@@ -242,19 +242,11 @@ export default function LuxuryProductsPage() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => window.location.href = '/products/add'}
-                className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
+                className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] text-white shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
               >
                 <span className="font-semibold text-sm sm:text-base lg:text-lg">إضافة منتج جديد</span>
               </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={toggleCurrency}
-                className="group p-2 sm:p-3 backdrop-blur-sm border rounded-xl sm:rounded-2xl transition-all duration-300 flex items-center gap-1 sm:gap-2 bg-[#749BC2]/20 border-[#749BC2]/30 hover:border-[#2C6D90]/50 text-[#F9F3EF]"
-              >
-                <DollarSign className="h-5 w-5 sm:h-6 sm:w-6 transition-colors text-[#2C6D90] group-hover:text-[#F9F3EF]" />
-                <span className="font-semibold text-sm sm:text-base transition-colors text-[#2C6D90] group-hover:text-[#F9F3EF]">{getCurrencyCode()}</span>
-              </motion.button>
+              
             </div>
           </div>
         </div>
@@ -264,16 +256,16 @@ export default function LuxuryProductsPage() {
       <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {[
-            { title: "إجمالي المنتجات", value: displayProducts.length, icon: ShoppingCart, color: "from-[#2C6D90] to-[#749BC2]", change: "+12%" },
+            { title: "إجمالي المنتجات", value: displayProducts.length, icon: ShoppingCart, color: "from-[#2C6D90] to-[#2C6D90]", change: "+12%" },
             { title: "الأكثر مبيعاً", value: displayProducts.filter(p => p.isBestSeller).length, icon: TrendingUp, color: "from-emerald-600 to-emerald-800", change: "+23%" },
             { title: "المنتجات الجديدة", value: displayProducts.filter(p => p.isNew).length, icon: Zap, color: "from-purple-600 to-purple-800", change: "+8%" },
             { title: "المنتجات المميزة", value: displayProducts.filter(p => p.rating >= 4.8).length, icon: Award, color: "from-yellow-600 to-yellow-800", change: "+15%" }
           ].map((stat, index) => (
             <div key={index} className="group relative">
-              <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl opacity-80 group-hover:opacity-90 transition-all duration-300`}></div>
-              <div className="relative backdrop-blur-sm border rounded-xl sm:rounded-2xl p-4 sm:p-6 transition-all duration-300 group-hover:transform group-hover:scale-105 bg-[#F9F3EF]/10 border-[#749BC2]/20 hover:border-[#2C6D90]/50">
+                <div className={`absolute inset-0 bg-[#2C6D90] rounded-2xl opacity-30 group-hover:opacity-40 transition-all duration-300`}></div>
+              <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 hover:border-[#2C6D90]/50 transition-all duration-300 group-hover:transform group-hover:scale-105 border-[#2C6D90]/20">
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <div className="p-2 sm:p-3 backdrop-blur-sm rounded-lg sm:rounded-xl border bg-[#749BC2]/20 border-[#749BC2]/30">
+                  <div className="p-2 sm:p-3 backdrop-blur-sm rounded-lg sm:rounded-xl border bg-[#2C6D90]/20 border-[#2C6D90]/30">
                     <stat.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
                   <span className="text-emerald-400 font-semibold text-xs sm:text-sm">{stat.change}</span>
@@ -288,7 +280,9 @@ export default function LuxuryProductsPage() {
 
       {/* Filters and Search */}
       <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6">
-        <div className="backdrop-blur-sm border rounded-xl sm:rounded-2xl p-4 sm:p-6 bg-[#F9F3EF]/5 border-[#749BC2]/20">
+        <div className="relative">
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#0C0C0E] via-[#0F1B24] to-[#11212D]"></div>
+          <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 bg-[#F9F3EF]/5 border-[#2C6D90]/20">
           <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
             {/* Search Bar */}
             <div className="flex-1">
@@ -299,7 +293,7 @@ export default function LuxuryProductsPage() {
                   placeholder="البحث في المنتجات..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pr-12 pl-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-[#F9F3EF]/10 border-[#749BC2]/30 text-[#F9F3EF] placeholder-[#F9F3EF]/50 focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
+                className="w-full pr-12 pl-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] placeholder-[#F9F3EF]/50 focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
                 />
               </div>
             </div>
@@ -310,7 +304,7 @@ export default function LuxuryProductsPage() {
               <select
                 value={filters.category}
                 onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#749BC2]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
+                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
               >
                 <option value="all">جميع الفئات</option>
                 {categories.map(category => (
@@ -322,7 +316,7 @@ export default function LuxuryProductsPage() {
               <select
                 value={filters.brand}
                 onChange={(e) => setFilters({ ...filters, brand: e.target.value })}
-                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#749BC2]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
+                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
               >
                 <option value="all">جميع الماركات</option>
                 {brands.map(brand => (
@@ -334,7 +328,7 @@ export default function LuxuryProductsPage() {
               <select
                 value={filters.priceRange}
                 onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
-                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#749BC2]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
+                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
               >
                 <option value="all">جميع الأسعار</option>
                 <option value="under-1000">أقل من {getCurrencySymbol()}1,000</option>
@@ -347,7 +341,7 @@ export default function LuxuryProductsPage() {
               <select
                 value={filters.sortBy}
                 onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
-                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#749BC2]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
+                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
               >
                 <option value="newest">الأحدث</option>
                 <option value="best-seller">الأكثر مبيعاً</option>
@@ -368,13 +362,14 @@ export default function LuxuryProductsPage() {
               <span className="text-xs sm:text-sm text-[#F9F3EF]/70">فلاتر نشطة</span>
             </div>
           </div>
+          </div>
         </div>
       </div>
 
       {/* Products Table */}
       <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
         {sortedProducts.length === 0 ? (
-          <div className="text-center py-12 sm:py-16 lg:py-20 rounded-xl sm:rounded-2xl border bg-gradient-to-r from-[#1a1a2e] to-[#2C6D90]/20 border-[#749BC2]/20">
+          <div className="text-center py-12 sm:py-16 lg:py-20 rounded-xl sm:rounded-2xl border bg-gradient-to-r from-[#0C0C0E] via-[#0F1B24] to-[#11212D] border-[#2C6D90]/20">
             <Search size={32} className="text-[#2C6D90] mx-auto mb-3 sm:mb-4 sm:w-12 sm:h-12 lg:w-12 lg:h-12" />
             <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-2 text-[#F9F3EF]">لم يتم العثور على منتجات</h3>
             <p className="mb-4 sm:mb-6 text-sm sm:text-base text-[#F9F3EF]/70">جرب تغيير الفلاتر أو البحث بكلمات مختلفة</p>
@@ -389,11 +384,13 @@ export default function LuxuryProductsPage() {
             </button>
           </div>
         ) : (
-          <div className="backdrop-blur-sm border rounded-xl sm:rounded-2xl overflow-hidden bg-[#F9F3EF]/5 border-[#749BC2]/20">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[600px] sm:min-w-[800px]">
-                <thead className="bg-gradient-to-r from-[#1a1a2e] to-[#2C6D90]/20">
-                  <tr>
+          <div className="relative rounded-2xl overflow-hidden">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#0C0C0E] via-[#0F1B24] to-[#11212D]"></div>
+            <div className="relative backdrop-blur-sm border rounded-2xl overflow-hidden bg-[#F9F3EF]/5 border-[#2C6D90]/20">
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[600px] sm:min-w-[800px]">
+                  <thead>
+                    <tr className="border-b border-[#2C6D90]/10">
                     <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الصورة</th>
                     <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">معلومات المنتج</th>
                     <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden sm:table-cell">المواصفات</th>
@@ -401,9 +398,9 @@ export default function LuxuryProductsPage() {
                     <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden md:table-cell">المخزون</th>
                     <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden lg:table-cell">الحالة</th>
                     <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الإجراءات</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#749BC2]/10">
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#2C6D90]/10">
                   {sortedProducts.map((product) => {
                     const discountPercentage = getDiscountPercentage(product.originalPrice, product.price);
 
@@ -464,7 +461,7 @@ export default function LuxuryProductsPage() {
                             <div className="flex flex-wrap gap-1">
                               {product.tags && product.tags.length > 0 ? (
                                 product.tags.slice(0, 2).map((tag, tagIndex) => (
-                                  <span key={tagIndex} className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-[#749BC2]/20 text-[#F9F3EF]/70">
+                                  <span key={tagIndex} className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-[#2C6D90]/20 text-[#F9F3EF]/70">
                                     #{tag}
                                   </span>
                                 ))
@@ -557,6 +554,7 @@ export default function LuxuryProductsPage() {
                   })}
                 </tbody>
               </table>
+            </div>
             </div>
           </div>
         )}

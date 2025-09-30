@@ -408,7 +408,7 @@ export default function AddProduct() {
                 <div className="space-y-8">
                   <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
                     <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
-                      <Save className="h-6 w-6 text-[#2C6D90]" />
+                      <Save className="h-6 w-6 text-white" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold text-[#F9F3EF]">المعلومات الأساسية</h2>
@@ -593,7 +593,7 @@ export default function AddProduct() {
                 <div className="space-y-8">
                   <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
                     <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
-                      <Save className="h-6 w-6 text-[#2C6D90]" />
+                      <Save className="h-6 w-6 text-white" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold text-[#F9F3EF]">المواصفات التقنية</h2>
@@ -630,7 +630,7 @@ export default function AddProduct() {
                     <div className="text-center py-12">
                       <div className="p-6 bg-[#F9F3EF]/5 rounded-3xl border border-[#2C6D90]/20">
                         <div className="w-16 h-16 bg-[#2C6D90]/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                          <Save className="h-8 w-8 text-[#2C6D90]" />
+                          <Save className="h-8 w-8 text-white" />
                         </div>
                         <h3 className="text-xl font-bold text-[#F9F3EF] mb-2">اختر فئة أولاً</h3>
                         <p className="text-[#F9F3EF]/70">
@@ -685,7 +685,7 @@ export default function AddProduct() {
                 <div className="space-y-8">
                   <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
                     <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
-                      <Save className="h-6 w-6 text-[#2C6D90]" />
+                      <Save className="h-6 w-6 text-white" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold text-[#F9F3EF]">العلامات (Tags)</h2>
@@ -737,7 +737,7 @@ export default function AddProduct() {
                 <div className="space-y-8">
                   <div className="flex items-center gap-4 pb-4 border-b border-nsr-primary/20">
                     <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
-                      <Upload className="h-6 w-6 text-[#2C6D90]" />
+                      <Upload className="h-6 w-6 text-white" />
                     </div>
                     <div>
                       <h2 className="text-2xl font-bold text-[#F9F3EF]">صور المنتج (حتى 5 صور)</h2>
@@ -764,7 +764,7 @@ export default function AddProduct() {
                         <label htmlFor="product-images" className="cursor-pointer w-full">
                           <div className="text-center space-y-6">
                             <div className="mx-auto w-24 h-24 bg-[#2C6D90]/20 rounded-3xl flex items-center justify-center group-hover:bg-[#2C6D90]/30 transition-all duration-300 group-hover:scale-110 border border-[#2C6D90]/20">
-                              <Upload className="h-12 w-12 text-[#2C6D90] group-hover:text-[#2C6D90] transition-colors" />
+                              <Upload className="h-12 w-12 text-white group-hover:text-white transition-colors" />
                             </div>
                             <div className="space-y-3">
                               <p className="text-2xl font-bold text-[#F9F3EF]">

@@ -22,6 +22,7 @@ import { useOrders } from "../hooks/useOrdersQuery";
 import ExchangeRateModal from "../components/ExchangeRateModal";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
+import { Home } from "lucide-react";
 export default function LuxuryDashboard() {
   // إزالة نظام الثيم - استخدام ألوان ثابتة
   const {
@@ -257,20 +258,18 @@ export default function LuxuryDashboard() {
       {/* Header */}
       <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
-        <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+        <div className="relative px-4  lg:px-8 py-6 sm:py-8">
+          <div className="flex items-center w-full justify-between">
+            <div className="flex justify-between items-center gap-4">
               <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
-                <FaShoppingCart className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                <Home className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">لوحة التحكم الرئيسية</h1>
                 <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">مرحباً بك في نظام الإدارة المتقدم</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
-              {customActions}
-            </div>
+           
           </div>
         </div>
       </div>
@@ -442,7 +441,7 @@ export default function LuxuryDashboard() {
                         <div className="flex gap-4 overflow-x-auto pb-4 px-4">
                           {newOrders.map((order, index) => (
                             <div key={index} className="flex-shrink-0 w-72 bg-[#F9F3EF]/5 border border-[#2C6D90]/20 rounded-xl p-4">
-                              <div className="flex items-center justify-between mb-3">
+                              <div className="flex flex-col gap-4 text-center md:flex-row items-center justify-between mb-3">
                                 <span className="font-mono text-[#2C6D90] font-semibold text-sm">#{order.orderNumber}</span>
                                 <span className={`px-2 py-1 rounded-full text-xs font-semibold ${order.status === 'مفتوح'
                                   ? 'bg-[#2C6D90]/20 text-[#2C6D90] border border-[#2C6D90]/30'

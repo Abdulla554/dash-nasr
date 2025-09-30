@@ -226,8 +226,8 @@ export default function LuxuryProductsPage() {
       {/* Header */}
       <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
-        <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <div className="flex items-center justify-between">
+        <div className="relative px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col gap-2 lg:flex-row md:items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
                 <ShoppingCart className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
@@ -237,7 +237,7 @@ export default function LuxuryProductsPage() {
                 <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">إدارة شاملة لجميع منتجاتك</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto mt-4 md:mt-0">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -246,7 +246,7 @@ export default function LuxuryProductsPage() {
               >
                 <span className="font-semibold text-sm sm:text-base lg:text-lg">إضافة منتج جديد</span>
               </motion.button>
-              
+
             </div>
           </div>
         </div>
@@ -262,7 +262,7 @@ export default function LuxuryProductsPage() {
             { title: "المنتجات المميزة", value: displayProducts.filter(p => p.rating >= 4.8).length, icon: Award, color: "from-yellow-600 to-yellow-800", change: "+15%" }
           ].map((stat, index) => (
             <div key={index} className="group relative">
-                <div className={`absolute inset-0 bg-[#2C6D90] rounded-2xl opacity-30 group-hover:opacity-40 transition-all duration-300`}></div>
+              <div className={`absolute inset-0 bg-[#2C6D90] rounded-2xl opacity-30 group-hover:opacity-40 transition-all duration-300`}></div>
               <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 hover:border-[#2C6D90]/50 transition-all duration-300 group-hover:transform group-hover:scale-105 border-[#2C6D90]/20">
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <div className="p-2 sm:p-3 backdrop-blur-sm rounded-lg sm:rounded-xl border bg-[#2C6D90]/20 border-[#2C6D90]/30">
@@ -283,89 +283,38 @@ export default function LuxuryProductsPage() {
         <div className="relative">
           <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#0C0C0E] via-[#0F1B24] to-[#11212D]"></div>
           <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 bg-[#F9F3EF]/5 border-[#2C6D90]/20">
-          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-            {/* Search Bar */}
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#F9F3EF]/70" size={20} />
-                <input
-                  type="text"
-                  placeholder="البحث في المنتجات..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pr-12 pl-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] placeholder-[#F9F3EF]/50 focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
-                />
+            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
+              {/* Search Bar */}
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-[#F9F3EF]/70" size={20} />
+                  <input
+                    type="text"
+                    placeholder="البحث في المنتجات..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pr-12 pl-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] placeholder-[#F9F3EF]/50 focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
+                  />
+                </div>
+              </div>
+
+              {/* Filters */}
+
+            </div>
+
+            {/* Results Count */}
+            <div className="mt-4 px-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+              <p className="text-sm sm:text-base text-[#F9F3EF]/70">
+                عرض {sortedProducts.length} من {displayProducts.length} منتج
+              </p>
+              <div className="flex items-center gap-2">
+                <Filter size={14} className="text-[#2C6D90] sm:w-4 sm:h-4" />
+                <span className="text-xs sm:text-sm text-[#F9F3EF]/70">فلاتر نشطة</span>
               </div>
             </div>
-
-            {/* Filters */}
-            <div className="flex flex-wrap gap-2 sm:gap-3 lg:gap-4">
-              {/* Category */}
-              <select
-                value={filters.category}
-                onChange={(e) => setFilters({ ...filters, category: e.target.value })}
-                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
-              >
-                <option value="all">جميع الفئات</option>
-                {categories.map(category => (
-                  <option key={category.id} value={category.id}>{category.name}</option>
-                ))}
-              </select>
-
-              {/* Brand */}
-              <select
-                value={filters.brand}
-                onChange={(e) => setFilters({ ...filters, brand: e.target.value })}
-                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
-              >
-                <option value="all">جميع الماركات</option>
-                {brands.map(brand => (
-                  <option key={brand.id} value={brand.id}>{brand.name}</option>
-                ))}
-              </select>
-
-              {/* Price Range */}
-              <select
-                value={filters.priceRange}
-                onChange={(e) => setFilters({ ...filters, priceRange: e.target.value })}
-                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
-              >
-                <option value="all">جميع الأسعار</option>
-                <option value="under-1000">أقل من {getCurrencySymbol()}1,000</option>
-                <option value="1000-5000">{getCurrencySymbol()}1,000 - {getCurrencySymbol()}5,000</option>
-                <option value="5000-10000">{getCurrencySymbol()}5,000 - {getCurrencySymbol()}10,000</option>
-                <option value="over-10000">أكثر من {getCurrencySymbol()}10,000</option>
-              </select>
-
-              {/* Sort */}
-              <select
-                value={filters.sortBy}
-                onChange={(e) => setFilters({ ...filters, sortBy: e.target.value })}
-                className="px-3 sm:px-4 py-2 sm:py-3 border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-all duration-300 text-sm sm:text-base bg-[#F9F3EF]/10 border-[#2C6D90]/30 text-[#F9F3EF] focus:border-[#2C6D90] focus:ring-[#2C6D90]/20"
-              >
-                <option value="newest">الأحدث</option>
-                <option value="best-seller">الأكثر مبيعاً</option>
-                <option value="price-low">السعر: من الأقل للأعلى</option>
-                <option value="price-high">السعر: من الأعلى للأقل</option>
-                <option value="rating">التقييم</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Results Count */}
-          <div className="mt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-            <p className="text-sm sm:text-base text-[#F9F3EF]/70">
-              عرض {sortedProducts.length} من {displayProducts.length} منتج
-            </p>
-            <div className="flex items-center gap-2">
-              <Filter size={14} className="text-[#2C6D90] sm:w-4 sm:h-4" />
-              <span className="text-xs sm:text-sm text-[#F9F3EF]/70">فلاتر نشطة</span>
-            </div>
-          </div>
           </div>
         </div>
       </div>
-
       {/* Products Table */}
       <div className="px-4 sm:px-6 lg:px-8 pb-4 sm:pb-6 lg:pb-8">
         {sortedProducts.length === 0 ? (
@@ -391,170 +340,170 @@ export default function LuxuryProductsPage() {
                 <table className="w-full min-w-[600px] sm:min-w-[800px]">
                   <thead>
                     <tr className="border-b border-[#2C6D90]/10">
-                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الصورة</th>
-                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">معلومات المنتج</th>
-                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden sm:table-cell">المواصفات</th>
-                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">السعر</th>
-                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden md:table-cell">المخزون</th>
-                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden lg:table-cell">الحالة</th>
-                    <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الإجراءات</th>
+                      <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الصورة</th>
+                      <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">معلومات المنتج</th>
+                      <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden sm:table-cell">المواصفات</th>
+                      <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">السعر</th>
+                      <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden md:table-cell">المخزون</th>
+                      <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90] hidden lg:table-cell">الحالة</th>
+                      <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الإجراءات</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#2C6D90]/10">
-                  {sortedProducts.map((product) => {
-                    const discountPercentage = getDiscountPercentage(product.originalPrice, product.price);
+                    {sortedProducts.map((product) => {
+                      const discountPercentage = getDiscountPercentage(product.originalPrice, product.price);
 
-                    return (
-                      <tr key={product.id} className="hover:bg-[#F9F3EF]/5 transition-colors duration-300">
-                        {/* الصورة */}
-                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
-                          <div className="relative w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-lg sm:rounded-xl overflow-hidden group">
-                            <img
-                              src={getImageUrl(product.image || product.images?.[0])}
-                              alt={product.name}
-                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                              onError={(e) => {
-                                e.target.src = '/logo.png';
-                              }}
-                            />
-                            {product.isNew && (
-                              <span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded-full font-semibold">
-                                جديد
-                              </span>
-                            )}
-                          </div>
-                        </td>
-
-                        {/* معلومات المنتج */}
-                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
-                          <div className="space-y-1 sm:space-y-2">
-                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
-                              <span className="text-xs sm:text-sm font-medium px-1 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-[#2C6D90] bg-[#2C6D90]/10">
-                                {brands.find(b => b.id === product.brandId)?.name || 'Unknown Brand'}
-                              </span>
-                              <div className="flex items-center gap-1">
-                                <Star size={8} className="text-yellow-400 fill-current sm:w-3 sm:h-3" />
-                                <span className="text-xs text-[#F9F3EF]/70">{product.rating}</span>
-                                <span className="text-xs text-[#F9F3EF]/70">({product.reviews})</span>
-                              </div>
-                            </div>
-                            <h3 className="font-semibold text-xs sm:text-sm max-w-xs text-[#F9F3EF]">
-                              {product.name}
-                            </h3>
-                            <div className="flex flex-wrap gap-1 mb-1 sm:mb-2">
+                      return (
+                        <tr key={product.id} className="hover:bg-[#F9F3EF]/5 transition-colors duration-300">
+                          {/* الصورة */}
+                          <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
+                            <div className="relative w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-lg sm:rounded-xl overflow-hidden group">
+                              <img
+                                src={getImageUrl(product.image || product.images?.[0])}
+                                alt={product.name}
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                onError={(e) => {
+                                  e.target.src = '/logo.png';
+                                }}
+                              />
                               {product.isNew && (
-                                <span className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-green-500/20 text-green-300 border border-green-500/30">
+                                <span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-xs px-1 sm:px-2 py-0.5 sm:py-1 rounded-full font-semibold">
                                   جديد
                                 </span>
                               )}
+                            </div>
+                          </td>
+
+                          {/* معلومات المنتج */}
+                          <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
+                            <div className="space-y-1 sm:space-y-2">
+                              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-1 sm:gap-2">
+                                <span className="text-xs sm:text-sm font-medium px-1 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-[#2C6D90] bg-[#2C6D90]/10">
+                                  {brands.find(b => b.id === product.brandId)?.name || 'Unknown Brand'}
+                                </span>
+                                <div className="flex items-center gap-1">
+                                  <Star size={8} className="text-yellow-400 fill-current sm:w-3 sm:h-3" />
+                                  <span className="text-xs text-[#F9F3EF]/70">{product.rating}</span>
+                                  <span className="text-xs text-[#F9F3EF]/70">({product.reviews})</span>
+                                </div>
+                              </div>
+                              <h3 className="font-semibold text-xs sm:text-sm max-w-xs text-[#F9F3EF]">
+                                {product.name}
+                              </h3>
+                              <div className="flex flex-wrap gap-1 mb-1 sm:mb-2">
+                                {product.isNew && (
+                                  <span className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-green-500/20 text-green-300 border border-green-500/30">
+                                    جديد
+                                  </span>
+                                )}
+                                {product.isBestSeller && (
+                                  <span className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
+                                    الأكثر مبيعاً
+                                  </span>
+                                )}
+                                {product.isFeatured && (
+                                  <span className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                                    مميز
+                                  </span>
+                                )}
+                              </div>
+                              <div className="flex flex-wrap gap-1">
+                                {product.tags && product.tags.length > 0 ? (
+                                  product.tags.slice(0, 2).map((tag, tagIndex) => (
+                                    <span key={tagIndex} className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-[#2C6D90]/20 text-[#F9F3EF]/70">
+                                      #{tag}
+                                    </span>
+                                  ))
+                                ) : (
+                                  <span className="text-xs text-[#F9F3EF]/50">لا توجد علامات</span>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* المواصفات */}
+                          <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 hidden sm:table-cell">
+                            <div className="space-y-1 text-xs">
+                              {product.specifications.processor && (
+                                <div className="text-[#F9F3EF]/70">
+                                  <span className="font-medium text-[#2C6D90]">المعالج:</span> {product.specifications.processor}
+                                </div>
+                              )}
+                              {product.specifications.ram && (
+                                <div className="text-[#F9F3EF]/70">
+                                  <span className="font-medium text-[#2C6D90]">الذاكرة:</span> {product.specifications.ram}
+                                </div>
+                              )}
+                              {product.specifications.storage && (
+                                <div className="text-[#F9F3EF]/70">
+                                  <span className="font-medium text-[#2C6D90]">التخزين:</span> {product.specifications.storage}
+                                </div>
+                              )}
+                            </div>
+                          </td>
+
+                          {/* السعر */}
+                          <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
+                            <div className="space-y-1">
+                              <div className="text-sm sm:text-base lg:text-lg font-bold text-[#2C6D90]">
+                                {getCurrencySymbol()}{convertCurrency(product.price).toLocaleString()}
+                              </div>
+                              {product.originalPrice && (
+                                <div className="text-xs sm:text-sm line-through text-[#F9F3EF]/70">
+                                  {getCurrencySymbol()}{convertCurrency(product.originalPrice).toLocaleString()}
+                                </div>
+                              )}
+                              {(discountPercentage > 0 || product.discountPercentage > 0) && (
+                                <span className="bg-red-500 text-white px-1 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-xs font-semibold">
+                                  -{product.discountPercentage || discountPercentage}%
+                                </span>
+                              )}
+                            </div>
+                          </td>
+
+                          {/* المخزون */}
+                          <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 hidden md:table-cell">
+                            <div className="flex items-center gap-2">
+                              <div className={`w-2 h-2 rounded-full ${getStockColor(product.stock)}`}></div>
+                              <span className="text-xs sm:text-sm font-medium text-[#F9F3EF]">
+                                {getStockStatus(product.stock)}
+                              </span>
+                              <span className="text-xs text-[#F9F3EF]/70">({product.stock})</span>
+                            </div>
+                          </td>
+
+                          {/* الحالة */}
+                          <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 hidden lg:table-cell">
+                            <div className="flex flex-col gap-1">
+                              <span className={`text-xs sm:text-sm font-medium px-2 py-1 rounded-md ${product.isActive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
+                                {product.isActive ? 'نشط' : 'غير نشط'}
+                              </span>
                               {product.isBestSeller && (
-                                <span className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
+                                <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-md">
                                   الأكثر مبيعاً
                                 </span>
                               )}
-                              {product.isFeatured && (
-                                <span className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-purple-500/20 text-purple-300 border border-purple-500/30">
-                                  مميز
-                                </span>
-                              )}
                             </div>
-                            <div className="flex flex-wrap gap-1">
-                              {product.tags && product.tags.length > 0 ? (
-                                product.tags.slice(0, 2).map((tag, tagIndex) => (
-                                  <span key={tagIndex} className="px-1 sm:px-2 py-0.5 rounded-md sm:rounded-lg text-xs bg-[#2C6D90]/20 text-[#F9F3EF]/70">
-                                    #{tag}
-                                  </span>
-                                ))
-                              ) : (
-                                <span className="text-xs text-[#F9F3EF]/50">لا توجد علامات</span>
-                              )}
+                          </td>
+
+                          {/* الإجراءات - Only Delete Button */}
+                          <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
+                            <div className="flex items-center justify-center">
+                              <button
+                                onClick={() => handleDelete(product.id)}
+                                className="p-1 sm:p-2 text-red-500 hover:text-white hover:bg-red-500 rounded-lg transition-colors duration-300"
+                                title="حذف"
+                              >
+                                <Trash size={14} className="sm:w-4 sm:h-4" />
+                              </button>
                             </div>
-                          </div>
-                        </td>
-
-                        {/* المواصفات */}
-                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 hidden sm:table-cell">
-                          <div className="space-y-1 text-xs">
-                            {product.specifications.processor && (
-                              <div className="text-[#F9F3EF]/70">
-                                <span className="font-medium text-[#2C6D90]">المعالج:</span> {product.specifications.processor}
-                              </div>
-                            )}
-                            {product.specifications.ram && (
-                              <div className="text-[#F9F3EF]/70">
-                                <span className="font-medium text-[#2C6D90]">الذاكرة:</span> {product.specifications.ram}
-                              </div>
-                            )}
-                            {product.specifications.storage && (
-                              <div className="text-[#F9F3EF]/70">
-                                <span className="font-medium text-[#2C6D90]">التخزين:</span> {product.specifications.storage}
-                              </div>
-                            )}
-                          </div>
-                        </td>
-
-                        {/* السعر */}
-                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
-                          <div className="space-y-1">
-                            <div className="text-sm sm:text-base lg:text-lg font-bold text-[#2C6D90]">
-                              {getCurrencySymbol()}{convertCurrency(product.price).toLocaleString()}
-                            </div>
-                            {product.originalPrice && (
-                              <div className="text-xs sm:text-sm line-through text-[#F9F3EF]/70">
-                                {getCurrencySymbol()}{convertCurrency(product.originalPrice).toLocaleString()}
-                              </div>
-                            )}
-                            {(discountPercentage > 0 || product.discountPercentage > 0) && (
-                              <span className="bg-red-500 text-white px-1 sm:px-2 py-0.5 sm:py-1 rounded-md sm:rounded-lg text-xs font-semibold">
-                                -{product.discountPercentage || discountPercentage}%
-                              </span>
-                            )}
-                          </div>
-                        </td>
-
-                        {/* المخزون */}
-                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 hidden md:table-cell">
-                          <div className="flex items-center gap-2">
-                            <div className={`w-2 h-2 rounded-full ${getStockColor(product.stock)}`}></div>
-                            <span className="text-xs sm:text-sm font-medium text-[#F9F3EF]">
-                              {getStockStatus(product.stock)}
-                            </span>
-                            <span className="text-xs text-[#F9F3EF]/70">({product.stock})</span>
-                          </div>
-                        </td>
-
-                        {/* الحالة */}
-                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 hidden lg:table-cell">
-                          <div className="flex flex-col gap-1">
-                            <span className={`text-xs sm:text-sm font-medium px-2 py-1 rounded-md ${product.isActive ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
-                              {product.isActive ? 'نشط' : 'غير نشط'}
-                            </span>
-                            {product.isBestSeller && (
-                              <span className="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-md">
-                                الأكثر مبيعاً
-                              </span>
-                            )}
-                          </div>
-                        </td>
-
-                        {/* الإجراءات - Only Delete Button */}
-                        <td className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3">
-                          <div className="flex items-center justify-center">
-                            <button
-                              onClick={() => handleDelete(product.id)}
-                              className="p-1 sm:p-2 text-red-500 hover:text-white hover:bg-red-500 rounded-lg transition-colors duration-300"
-                              title="حذف"
-                            >
-                              <Trash size={14} className="sm:w-4 sm:h-4" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}

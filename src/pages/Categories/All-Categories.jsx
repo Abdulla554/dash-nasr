@@ -18,10 +18,11 @@ import {
   Server,
   MousePointer,
   Sun,
-  Moon
+  Moon,
+  Grid3X3
 } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
-  import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useCategories, useCreateCategory, useUpdateCategory, useDeleteCategory } from "../../hooks/useCategoriesQuery";
 import ConfirmationModal from "../../components/ConfirmationModal";
@@ -108,7 +109,7 @@ export default function LuxuryCategoriesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]"  >
+    <div className="min-h-screen bg-[#0A0A0A]" dir="rtl" >
       <ConfirmationModal
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
@@ -120,10 +121,10 @@ export default function LuxuryCategoriesPage() {
       <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
         <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 lg:flex-row  md:items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
-                <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                <Grid3X3 className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
               </div>
               <div>
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">فئات المنتجات</h1>
@@ -154,16 +155,13 @@ export default function LuxuryCategoriesPage() {
             { title: "إجمالي المنتجات", value: 0, icon: MousePointer, color: "from-[#2C6D90] to-[#749BC2]", change: "+31%" }
           ].map((stat, index) => (
             <div key={index} className="group relative">
-              <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-xl sm:rounded-2xl opacity-80 group-hover:opacity-90 transition-all duration-300`}></div>
-              <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:border-[#2C6D90]/30 transition-all duration-300 group-hover:transform group-hover:scale-105">
+              <div className={`absolute inset-0 bg-[#2C6D90] rounded-2xl opacity-30 group-hover:opacity-40 transition-all duration-300`}></div>
+              <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 hover:border-[#2C6D90]/50 transition-all duration-300 group-hover:transform group-hover:scale-105 border-[#2C6D90]/20">
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <div className="p-2 sm:p-3 bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/20">
+                  <div className="p-2 sm:p-3 backdrop-blur-sm rounded-lg sm:rounded-xl border bg-[#2C6D90]/20 border-[#2C6D90]/30">
                     <stat.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                   </div>
-                  <span className="text-emerald-400 font-semibold text-xs sm:text-sm flex items-center gap-1">
-                    <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
-                    {stat.change}
-                  </span>
+                  <span className="text-emerald-400 font-semibold text-xs sm:text-sm">{stat.change}</span>
                 </div>
                 <div className="text-2xl sm:text-3xl font-bold text-white mb-1">{stat.value}</div>
                 <div className="text-white/80 text-xs sm:text-sm">{stat.title}</div>

@@ -144,12 +144,12 @@ export default function LuxuryAddCategoryPage() {
 
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A]" dir="rtl">
+    <div className="min-h-screen bg-[#0A0A0A]" dir="rtl" >
       {/* Header */}
       <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
         <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
         <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-4 lg:flex-row md:items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
                 <Plus className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
@@ -159,7 +159,7 @@ export default function LuxuryAddCategoryPage() {
                 <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">أضف اسم الفئة وصورة جذابة</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
+            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto mt-4 lg:mt-0">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -175,8 +175,8 @@ export default function LuxuryAddCategoryPage() {
 
       {/* Main Form */}
       <div className="px-8 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-[#F9F3EF]/5 backdrop-blur-sm border border-[#2C6D90]/20 rounded-3xl overflow-hidden shadow-2xl">
+        <div className=" ">
+          <div className="bg-[#F9F3EF]/5 backdrop-blur-sm border border-[#2C6D90]/90 rounded-3xl overflow-hidden shadow-2xl">
 
             {/* Form Container */}
             <div className="p-8 space-y-10">
@@ -185,7 +185,7 @@ export default function LuxuryAddCategoryPage() {
               <div className="space-y-8">
                 <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
                   <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
-                    <Save className="h-6 w-6 text-[#2C6D90]" />
+                    <Save className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-[#F9F3EF]">اسم الفئة</h2>
@@ -238,7 +238,7 @@ export default function LuxuryAddCategoryPage() {
               <div className="space-y-8">
                 <div className="flex items-center gap-4 pb-4 border-b border-[#2C6D90]/20">
                   <div className="p-3 bg-[#2C6D90]/20 rounded-2xl border border-[#2C6D90]/30">
-                    <Image className="h-6 w-6 text-[#2C6D90]" />
+                    <Image className="h-6 w-6 text-white" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-[#F9F3EF]">صورة الفئة</h2>
@@ -262,7 +262,7 @@ export default function LuxuryAddCategoryPage() {
                       <label htmlFor="category-image" className="cursor-pointer w-full">
                         <div className="text-center space-y-6">
                           <div className="mx-auto w-24 h-24 bg-[#2C6D90]/20 rounded-3xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 border border-[#2C6D90]/20">
-                            <Upload className="h-12 w-12 text-[#2C6D90]" />
+                            <Upload className="h-12 w-12 text-white" />
                           </div>
                           <div className="space-y-3">
                             <p className="text-2xl font-bold text-[#F9F3EF]">
@@ -350,7 +350,7 @@ export default function LuxuryAddCategoryPage() {
                     </>
                   ) : (
                     <>
-                      <Save className="h-6 w-6" />
+                      <Save className="h-6 w-6 text-white" />
                       إضافة الفئة الجديدة
                     </>
                   )}

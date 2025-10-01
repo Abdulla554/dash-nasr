@@ -28,7 +28,7 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import ExchangeRateModal from "../../components/ExchangeRateModal";
 import { useCurrency } from "../../contexts/CurrencyContext.jsx";
 import { useTheme } from "../../contexts/ThemeContext.jsx";
-import { useOrder } from "../../hooks/useOrdersQuery.js";
+import { useOrder, useUpdateOrder } from "../../hooks/useOrdersQuery.js";
 
 export default function OrderDetails() {
     const { id } = useParams();
@@ -38,7 +38,8 @@ export default function OrderDetails() {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
     // Fetch order data from API
-    const { data: orderData, isLoading, error } = useOrder(id);
+    const { data: orderData, isLoading, error, refetch } = useOrder(id);
+    const updateOrderMutation = useUpdateOrder();
     const order = orderData?.data || orderData;
 
     console.log("Order data:", orderData);
@@ -116,17 +117,94 @@ export default function OrderDetails() {
     const getStatusText = (status) => {
         switch (status) {
             case 'completed':
+            case 'COMPLETED':
                 return 'مكتمل';
             case 'processing':
+            case 'PROCESSING':
                 return 'قيد المعالجة';
             case 'shipped':
+            case 'SHIPPED':
                 return 'تم الشحن';
             case 'pending':
+            case 'PENDING':
                 return 'في الانتظار';
             case 'cancelled':
+            case 'CANCELLED':
                 return 'ملغي';
+            case 'CONFIRMED':
+                return 'مؤكد';
+            case 'DELIVERED':
+                return 'تم التسليم';
             default:
                 return 'غير محدد';
+        }
+    };
+
+    // ترتيب حالات الطلب للتراجع
+    const statusOrder = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'COMPLETED'];
+
+    // الحصول على الحالة السابقة
+    const getPreviousStatus = (currentStatus) => {
+        const currentIndex = statusOrder.indexOf(currentStatus);
+        if (currentIndex > 0) {
+            return statusOrder[currentIndex - 1];
+        }
+        return null;
+    };
+
+
+    // إرجاع خطوة
+    const handleRevertStatus = async () => {
+        const previousStatus = getPreviousStatus(order.status);
+        if (!previousStatus) {
+            toast.error('لا يمكن إرجاع هذه الحالة', {
+                position: "top-right",
+                autoClose: 3000,
+            });
+            return;
+        }
+
+        try {
+            await updateOrderMutation.mutateAsync({
+                id: order.id,
+                data: { status: previousStatus }
+            });
+
+            toast.success(`تم إرجاع حالة الطلب إلى ${getStatusText(previousStatus)}`, {
+                position: "top-right",
+                autoClose: 3000,
+            });
+
+            refetch();
+        } catch (error) {
+            console.error('Error reverting order status:', error);
+            toast.error('حدث خطأ في إرجاع حالة الطلب', {
+                position: "top-right",
+                autoClose: 3000,
+            });
+        }
+    };
+
+    // تحديث الحالة
+    const handleUpdateStatus = async (newStatus) => {
+        try {
+            await updateOrderMutation.mutateAsync({
+                id: order.id,
+                data: { status: newStatus }
+            });
+
+            toast.success(`تم تحديث حالة الطلب إلى ${getStatusText(newStatus)}`, {
+                position: "top-right",
+                autoClose: 3000,
+            });
+
+            refetch();
+        } catch (error) {
+            console.error('Error updating order status:', error);
+            toast.error('حدث خطأ في تحديث حالة الطلب', {
+                position: "top-right",
+                autoClose: 3000,
+            });
         }
     };
 
@@ -309,6 +387,41 @@ export default function OrderDetails() {
                                     <span className="font-semibold">{getPaymentStatusText(order.paymentStatus)}</span>
                                 </div>
                             </div>
+                        </div>
+
+                        {/* أزرار إدارة الحالة */}
+                        <div className="flex flex-wrap gap-2 mt-4">
+                            {/* زر إرجاع خطوة */}
+                            {getPreviousStatus(order.status) && (
+                                <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={handleRevertStatus}
+                                    className="px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 rounded-xl font-semibold hover:bg-yellow-500/30 transition-all duration-300 flex items-center gap-2"
+                                >
+                                    <ArrowLeft size={16} />
+                                    <span>إرجاع خطوة</span>
+                                </motion.button>
+                            )}
+
+                            {/* أزرار الحالات المتاحة */}
+                            {statusOrder.map((status) => {
+                                if (status !== order.status && statusOrder.indexOf(status) > statusOrder.indexOf(order.status)) {
+                                    return (
+                                        <motion.button
+                                            key={status}
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            onClick={() => handleUpdateStatus(status)}
+                                            className="px-4 py-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 rounded-xl font-semibold hover:bg-blue-500/30 transition-all duration-300 flex items-center gap-2"
+                                        >
+                                            <CheckCircle size={16} />
+                                            <span>{getStatusText(status)}</span>
+                                        </motion.button>
+                                    );
+                                }
+                                return null;
+                            })}
                         </div>
                     </div>
                 </div>
@@ -561,6 +674,54 @@ export default function OrderDetails() {
                                         {getPaymentStatusText(order.paymentStatus) || 'غير محدد'}
                                     </span>
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* إدارة حالة الطلب */}
+                        <div className="bg-nsr-secondary/30 rounded-2xl p-6">
+                            <h3 className="text-lg font-bold text-nsr-primary mb-4">إدارة الحالة</h3>
+
+                            <div className="space-y-3">
+                                {/* الحالة الحالية */}
+                                <div className="p-3 bg-nsr-primary/5 rounded-xl border border-nsr-primary/20">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <div className={`w-3 h-3 rounded-full ${getStatusColor(order.status).split(' ')[0]}`}></div>
+                                        <span className="text-sm font-semibold text-nsr-primary">الحالة الحالية</span>
+                                    </div>
+                                    <p className="text-nsr-primary font-bold">{getStatusText(order.status)}</p>
+                                </div>
+
+                                {/* إرجاع خطوة */}
+                                {getPreviousStatus(order.status) && (
+                                    <motion.button
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={handleRevertStatus}
+                                        className="w-full bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 py-3 px-4 rounded-xl font-semibold hover:bg-yellow-500/30 transition-all duration-300 flex items-center justify-center gap-2"
+                                    >
+                                        <ArrowLeft size={20} />
+                                        <span>إرجاع إلى {getStatusText(getPreviousStatus(order.status))}</span>
+                                    </motion.button>
+                                )}
+
+                                {/* الحالات المتاحة */}
+                                {statusOrder.map((status) => {
+                                    if (status !== order.status && statusOrder.indexOf(status) > statusOrder.indexOf(order.status)) {
+                                        return (
+                                            <motion.button
+                                                key={status}
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                                onClick={() => handleUpdateStatus(status)}
+                                                className="w-full bg-blue-500/20 border border-blue-500/30 text-blue-300 py-3 px-4 rounded-xl font-semibold hover:bg-blue-500/30 transition-all duration-300 flex items-center justify-center gap-2"
+                                            >
+                                                <CheckCircle size={20} />
+                                                <span>تحديث إلى {getStatusText(status)}</span>
+                                            </motion.button>
+                                        );
+                                    }
+                                    return null;
+                                })}
                             </div>
                         </div>
 

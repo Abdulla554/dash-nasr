@@ -19,23 +19,12 @@ import {
 import { useCurrency } from "../hooks/useCurrency";
 import { useDashboardData } from "../hooks/useDashboardQuery";
 import { useOrders } from "../hooks/useOrdersQuery";
-import ExchangeRateModal from "../components/ExchangeRateModal";
-// eslint-disable-next-line no-unused-vars
-import { motion } from "framer-motion";
 import { Home } from "lucide-react";
-import { useEffect } from "react";
 export default function LuxuryDashboard() {
   // إزالة نظام الثيم - استخدام ألوان ثابتة
   const {
-    currency,
-    exchangeRate,
-    showExchangeModal,
-    setShowExchangeModal,
-    toggleCurrency,
-    updateExchangeRate,
     convertCurrency,
     getCurrencySymbol,
-    getCurrencyCode
   } = useCurrency();
 
   // API Hooks with React Query
@@ -49,6 +38,7 @@ export default function LuxuryDashboard() {
 
     // استخدام البيانات الفعلية من API
     const stats = dashboardData?.stats || {};
+    const visitors = dashboardData?.visitors?.totalVisitors || 0;
 
     // حسابات ديناميكية للنسب المئوية
     const calculateGrowthPercentage = (current, previous) => {
@@ -87,7 +77,7 @@ export default function LuxuryDashboard() {
     );
 
     const visitorsGrowth = calculateGrowthPercentage(
-      stats.totalVisitors || 0,
+      visitors,
       historicalData.lastMonth.visitors
     );
 
@@ -118,7 +108,7 @@ export default function LuxuryDashboard() {
       },
       {
         title: "عدد زوار الموقع",
-        value: (stats.totalVisitors || 0).toLocaleString(),
+        value: (visitors).toLocaleString(),
         change: `${visitorsGrowth}%`,
         trend: visitorsGrowth > 0 ? "up" : visitorsGrowth < 0 ? "down" : "equal",
         icon: <FaUsers className="text-[#2C6D90]" />,
@@ -237,31 +227,8 @@ export default function LuxuryDashboard() {
     );
   }
 
-  // مكون الأزرار المخصصة للهيدر
-  const customActions = (
-    <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
-      {/* Currency Toggle */}
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={toggleCurrency}
-        className="group p-3 backdrop-blur-sm border rounded-2xl transition-all duration-300 flex items-center gap-2 bg-[#2C6D90]/20 border-[#2C6D90]/30 hover:border-[#2C6D90]/30"
-        title={`التبديل إلى ${currency === 'USD' ? 'الدينار العراقي' : 'الدولار الأمريكي'}`}
-      >
-        {currency === 'USD' ? <FaDollarSign className="w-5 h-5 text-[#F9F3EF]" /> : <FaExchangeAlt className="w-5 h-5 text-[#F9F3EF]" />}
-        <span className="font-semibold text-[#F9F3EF] text-sm">{getCurrencyCode()}</span>
-      </motion.button>
-    </div>
-  );
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
-    });
-  }, []);
-  
-  
+
+
   return (
     <div className="min-h-screen bg-[#0A0A0A]" dir="rtl">
       {/* Header */}
@@ -278,7 +245,7 @@ export default function LuxuryDashboard() {
                 <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">مرحباً بك في نظام الإدارة المتقدم</p>
               </div>
             </div>
-           
+
           </div>
         </div>
       </div>
@@ -320,8 +287,8 @@ export default function LuxuryDashboard() {
                 {/* Glass effect overlay */}
                 <div className="relative backdrop-blur-sm border rounded-2xl p-4 sm:p-6 hover:border-[#2C6D90]/50 transition-all duration-300 group-hover:transform group-hover:scale-105  border-[#2C6D90]/20">
 
-                
-                
+
+
                   <div className="flex items-start justify-between mb-4 sm:mb-6">
                     <div className="flex items-center gap-2 sm:gap-4">
                       <div className="p-2 sm:p-3 backdrop-blur-sm rounded-xl border bg-[#2C6D90]/20 border-[#2C6D90]/30">
@@ -654,13 +621,7 @@ export default function LuxuryDashboard() {
         </div>
       </div>
 
-      {/* Exchange Rate Modal */}
-      <ExchangeRateModal
-        isOpen={showExchangeModal}
-        onClose={() => setShowExchangeModal(false)}
-        onUpdateRate={updateExchangeRate}
-        currentRate={exchangeRate}
-      />
+
     </div>
   );
 }

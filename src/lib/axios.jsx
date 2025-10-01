@@ -168,7 +168,14 @@ export const api = {
   getOrder: (id) => axiosInstance.get(`/orders/${id}`),
   createOrder: (data) => axiosInstance.post('/orders', data),
   updateOrder: (id, data) => axiosInstance.put(`/orders/${id}`, data),
-  patchOrder: (id, data) => axiosInstance.patch(`/orders/${id}`, data),
+  patchOrder: (id, data) => {
+    console.log('🚀 إرسال PATCH request:', {
+      url: `/orders/${id}`,
+      data: data,
+      timestamp: new Date().toISOString()
+    });
+    return axiosInstance.patch(`/orders/${id}`, data);
+  },
   deleteOrder: (id) => axiosInstance.delete(`/orders/${id}`),
 
   // Banners - Updated to match backend endpoints

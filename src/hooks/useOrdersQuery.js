@@ -85,18 +85,34 @@ export const useUpdateOrder = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, orderData }) => {
-      console.log("Updating order:", id, orderData);
-      const response = await api.patchOrder(id, orderData);
-      console.log("Order updated successfully:", response.data);
-      return response.data;
+    mutationFn: async ({ id, data }) => {
+      console.log("🔄 تحديث الطلب:", { id, data });
+      console.log("📤 إرسال PATCH request إلى:", `/orders/${id}`);
+      console.log("📦 البيانات المرسلة:", data);
+      
+      try {
+        const response = await api.patchOrder(id, data);
+        console.log("✅ تم تحديث الطلب بنجاح:", response.data);
+        return response.data;
+      } catch (error) {
+        console.error("❌ خطأ في تحديث الطلب:", error);
+        throw error;
+      }
     },
     onSuccess: (data, variables) => {
+      console.log("🎉 نجح التحديث، تحديث cache:", { data, variables });
       queryClient.setQueryData(queryKeys.orders.detail(variables.id), data);
       queryClient.invalidateQueries({ queryKey: queryKeys.orders.lists() });
     },
     onError: (error) => {
-      console.error("Failed to update order:", error);
+      console.error("❌ فشل في تحديث الطلب:", error);
+      console.error("تفاصيل الخطأ:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        url: error.config?.url,
+        method: error.config?.method,
+      });
     },
   });
 };

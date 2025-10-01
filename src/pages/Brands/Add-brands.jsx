@@ -231,14 +231,14 @@ export default function AddBrand() {
                       />
                       <label htmlFor="Brand-image" className="cursor-pointer">
                         <div className="text-center">
-                          <Plus className="mx-auto h-12 w-12 text-[#2C6D90]" />
-                          <div className="mt-4 flex text-sm text-[#2C6D90]">
-                            <span className="text-[#2C6D90] hover:text-[#ECB774]">
+                          <Plus className="mx-auto h-12 w-12 text-white" />
+                          <div className="mt-4 flex text-sm text-white">
+                            <span className="text-[#2C6D90] hover:text-white">
                               Upload a file
                             </span>
                             <p className="pl-1">or drag and drop</p>
                           </div>
-                          <p className="text-xs text-[#2C6D90]/70 mt-2">
+                          <p className="text-xs text-white mt-2">
                             PNG, JPG, GIF up to 10MB
                           </p>
                         </div>
@@ -264,13 +264,49 @@ export default function AddBrand() {
               </div>
             </div>
 
-            {/* Submit Button */}
-            <div className="flex justify-center md:justify-end">
+            {/* Enhanced Submit Button */}
+            <div className="flex justify-center md:justify-end pt-6">
               <button
                 type="submit"
-                className="bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] text-white px-8 py-3 rounded-lg hover:shadow-lg hover:shadow-[#2C6D90]/25 transition-all duration-300 hover:scale-105"
+                className="group relative px-12 py-5 bg-gradient-to-br from-[#1e3a8a] via-[#2C6D90] via-[#3b82f6] to-[#2C6D90] text-white font-bold rounded-2xl hover:rounded-3xl hover:shadow-[0_20px_50px_rgba(44,109,144,0.4)] hover:shadow-2xl transition-all duration-700 hover:scale-110 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 overflow-hidden border border-white/20 hover:border-white/40"
               >
-                إضافة الماركة
+                {/* Animated Background Pattern */}
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Shine Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1200 ease-out"></div>
+                
+                {/* Floating Particles Effect */}
+                <div className="absolute inset-0 overflow-hidden rounded-2xl group-hover:rounded-3xl">
+                  <div className="absolute top-2 left-4 w-1 h-1 bg-white/60 rounded-full animate-pulse group-hover:animate-bounce delay-100"></div>
+                  <div className="absolute top-4 right-6 w-0.5 h-0.5 bg-white/40 rounded-full animate-pulse group-hover:animate-bounce delay-300"></div>
+                  <div className="absolute bottom-3 left-8 w-0.5 h-0.5 bg-white/50 rounded-full animate-pulse group-hover:animate-bounce delay-500"></div>
+                </div>
+                
+                {/* Button Content */}
+                <div className="relative z-10 flex items-center justify-center gap-4">
+                  <div className="relative">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 transform transition-all duration-500 group-hover:rotate-180 group-hover:scale-125"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2.5}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    {/* Icon Glow */}
+                    <div className="absolute inset-0 bg-white/30 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </div>
+                  <span className="text-lg font-black tracking-wider group-hover:tracking-widest transition-all duration-300">إضافة الماركة</span>
+                </div>
+                
+                {/* Outer Glow */}
+                <div className="absolute -inset-1 bg-gradient-to-br from-[#3b82f6] via-[#2C6D90] to-[#1e3a8a] rounded-2xl group-hover:rounded-3xl opacity-0 group-hover:opacity-75 blur-lg -z-10 transition-all duration-700"></div>
+                
+                {/* Inner Shadow */}
+                <div className="absolute inset-0 rounded-2xl group-hover:rounded-3xl shadow-inner shadow-black/20"></div>
               </button>
             </div>
           </form>

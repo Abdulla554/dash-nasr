@@ -18,6 +18,7 @@ export default function AddBanner() {
   const [imagePreview, setImagePreview] = useState(null);
   const [isCompressing, setIsCompressing] = useState(false);
   const [formData, setFormData] = useState({
+    title: "",
     isActive: true
   });
   const { uploadBannerImage } = useUpload();
@@ -131,6 +132,11 @@ export default function AddBanner() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!formData.title.trim()) {
+      toast.error("Please enter a banner title");
+      return;
+    }
+
     if (!BannerImage) {
       toast.error("Please select an image first");
       return;
@@ -155,6 +161,7 @@ export default function AddBanner() {
 
       // 2. إنشاء البانر مع URL من Cloudflare
       const requestData = {
+        title: formData.title,
         isActive: formData.isActive,
         image: uploadedImage, // URL من Cloudflare
       };
@@ -202,6 +209,31 @@ export default function AddBanner() {
         {/* Enhanced Form */}
         <div className="rounded-2xl shadow-2xl p-6 sm:p-8 mt-6 sm:mt-8 mb-10 sm:mb-14 backdrop-blur-lg bg-[#F9F3EF]/5 border border-[#2C6D90]/20">
           <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+            {/* Banner Title */}
+            <div className="bg-[#F9F3EF]/5 rounded-xl p-4 sm:p-6 border border-[#2C6D90]/20">
+              <h2 className="text-xl sm:text-2xl font-semibold text-[#F9F3EF] mb-4 sm:mb-6 flex items-center gap-3">
+                <div className="w-1 h-6 sm:h-8 bg-[#2C6D90] rounded-full"></div>
+                Banner Details
+              </h2>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="flex text-sm font-semibold text-[#F9F3EF] mb-3 sm:mb-4 items-center gap-2">
+                    <div className="w-2 h-2 bg-[#2C6D90] rounded-full"></div>
+                    Banner Title
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.title}
+                    onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                    placeholder="Enter banner title..."
+                    className="w-full px-4 py-3 bg-[#F9F3EF]/10 border border-[#2C6D90]/30 rounded-xl focus:ring-2 focus:ring-[#2C6D90] focus:border-transparent transition-all duration-300 text-[#F9F3EF] placeholder-[#F9F3EF]/50"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Active Status */}
             <div className="flex items-center justify-center space-x-4 p-4 bg-[#F9F3EF]/5 rounded-xl border border-[#2C6D90]/20">
               <input

@@ -453,7 +453,7 @@ export default function AddProduct() {
                       >
                         <option value="">اختر الماركة</option>
                         {brands.map(brand => (
-                          <option key={brand.id} value={brand.id}>{brand.name}</option>
+                          <option className="text-black" key={brand.id} value={brand.id}>{brand.name}</option>
                         ))}
                       </select>
                     </div>
@@ -473,7 +473,7 @@ export default function AddProduct() {
                       >
                         <option value="">اختر الفئة</option>
                         {categories.map(category => (
-                          <option key={category.id} value={category.id}>{category.name}</option>
+                          <option className="text-black" key={category.id} value={category.id}>{category.name}</option>
                         ))}
                       </select>
                     </div>

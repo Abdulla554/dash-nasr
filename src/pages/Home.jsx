@@ -16,25 +16,19 @@ import {
   FaSpinner,
   FaExclamationTriangle,
 } from "react-icons/fa";
-import { useCurrency } from "../hooks/useCurrency";
 import { useDashboardData } from "../hooks/useDashboardQuery";
 import { useOrders } from "../hooks/useOrdersQuery";
 import { Home } from "lucide-react";
 export default function LuxuryDashboard() {
   // إزالة نظام الثيم - استخدام ألوان ثابتة
-  const {
-    convertCurrency,
-    getCurrencySymbol,
-  } = useCurrency();
 
   // API Hooks with React Query
   const { dashboardData, loading: dashboardLoading, error: dashboardError, refetch: refetchDashboard } = useDashboardData();
-  const { data: ordersData, isLoading: ordersLoading, error: ordersError } = useOrders({ limit: 5, sort: 'createdAt', order: 'desc' });
+  const { data: ordersData, isLoading: ordersLoading, error: ordersError } = useOrders({ limit: 7, sort: 'createdAt', order: 'desc' });
   const orders = React.useMemo(() => ordersData?.data || [], [ordersData?.data]);
 
   // Business Overview Data from API
   const businessOverview = React.useMemo(() => {
-    const currencySymbol = getCurrencySymbol();
 
     // استخدام البيانات الفعلية من API
     const stats = dashboardData?.stats || {};
@@ -84,7 +78,7 @@ export default function LuxuryDashboard() {
     return [
       {
         title: "إجمالي الإيرادات",
-        value: `${currencySymbol}${convertCurrency(stats.totalRevenue || 0).toLocaleString()}`,
+        value: `${(stats.totalRevenue || 0).toLocaleString()} د.ع`,
         change: `${revenueGrowth}%`,
         trend: revenueGrowth > 0 ? "up" : revenueGrowth < 0 ? "down" : "equal",
         icon: <FaShoppingCart className="text-[#2C6D90]" />,
@@ -115,23 +109,21 @@ export default function LuxuryDashboard() {
         gradient: "from-[#2C6D90] to-[#2C6D90]"
       },
     ];
-  }, [dashboardData?.stats, getCurrencySymbol, convertCurrency]);
+  }, [dashboardData?.stats]);
 
   // New Orders Data from API
   const newOrders = React.useMemo(() => {
-    const currencySymbol = getCurrencySymbol();
-
     const ordersData = orders || [];
 
     return ordersData.map(order => ({
       orderNumber: order.id || order.orderNumber,
       customer: order.customer?.name || order.customerName || "عميل غير محدد",
-      total: `${currencySymbol}${convertCurrency(order.total || 0).toLocaleString()}`,
+      total: `${(order.total || 0).toLocaleString()} د.ع`,
       paid: order.paymentStatus === 'paid' || order.isPaid,
       status: order.status === 'pending' ? 'مفتوح' : order.status === 'completed' ? 'مغلق' : order.status,
       priority: order.priority === 'high' ? 'عالي' : order.priority === 'medium' ? 'متوسط' : 'منخفض'
     }));
-  }, [orders, getCurrencySymbol, convertCurrency]);
+  }, [orders]);
 
   // Top Customers Data from Orders
   const topCustomers = React.useMemo(() => {
@@ -331,12 +323,12 @@ export default function LuxuryDashboard() {
                 </div>
               </div>
 
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-[#2C6D90]/30 scrollbar-track-transparent hover:scrollbar-thumb-[#2C6D90]/50">
                 {isLoading ? (
                   // Loading skeleton for orders table
                   <div className="p-4 sm:p-6">
                     <div className="space-y-4">
-                      {Array.from({ length: 5 }).map((_, index) => (
+                      {Array.from({ length: 7 }).map((_, index) => (
                         <div key={index} className="flex items-center justify-between p-3 sm:p-4 rounded-xl border border-[#2C6D90]/10">
                           <div className="flex items-center gap-2 sm:gap-4">
                             <div className="h-4 bg-[#2C6D90]/20 rounded animate-pulse w-16 sm:w-20"></div>
@@ -359,7 +351,6 @@ export default function LuxuryDashboard() {
                           <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80">رقم الطلب</th>
                           <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80 hidden sm:table-cell">العميل</th>
                           <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80">المجموع</th>
-                          <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80 hidden sm:table-cell">الدفع</th>
                           <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80">الحالة</th>
                           <th className="px-2 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold text-[#F9F3EF]/80 hidden sm:table-cell">الأولوية</th>
                         </tr>
@@ -375,21 +366,13 @@ export default function LuxuryDashboard() {
                           newOrders.map((order, index) => (
                             <tr key={index} className="border-b border-[#2C6D90]/5 hover:bg-[#F9F3EF]/5 transition-colors duration-300">
                               <td className="px-2 sm:px-6 py-3 sm:py-4">
-                                <span className="font-mono text-[#2C6D90] font-semibold text-xs sm:text-sm">#{order.orderNumber}</span>
+                                <span className="font-mono text-[#2C6D90] font-semibold text-xs sm:text-sm">
+                                  {order.id ? `#${order.id.slice(-6)}` : (order.orderNumber ? `#${order.orderNumber.slice(-6)}` : '—')}
+                                </span>
                               </td>
                               <td className="px-2 sm:px-6 py-3 sm:py-4 font-medium text-[#F9F3EF] hidden sm:table-cell text-sm">{order.customer}</td>
                               <td className="px-2 sm:px-6 py-3 sm:py-4 font-semibold text-[#F9F3EF]/80 text-xs sm:text-sm">{order.total}</td>
-                              <td className="px-2 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">
-                                {order.paid ? (
-                                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded-full flex items-center justify-center">
-                                    <span className="text-white font-bold text-xs sm:text-sm">✓</span>
-                                  </div>
-                                ) : (
-                                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-red-500 rounded-full flex items-center justify-center">
-                                    <span className="text-white font-bold text-xs sm:text-sm">✗</span>
-                                  </div>
-                                )}
-                              </td>
+
                               <td className="px-2 sm:px-6 py-3 sm:py-4">
                                 <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-semibold ${order.status === 'مفتوح'
                                   ? 'bg-[#2C6D90]/20 text-[#2C6D90] border border-[#2C6D90]/30'
@@ -414,7 +397,7 @@ export default function LuxuryDashboard() {
                           لا توجد طلبات جديدة
                         </div>
                       ) : (
-                        <div className="flex gap-4 overflow-x-auto pb-4 px-4">
+                        <div className="flex gap-4 overflow-x-auto pb-4 px-4 max-h-80 scrollbar-thin scrollbar-thumb-[#2C6D90]/30 scrollbar-track-transparent hover:scrollbar-thumb-[#2C6D90]/50">
                           {newOrders.map((order, index) => (
                             <div key={index} className="flex-shrink-0 w-72 bg-[#F9F3EF]/5 border border-[#2C6D90]/20 rounded-xl p-4">
                               <div className="flex flex-col gap-4 text-center md:flex-row items-center justify-between mb-3">
@@ -489,11 +472,11 @@ export default function LuxuryDashboard() {
                 </div>
               </div>
 
-              <div className="p-4 sm:p-6">
+              <div className="p-4 sm:p-6 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-[#2C6D90]/30 scrollbar-track-transparent hover:scrollbar-thumb-[#2C6D90]/50">
                 {isLoading ? (
                   // Loading skeleton for top customers
                   <div className="space-y-4">
-                    {Array.from({ length: 5 }).map((_, index) => (
+                    {Array.from({ length: 7 }).map((_, index) => (
                       <div key={index} className="flex items-center justify-between p-4 rounded-xl border border-[#2C6D90]/10">
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 bg-[#2C6D90]/20 rounded-full animate-pulse"></div>
@@ -543,7 +526,7 @@ export default function LuxuryDashboard() {
                               </div>
                               <div className="text-center">
                                 <div className="text-[#2C6D90] font-bold text-sm">
-                                  {getCurrencySymbol()}{convertCurrency(customer.totalSpent || 0).toLocaleString()}
+                                  {(customer.totalSpent || 0).toLocaleString()} د.ع
                                 </div>
                                 <div className="text-xs text-[#F9F3EF]/50">إجمالي</div>
                               </div>
@@ -569,7 +552,7 @@ export default function LuxuryDashboard() {
                           لا توجد طلبات لعرض العملاء
                         </div>
                       ) : (
-                        <div className="flex gap-4 overflow-x-auto pb-4 px-4">
+                        <div className="flex gap-4 overflow-x-auto pb-4 px-4 max-h-80 scrollbar-thin scrollbar-thumb-[#2C6D90]/30 scrollbar-track-transparent hover:scrollbar-thumb-[#2C6D90]/50">
                           {topCustomers.map((customer, index) => (
                             <div key={index} className="flex-shrink-0 w-64 bg-[#F9F3EF]/5 border border-[#2C6D90]/20 rounded-xl p-4">
                               <div className="flex items-center gap-3 mb-3">
@@ -591,7 +574,7 @@ export default function LuxuryDashboard() {
                                 <div className="flex items-center justify-between">
                                   <span className="text-[#F9F3EF]/70 text-xs">الإجمالي:</span>
                                   <span className="text-[#2C6D90] font-bold text-sm">
-                                    {getCurrencySymbol()}{convertCurrency(customer.totalSpent || 0).toLocaleString()}
+                                    {(customer.totalSpent || 0).toLocaleString()} د.ع
                                   </span>
                                 </div>
 

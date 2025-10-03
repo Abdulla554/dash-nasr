@@ -129,9 +129,9 @@ export default function AllBanner() {
               onClick={() => handleDelete(Banner.id)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 sm:p-3 rounded-full bg-nsr-accent/10 backdrop-blur-lg border-2 border-red-600 border-dashed text-nsr-accent hover:bg-nsr-accent/20 transition-all duration-300"
+              className="p-2 sm:p-3 rounded-full bg-red-900/50 backdrop-blur-lg  text-nsr-accent hover:bg-red-800/90 transition-all duration-300"
             >
-              <Trash size={16} className="sm:w-5 sm:h-5 text-red-600" />
+              <Trash size={16} className="sm:w-5 sm:h-5 text-white" />
             </motion.button>
           </motion.div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>

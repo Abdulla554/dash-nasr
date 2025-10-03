@@ -49,7 +49,7 @@ export default function AddBanner() {
     if (file) {
       // Check file size (5MB limit)
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image size should be less than 5MB", {
+        toast.error("يجب أن يكون حجم الصورة أقل من 5 ميجابايت", {
           position: "top-center",
           rtl: true,
           theme: "colored",
@@ -67,7 +67,7 @@ export default function AddBanner() {
         };
         reader.readAsDataURL(compressedFile);
       } catch {
-        toast.error("Error processing image. Please try again.", {
+        toast.error("خطأ في معالجة الصورة. يرجى المحاولة مرة أخرى.", {
           position: "top-center",
           rtl: true,
           theme: "colored",
@@ -105,7 +105,7 @@ export default function AddBanner() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["Banners"] });
-      toast.success("Banner added successfully", {
+      toast.success("تم إضافة البانر بنجاح", {
         position: "top-center",
         rtl: true,
         theme: "colored",
@@ -118,7 +118,7 @@ export default function AddBanner() {
     },
     onError: (error) => {
       const errorMessage =
-        error.response?.data?.message || "Failed to add Banner";
+        error.response?.data?.message || "فشل في إضافة البانر";
       toast.error(errorMessage, {
         position: "top-center",
         rtl: true,
@@ -138,18 +138,18 @@ export default function AddBanner() {
     }
 
     if (!BannerImage) {
-      toast.error("Please select an image first");
+      toast.error("يرجى اختيار صورة أولاً");
       return;
     }
 
     if (isCompressing) {
-      toast.info("Please wait while the image is being processed...");
+      toast.info("يرجى الانتظار أثناء معالجة الصورة...");
       return;
     }
 
     try {
       // 1. رفع الصورة إلى Cloudflare أولاً
-      toast.info("Uploading image to Cloudflare...", {
+      toast.info("جاري رفع الصورة إلى Cloudflare...", {
         position: "top-center",
         rtl: true,
         theme: "colored",
@@ -171,15 +171,15 @@ export default function AddBanner() {
       mutation.mutate(requestData);
     } catch (error) {
       console.error("Submission error:", error);
-      toast.error("Failed to upload image. Please try again.");
+      toast.error("فشل في رفع الصورة. يرجى المحاولة مرة أخرى.");
     }
   };
 
   return (
     <div className="min-h-screen pb-10 bg-[#0A0A0A]" dir="rtl">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="  px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
+        <div className="relative  backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
           <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
           <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
             <div className="flex flex-col gap-4 lg:flex-row md:items-center justify-between">
@@ -235,7 +235,7 @@ export default function AddBanner() {
             </div>
 
             {/* Active Status */}
-            <div className="flex items-center justify-center space-x-4 p-4 bg-[#F9F3EF]/5 rounded-xl border border-[#2C6D90]/20">
+            <div className="flex items-center justify-center gap-4 p-4 bg-[#F9F3EF]/5 rounded-xl border border-[#2C6D90]/20">
               <input
                 type="checkbox"
                 id="isActive"
@@ -244,7 +244,7 @@ export default function AddBanner() {
                 className="w-5 h-5 text-[#2C6D90] bg-transparent border-[#2C6D90]/40 rounded focus:ring-[#2C6D90] focus:ring-2 transition-all duration-300"
               />
               <label htmlFor="isActive" className="text-sm font-semibold text-[#F9F3EF] cursor-pointer">
-                Active Banner
+                بانر نشط
               </label>
             </div>
 
@@ -252,7 +252,7 @@ export default function AddBanner() {
             <div className="bg-[#F9F3EF]/5 rounded-xl p-4 sm:p-6 border border-[#2C6D90]/20">
               <h2 className="text-xl sm:text-2xl font-semibold text-[#F9F3EF] mb-6 sm:mb-8 flex items-center gap-3">
                 <div className="w-1 h-6 sm:h-8 bg-[#2C6D90] rounded-full"></div>
-                Banner Image
+                صورة البانر
               </h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
@@ -260,7 +260,7 @@ export default function AddBanner() {
                 <div>
                   <label className="flex text-sm font-semibold text-[#F9F3EF] mb-3 sm:mb-4 items-center gap-2">
                     <div className="w-2 h-2 bg-[#2C6D90] rounded-full"></div>
-                    Upload Image
+                    رفع صورة
                   </label>
                   {!imagePreview ? (
                     <div className="relative border-2 border-dashed rounded-xl sm:rounded-2xl py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 border-[#2C6D90]/30 hover:border-[#2C6D90]/50 transition-all duration-300 flex items-center justify-center cursor-pointer bg-[#F9F3EF]/5 hover:bg-[#F9F3EF]/10 group">
@@ -273,20 +273,20 @@ export default function AddBanner() {
                       />
                       <label htmlFor="Banner-image" className="cursor-pointer">
                         <div className="text-center">
-                          <Upload className="mx-auto h-12 w-12 sm:h-16 sm:w-16 text-[#2C6D90] transition-colors duration-300" />
+                          <Upload className="mx-auto h-12 w-12 sm:h-16 sm:w-16 text-white transition-colors duration-300" />
                           <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row text-sm text-[#F9F3EF] justify-center items-center gap-1">
                             <span className="text-[#2C6D90] font-semibold">
-                              Upload a file
+                              رفع ملف
                             </span>
-                            <p className="text-[#F9F3EF]/70">or drag and drop</p>
+                            <p className="text-[#F9F3EF]/70">أو اسحب وأفلت</p>
                           </div>
                           <p className="text-xs text-[#F9F3EF]/60 mt-2 sm:mt-3">
-                            PNG, JPG, GIF up to 5MB
+                            PNG, JPG, GIF حتى 5 ميجابايت
                           </p>
                           {isCompressing && (
                             <div className="mt-3 sm:mt-4 flex items-center justify-center gap-2 text-[#2C6D90]">
                               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#2C6D90]"></div>
-                              <span className="text-sm">Compressing...</span>
+                              <span className="text-sm">جاري الضغط...</span>
                             </div>
                           )}
                         </div>
@@ -296,7 +296,7 @@ export default function AddBanner() {
                     <div className="relative group">
                       <img
                         src={imagePreview}
-                        alt="Banner preview"
+                        alt="معاينة البانر"
                         className="w-full h-48 sm:h-56 lg:h-64 object-cover rounded-xl sm:rounded-2xl border-2 border-[#2C6D90]/30 hover:border-[#2C6D90]/50 transition-all duration-300"
                       />
                       <button
@@ -314,7 +314,7 @@ export default function AddBanner() {
                 <div>
                   <label className="flex text-sm font-semibold text-[#F9F3EF] mb-3 sm:mb-4 items-center gap-2">
                     <div className="w-2 h-2 bg-[#2C6D90] rounded-full"></div>
-                    Banner Preview
+                    معاينة البانر
                   </label>
                   <div className="bg-[#F9F3EF]/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-[#2C6D90]/20 min-h-[150px] sm:min-h-[200px] flex items-center justify-center">
                     {imagePreview ? (
@@ -322,18 +322,18 @@ export default function AddBanner() {
                         <div className="w-full h-24 sm:h-32 bg-[#F9F3EF]/10 rounded-lg sm:rounded-xl border border-[#2C6D90]/30 flex items-center justify-center mb-3 sm:mb-4">
                           <img
                             src={imagePreview}
-                            alt="Preview"
+                            alt="معاينة"
                             className="max-w-full max-h-full object-contain rounded-lg"
                           />
                         </div>
-                        <p className="text-xs sm:text-sm text-[#F9F3EF]/70">Preview your banner</p>
+                        <p className="text-xs sm:text-sm text-[#F9F3EF]/70">معاينة البانر الخاص بك</p>
                       </div>
                     ) : (
                       <div className="text-center text-[#F9F3EF]/60">
                         <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 bg-[#F9F3EF]/10 rounded-lg sm:rounded-xl flex items-center justify-center">
                           <Upload className="h-6 w-6 sm:h-8 sm:w-8" />
                         </div>
-                        <p className="text-xs sm:text-sm">Upload an image to see preview</p>
+                        <p className="text-xs sm:text-sm">ارفع صورة لرؤية المعاينة</p>
                       </div>
                     )}
                   </div>
@@ -356,15 +356,15 @@ export default function AddBanner() {
                   {mutation.isPending ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white"></div>
-                      <span className="text-sm sm:text-base">Creating Banner...</span>
+                      <span className="text-sm sm:text-base">جاري إنشاء البانر...</span>
                     </>
                   ) : isCompressing ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white text-white"></div>
-                      <span className="text-sm sm:text-base">Processing Image...</span>
+                      <span className="text-sm sm:text-base">جاري معالجة الصورة...</span>
                     </>
                   ) : (
-                    <div className="flex items-center gap-2 sm:gap-3 justify-center text-center text-white font-semibold bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+                    <div className="flex  items-center gap-2 sm:gap-3 justify-center text-center text-white font-semibold bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-4 w-4 sm:h-5 sm:w-5 transform transition-transform group-hover:rotate-12"
@@ -374,7 +374,7 @@ export default function AddBanner() {
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                       </svg>
-                      <span className="text-sm sm:text-base">Create Banner</span>
+                      <span className="text-sm sm:text-base">إنشاء بانر</span>
                     </div>
                   )}
                 </div>

@@ -281,15 +281,13 @@ export default function AllBrands() {
             {filteredAndSortedBrands.map((brand) => {
               return (
                 <div key={brand.id} className="group relative">
-                  {/* Background Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90] to-[#749BC2] rounded-xl sm:rounded-2xl opacity-20 group-hover:opacity-30 transition-all duration-300"></div>
-
+               
                   {/* Main Card */}
-                  <div className="relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl overflow-hidden hover:border-[#2C6D90]/30 transition-all duration-300 group-hover:transform group-hover:scale-[1.02]">
+                  <div className="relative bg-gradient-to-br from-white/8 to-white/3 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl overflow-hidden hover:border-[#2C6D90]/50 hover:shadow-2xl hover:shadow-[#2C6D90]/20 transition-all duration-500 group-hover:transform group-hover:scale-[1.02] group-hover:bg-gradient-to-br group-hover:from-white/12 group-hover:to-white/6">
 
                     {/* Brand Badge */}
                     <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-20">
-                      <div className="px-2 sm:px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white">
+                      <div className="px-2 sm:px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white group-hover:from-[#3A7BA8] group-hover:to-[#8BB3D9] transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg group-hover:shadow-[#2C6D90]/30">
                         ماركة
                       </div>
                     </div>
@@ -300,19 +298,19 @@ export default function AllBrands() {
                         <img
                           src={brand.logo}
                           alt={brand.name}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 brightness-90 group-hover:brightness-100"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-[#2C6D90] to-[#749BC2] flex items-center justify-center">
-                          <Package className="w-12 h-12 sm:w-16 sm:h-16 text-white/50" />
+                        <div className="w-full h-full bg-gradient-to-br from-[#2C6D90] to-[#749BC2] flex items-center justify-center group-hover:from-[#3A7BA8] group-hover:to-[#8BB3D9] transition-all duration-500">
+                          <Package className="w-12 h-12 sm:w-16 sm:h-16 text-white/50 group-hover:text-white/70 transition-colors duration-300" />
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent group-hover:from-black/40 transition-all duration-500"></div>
 
                       {/* Icon Overlay */}
                       <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4">
-                        <div className="p-2 sm:p-3 bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/20">
-                          <Package className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
+                        <div className="p-2 sm:p-3 bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/20 group-hover:bg-[#b5a28b]/40 group-hover:border-[#2C6D90]/40 group-hover:scale-110 transition-all duration-300">
+                          <Package className="w-4 h-4 sm:w-6 sm:h-6 text-white group-hover:text-white transition-colors duration-300" />
                         </div>
                       </div>
                     </div>
@@ -320,28 +318,28 @@ export default function AllBrands() {
                     {/* Content */}
                     <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
                       <div>
-                        <h3 className="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-[#2C6D90] transition-colors duration-300">
+                        <h3 className="text-lg sm:text-xl font-bold text-white mb-2 group-hover:text-[#2C6D90] transition-colors duration-300 group-hover:drop-shadow-lg">
                           {brand.name}
                         </h3>
-                        <p className="text-xs sm:text-sm text-slate-400 line-clamp-2 mb-2 sm:mb-3">
+                        <p className="text-xs sm:text-sm text-slate-400 line-clamp-2 mb-2 sm:mb-3 group-hover:text-slate-300 transition-colors duration-300">
                           {brand.description || "لا يوجد وصف"}
                         </p>
                         <div className="flex items-center gap-3 sm:gap-4 text-xs sm:text-sm">
                           <div className="flex items-center gap-1 sm:gap-2">
-                            <Package className="w-3 h-3 sm:w-4 sm:h-4 text-[#2C6D90]" />
-                            <span className="text-slate-300">0 منتج</span>
+                            <Package className="w-3 h-3 sm:w-4 sm:h-4 text-[#2C6D90] group-hover:text-[#3A7BA8] transition-colors duration-300" />
+                            <span className="text-slate-300 group-hover:text-white transition-colors duration-300">0 منتج</span>
                           </div>
-                          <div className="text-slate-500">
+                          <div className="text-slate-500 group-hover:text-slate-400 transition-colors duration-300">
                             {new Date(brand.createdAt).toLocaleDateString('ar')}
                           </div>
                         </div>
                       </div>
 
                       {/* Action Buttons - Only Delete Button */}
-                      <div className="flex items-center justify-end pt-3 sm:pt-4 border-t border-white/10">
+                      <div className="flex items-center justify-end pt-3 sm:pt-4 border-t border-white/10 group-hover:border-[#2C6D90]/20 transition-colors duration-300">
                         <button
                           onClick={() => handleDeleteBrand(brand)}
-                          className="group/btn p-2 sm:p-2.5 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg sm:rounded-xl hover:bg-red-500/30 transition-all duration-300 hover:scale-110"
+                          className="group/btn p-2 sm:p-2.5 bg-red-500/20 border border-red-500/30 text-red-300 rounded-lg sm:rounded-xl hover:bg-red-500/30 hover:border-red-500/50 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 hover:scale-110"
                           title="حذف الماركة"
                         >
                           <Trash2 size={14} className="sm:w-4 sm:h-4 group-hover/btn:scale-110 transition-transform" />

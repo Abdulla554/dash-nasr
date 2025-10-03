@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Upload,
   X,
@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import { useCreateCategory } from "../../hooks/useCategoriesQuery";
 import { useUpload } from "../../hooks/useUpload";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function LuxuryAddCategoryPage() {
   const [, setCategorieImage] = useState(null);
@@ -27,11 +28,13 @@ export default function LuxuryAddCategoryPage() {
     name: "", // Changed from title to name
     description: "",
   });
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   // Add the create category mutation
   const createCategoryMutation = useCreateCategory();
   const { uploadCategoryImage } = useUpload();
-
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
@@ -100,12 +103,7 @@ export default function LuxuryAddCategoryPage() {
 
       // رفع الصورة إلى Cloudflare إذا كانت موجودة
       if (imagePreview) {
-        toast.info("جاري رفع الصورة إلى Cloudflare...", {
-          position: "top-center",
-          rtl: true,
-          theme: "colored",
-          autoClose: 2000,
-        });
+       
 
         // تحويل base64 إلى File object للرفع
         const response = await fetch(imagePreview);
@@ -123,11 +121,11 @@ export default function LuxuryAddCategoryPage() {
         image: imageUrl // URL من Cloudflare
       };
 
-      console.log("Creating category:", categoryData);
+      console.log("إنشاء الفئة:", categoryData);
 
       await createCategoryMutation.mutateAsync(categoryData);
 
-      toast.success("تم إضافة الفئة بنجاح!");
+      navigate("/categories");
 
       // Reset form
       setFormData({ name: "", description: "" });
@@ -135,7 +133,7 @@ export default function LuxuryAddCategoryPage() {
       setCategorieImage(null);
 
     } catch (error) {
-      console.error("Error creating category:", error);
+      console.error("تفاصيل الخطأ:", error);
       toast.error("حدث خطأ أثناء إضافة الفئة");
     } finally {
       setIsSubmitting(false);

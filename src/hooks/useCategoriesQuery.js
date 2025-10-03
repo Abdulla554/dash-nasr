@@ -49,6 +49,7 @@ export const useCreateCategory = () => {
       const response = await api.createCategory(categoryData);
       console.log("Category created successfully:", response.data);
       return response.data;
+      
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.categories.lists() });

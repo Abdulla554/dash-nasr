@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Upload, X } from "lucide-react";
+import { Plus, Save, Upload, X } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -105,59 +105,45 @@ export default function AddBanner() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["Banners"] });
-      toast.success("تم إضافة البانر بنجاح", {
-        position: "top-center",
-        rtl: true,
-        theme: "colored",
-        autoClose: 2000,
-      });
-      console.log("Banner added successfully");
+       
+      console.log("تم إضافة البانر بنجاح");
       setTimeout(() => {
         navigate("/banner");
       }, 2000);
     },
     onError: (error) => {
       const errorMessage =
-        error.response?.data?.message || "فشل في إضافة البانر";
-      toast.error(errorMessage, {
-        position: "top-center",
-        rtl: true,
-        theme: "colored",
-        autoClose: 2000,
-      });
-      console.error("Error details:", error.response?.data);
+        error.response?.data?.message || "فشل في إضافة البانر...";
+    
+      console.error("تفاصيل الخطأ:", error.response?.data);
     },
   });
+
+  const isSubmitting = mutation.isPending;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.title.trim()) {
-      toast.error("Please enter a banner title");
+      toast.error("يرجى إدخال عنوان البانر...");
       return;
     }
 
     if (!BannerImage) {
-      toast.error("يرجى اختيار صورة أولاً");
+      toast.error("يرجى اختيار صورة أولاً...");
       return;
     }
 
     if (isCompressing) {
-      toast.info("يرجى الانتظار أثناء معالجة الصورة...");
+      toast.info("يرجى الانتظار أثناء معالجة الصورة أولاً...");
       return;
     }
 
     try {
-      // 1. رفع الصورة إلى Cloudflare أولاً
-      toast.info("جاري رفع الصورة إلى Cloudflare...", {
-        position: "top-center",
-        rtl: true,
-        theme: "colored",
-        autoClose: 2000,
-      });
+      
 
       const uploadedImage = await uploadBannerImage(BannerImage);
-      console.log("Uploaded image:", uploadedImage);
+      console.log("تم رفع الصورة:", uploadedImage);
 
       // 2. إنشاء البانر مع URL من Cloudflare
       const requestData = {
@@ -166,12 +152,12 @@ export default function AddBanner() {
         image: uploadedImage, // URL من Cloudflare
       };
 
-      console.log("Creating banner with data:", requestData);
+      console.log("إنشاء البانر بالبيانات:", requestData);
 
       mutation.mutate(requestData);
     } catch (error) {
-      console.error("Submission error:", error);
-      toast.error("فشل في رفع الصورة. يرجى المحاولة مرة أخرى.");
+      console.error("خطأ في التسليم:", error);
+     
     }
   };
 
@@ -213,20 +199,20 @@ export default function AddBanner() {
             <div className="bg-[#F9F3EF]/5 rounded-xl p-4 sm:p-6 border border-[#2C6D90]/20">
               <h2 className="text-xl sm:text-2xl font-semibold text-[#F9F3EF] mb-4 sm:mb-6 flex items-center gap-3">
                 <div className="w-1 h-6 sm:h-8 bg-[#2C6D90] rounded-full"></div>
-                Banner Details
+                تفاصيل البانر
               </h2>
 
               <div className="space-y-4">
                 <div>
                   <label className="flex text-sm font-semibold text-[#F9F3EF] mb-3 sm:mb-4 items-center gap-2">
                     <div className="w-2 h-2 bg-[#2C6D90] rounded-full"></div>
-                    Banner Title
+                    عنوان البانر
                   </label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="Enter banner title..."
+                    placeholder="أدخل عنوان البانر..."
                     className="w-full px-4 py-3 bg-[#F9F3EF]/10 border border-[#2C6D90]/30 rounded-xl focus:ring-2 focus:ring-[#2C6D90] focus:border-transparent transition-all duration-300 text-[#F9F3EF] placeholder-[#F9F3EF]/50"
                     required
                   />
@@ -341,45 +327,49 @@ export default function AddBanner() {
               </div>
             </div>
 
-            {/* Enhanced Submit Button */}
-            <div className="flex justify-center pt-4 sm:pt-6">
+
+            {/* Submit Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-end pt-8 border-t border-[#2C6D90]/20">
+              <button
+                type="button"
+                className="px-8 py-4 border-2 border-[#2C6D90]/40 text-[#F9F3EF]/80 rounded-2xl hover:bg-[#F9F3EF]/5 hover:border-[#2C6D90]/60 transition-all duration-300 font-semibold text-lg hover:scale-105"
+              >
+                إلغاء
+              </button>
+
+              {/* Enhanced Submit Button */}
               <button
                 type="submit"
-                disabled={mutation.isPending || isCompressing}
-                className="group relative px-8 sm:px-10 lg:px-12 py-3 sm:py-4 bg-gradient-to-r from-nsr-primary to-nsr-accent text-white font-semibold rounded-xl sm:rounded-2xl hover:shadow-2xl hover:shadow-nsr-accent/25 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 overflow-hidden w-full sm:w-auto"
+                disabled={isSubmitting || isCompressing}
+                onClick={handleSubmit}
+                className="group relative px-10 py-4 bg-gradient-to-r from-[#2C6D90] to-[#3b82f6] text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg shadow-[#2C6D90]/25 hover:shadow-xl hover:shadow-[#2C6D90]/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4 hover:scale-105 text-lg overflow-hidden"
               >
-                {/* Button Shine Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                {/* Shine Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transform transition-transform duration-1000"></div>
 
                 {/* Button Content */}
-                <div className="relative z-10 flex items-center justify-center gap-2 sm:gap-3">
-                  {mutation.isPending ? (
+                <div className="relative z-10 flex items-center gap-3">
+                  {isSubmitting ? (
                     <>
-                      <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white"></div>
-                      <span className="text-sm sm:text-base">جاري إنشاء البانر...</span>
+                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>جاري إنشاء البانر...</span>
                     </>
                   ) : isCompressing ? (
                     <>
-                      <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-b-2 border-white text-white"></div>
-                      <span className="text-sm sm:text-base">جاري معالجة الصورة...</span>
+                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>جاري معالجة الصورة...</span>
                     </>
                   ) : (
-                    <div className="flex  items-center gap-2 sm:gap-3 justify-center text-center text-white font-semibold bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 sm:h-5 sm:w-5 transform transition-transform group-hover:rotate-12"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                      <span className="text-sm sm:text-base">إنشاء بانر</span>
-                    </div>
+                    <>
+                      <Save className="h-6 w-6 text-white transform transition-transform group-hover:rotate-12" />
+                      <span>إضافة بنر الجديد</span>
+                    </>
                   )}
                 </div>
               </button>
             </div>
+
+
           </form>
         </div>
       </div>

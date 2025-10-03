@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { Upload, X, Plus } from "lucide-react";
+import { Upload, X, Plus, Save } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -23,7 +23,7 @@ export default function AddBrand() {
   const navigate = useNavigate();
   const createBrandMutation = useCreateBrand();
   const { uploadBrandImage } = useUpload();
-
+  const isSubmitting = createBrandMutation.isPending;
   const compressImage = async (file) => {
     const options = {
       maxSizeMB: 1,
@@ -36,7 +36,7 @@ export default function AddBrand() {
       const compressedFile = await imageCompression(file, options);
       return compressedFile;
     } catch (error) {
-      console.error("Error compressing image:", error);
+      console.error("خطأ في معالجة الصورة:", error);
       throw error;
     } finally {
       setIsCompressing(false);
@@ -48,7 +48,7 @@ export default function AddBrand() {
     if (file) {
       // Check file size (5MB limit)
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image size should be less than 5MB", {
+        toast.error("حجم الصورة يجب أن يكون أقل من 5 ميجابايت...", {
           position: "top-center",
           rtl: true,
           theme: "colored",
@@ -66,7 +66,7 @@ export default function AddBrand() {
         };
         reader.readAsDataURL(compressedFile);
       } catch {
-        toast.error("Error processing image. Please try again.", {
+        toast.error("خطأ في معالجة الصورة. يرجى المحاولة مرة أخرى...", {
           position: "top-center",
           rtl: true,
           theme: "colored",
@@ -75,11 +75,13 @@ export default function AddBrand() {
       }
     }
   };
+  
 
   // Add useEffect to monitor brandImage changes
   useEffect(() => {
-    console.log("Brand Image updated:", brandImage);
+    console.log("تم تحديث صورة الماركة:", brandImage);
     console.log(typeof brandImage);
+    window.scrollTo(0, 0);
   }, [brandImage]);
 
   const handleDeleteImage = () => {
@@ -92,12 +94,22 @@ export default function AddBrand() {
     e.preventDefault();
 
     if (!formData.name.trim()) {
-      toast.error("يرجى إدخال اسم الماركة");
+      toast.error("يرجى إدخال اسم الماركة...", {
+        position: "top-center",
+        rtl: true,
+        theme: "colored",
+        autoClose: 3000,
+      });
       return;
     }
 
     if (isCompressing) {
-      toast.info("يرجى الانتظار حتى انتهاء معالجة الصورة...");
+      toast.info("يرجى الانتظار حتى انتهاء معالجة الصورة أولاً...", {
+        position: "top-center",
+        rtl: true,
+        theme: "colored",
+        autoClose: 3000,
+      });
       return;
     }
 
@@ -106,16 +118,12 @@ export default function AddBrand() {
 
       // رفع الصورة إلى Cloudflare إذا كانت موجودة
       if (brandImage) {
-        toast.info("جاري رفع الصورة إلى Cloudflare...", {
-          position: "top-center",
-          rtl: true,
-          theme: "colored",
-          autoClose: 2000,
-        });
+       
 
         const uploadedImage = await uploadBrandImage(brandImage);
         logoUrl = uploadedImage.url || uploadedImage;
-        console.log("Uploaded brand logo:", uploadedImage);
+          console.log("تم رفع صورة الماركة بنجاح:", uploadedImage);
+         
       }
 
       const brandData = {
@@ -124,11 +132,11 @@ export default function AddBrand() {
         logo: logoUrl // URL من Cloudflare
       };
 
-      console.log("Creating brand:", brandData);
+      console.log("إنشاء الماركة:", brandData);
 
       await createBrandMutation.mutateAsync(brandData);
 
-      toast.success("تم إضافة الماركة بنجاح!");
+     
 
       // Reset form
       setFormData({ name: "", description: "" });
@@ -139,8 +147,8 @@ export default function AddBrand() {
       navigate("/brands");
 
     } catch (error) {
-      console.error("Error creating brand:", error);
-      toast.error("حدث خطأ أثناء إضافة الماركة");
+      console.error("تفاصيل الخطأ:", error);
+      
     }
   };
 
@@ -181,7 +189,7 @@ export default function AddBrand() {
             {/* Basic Information Section */}
             <div>
               <h2 className="text-xl font-semibold bg-gradient-to-r from-nsr-primary to-nsr-accent bg-clip-text text-transparent mb-6">
-                Basic Information
+                المعلومات الأساسية
               </h2>
               <div className="space-y-6">
                 {/* Brand Name */}
@@ -218,7 +226,7 @@ export default function AddBrand() {
                 {/* Image Upload */}
                 <div>
                   <label className="block text-sm font-medium text-nsr-primary mb-3">
-                    Brand Image
+                    صورة الماركة
                   </label>
                   {!imagePreview ? (
                     <div className="relative border-2 border-dashed rounded-lg py-16 px-6 border-[#2C6D90]/40 hover:border-nsr-primary transition-all duration-300 flex items-center justify-center cursor-pointer bg-nsr-secondary/20">
@@ -234,12 +242,12 @@ export default function AddBrand() {
                           <Plus className="mx-auto h-12 w-12 text-white" />
                           <div className="mt-4 flex text-sm text-white">
                             <span className="text-[#2C6D90] hover:text-white">
-                              Upload a file
+                              رفع ملف
                             </span>
-                            <p className="pl-1">or drag and drop</p>
+                            <p className="pl-1">أو اسحب وأفلت</p>
                           </div>
                           <p className="text-xs text-white mt-2">
-                            PNG, JPG, GIF up to 10MB
+                            PNG, JPG, GIF حتى 10 ميجابايت
                           </p>
                         </div>
                       </label>
@@ -264,49 +272,44 @@ export default function AddBrand() {
               </div>
             </div>
 
-            {/* Enhanced Submit Button */}
-            <div className="flex justify-center md:justify-end pt-6">
+          {/* Submit Buttons */}
+          <div className="flex flex-col sm:flex-row gap-6 justify-end pt-8 border-t border-[#2C6D90]/20">
+              <button
+                type="button"
+                className="px-8 py-4 border-2 border-[#2C6D90]/40 text-[#F9F3EF]/80 rounded-2xl hover:bg-[#F9F3EF]/5 hover:border-[#2C6D90]/60 transition-all duration-300 font-semibold text-lg hover:scale-105"
+              >
+                إلغاء
+              </button>
+
+              {/* Enhanced Submit Button */}
               <button
                 type="submit"
-                className="group relative px-12 py-5 bg-gradient-to-br from-[#1e3a8a] via-[#2C6D90] via-[#3b82f6] to-[#2C6D90] text-white font-bold rounded-2xl hover:rounded-3xl hover:shadow-[0_20px_50px_rgba(44,109,144,0.4)] hover:shadow-2xl transition-all duration-700 hover:scale-110 hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 overflow-hidden border border-white/20 hover:border-white/40"
+                disabled={isSubmitting || isCompressing}
+                onClick={handleSubmit}
+                className="group relative px-10 py-4 bg-gradient-to-r from-[#2C6D90] to-[#3b82f6] text-white rounded-2xl transition-all duration-300 font-semibold shadow-lg shadow-[#2C6D90]/25 hover:shadow-xl hover:shadow-[#2C6D90]/40 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-4 hover:scale-105 text-lg overflow-hidden"
               >
-                {/* Animated Background Pattern */}
-                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
                 {/* Shine Effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1200 ease-out"></div>
-                
-                {/* Floating Particles Effect */}
-                <div className="absolute inset-0 overflow-hidden rounded-2xl group-hover:rounded-3xl">
-                  <div className="absolute top-2 left-4 w-1 h-1 bg-white/60 rounded-full animate-pulse group-hover:animate-bounce delay-100"></div>
-                  <div className="absolute top-4 right-6 w-0.5 h-0.5 bg-white/40 rounded-full animate-pulse group-hover:animate-bounce delay-300"></div>
-                  <div className="absolute bottom-3 left-8 w-0.5 h-0.5 bg-white/50 rounded-full animate-pulse group-hover:animate-bounce delay-500"></div>
-                </div>
-                
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transform transition-transform duration-1000"></div>
+
                 {/* Button Content */}
-                <div className="relative z-10 flex items-center justify-center gap-4">
-                  <div className="relative">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 transform transition-all duration-500 group-hover:rotate-180 group-hover:scale-125"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2.5}
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                    </svg>
-                    {/* Icon Glow */}
-                    <div className="absolute inset-0 bg-white/30 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  </div>
-                  <span className="text-lg font-black tracking-wider group-hover:tracking-widest transition-all duration-300">إضافة الماركة</span>
+                <div className="relative z-10 flex items-center gap-3">
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>جاري إنشاء الماركة...</span>
+                    </>
+                  ) : isCompressing ? (
+                    <>
+                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <span>جاري معالجة الصورة...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-6 w-6 text-white transform transition-transform group-hover:rotate-12" />
+                      <span>إضافة الماركة الجديدة</span>
+                    </>
+                  )}
                 </div>
-                
-                {/* Outer Glow */}
-                <div className="absolute -inset-1 bg-gradient-to-br from-[#3b82f6] via-[#2C6D90] to-[#1e3a8a] rounded-2xl group-hover:rounded-3xl opacity-0 group-hover:opacity-75 blur-lg -z-10 transition-all duration-700"></div>
-                
-                {/* Inner Shadow */}
-                <div className="absolute inset-0 rounded-2xl group-hover:rounded-3xl shadow-inner shadow-black/20"></div>
               </button>
             </div>
           </form>

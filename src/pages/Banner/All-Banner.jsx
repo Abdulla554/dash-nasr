@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { motion, easeOut, easeInOut } from "framer-motion";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../../lib/axios";
-import { toast } from "react-toastify";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import ClipLoader from "react-spinners/ClipLoader";
 export default function AllBanner() {
@@ -26,7 +25,7 @@ export default function AllBanner() {
         const response = await axiosInstance.get("/banners");
         return response.data;
       } catch (error) {
-        console.error("Error fetching banners:", error);
+        console.error("فشل في جلب البانرات:", error);
         throw error;
       }
     },
@@ -38,32 +37,16 @@ export default function AllBanner() {
         await axiosInstance.delete(`/banners/${bannerId}`);
         return bannerId;
       } catch (error) {
-        console.error("Error deleting banner:", error);
+        console.error("فشل في حذف البانر:", error);
         throw error;
       }
     },
     onSuccess: () => {
       // Invalidate and refetch banners query
       queryClient.invalidateQueries({ queryKey: ["banners"] });
-      toast.success("Banner deleted successfully", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      
     },
-    onError: () => {
-      toast.error("Failed to delete banner", {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-    },
+    
   });
   const containerVariants = {
     hidden: { opacity: 0 },

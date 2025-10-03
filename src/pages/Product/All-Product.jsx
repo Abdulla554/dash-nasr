@@ -340,11 +340,12 @@ export default function LuxuryProductsPage() {
             </button>
           </div>
         ) : (
-          <div className="relative rounded-2xl overflow-hidden">
+          <div className="relative rounded-2xl sm:overflow-hidden overflow-visible">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#0C0C0E] via-[#0F1B24] to-[#11212D]"></div>
-            <div className="relative backdrop-blur-sm border rounded-2xl overflow-hidden bg-[#F9F3EF]/5 border-[#2C6D90]/20">
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[600px] sm:min-w-[800px]">
+            <div className="relative backdrop-blur-sm border rounded-2xl sm:overflow-hidden overflow-visible bg-[#F9F3EF]/5 border-[#2C6D90]/20">
+              <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 py-2 touch-pan-x overscroll-x-contain scrollbar-thin">
+                {/* Desktop/Table View */}
+                <table className="w-full min-w-[600px] sm:min-w-[800px] whitespace-nowrap hidden sm:table">
                   <thead>
                     <tr className="border-b border-[#2C6D90]/10">
                       <th className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 text-right font-semibold text-xs sm:text-sm text-[#2C6D90]">الصورة</th>
@@ -510,6 +511,79 @@ export default function LuxuryProductsPage() {
                     })}
                   </tbody>
                 </table>
+                {/* Mobile List (Clean vertical cards) */}
+                <div className="sm:hidden">
+                  {sortedProducts.length === 0 ? (
+                    <div className="text-center py-8 text-[#F9F3EF]/60 text-sm">لا توجد منتجات</div>
+                  ) : (
+                    <div className="space-y-3 px-2 py-2">
+                      {sortedProducts.map((product) => {
+                        const discountPercentage = getDiscountPercentage(product.originalPrice, product.price);
+                        return (
+                          <div key={product.id} className="rounded-xl border border-[#2C6D90]/20 bg-[#F9F3EF]/5 p-3">
+                            <div className="flex items-center gap-3">
+                              <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                                <img
+                                  src={getImageUrl(product.image || product.images?.[0])}
+                                  alt={product.name}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => { e.target.src = '/logo.png'; }}
+                                />
+                                {product.isNew && (
+                                  <span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-[10px] px-1 py-0.5 rounded-md font-semibold">جديد</span>
+                                )}
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-[#2C6D90]/10 text-[#2C6D90]">
+                                    {brands.find(b => b.id === product.brandId)?.name || 'Unknown'}
+                                  </span>
+                                  <div className="flex items-center gap-1">
+                                    <Star size={10} className="text-yellow-400 fill-current" />
+                                    <span className="text-[11px] text-[#F9F3EF]/70">{product.rating}</span>
+                                  </div>
+                                </div>
+                                <div className="text-sm font-semibold text-[#F9F3EF] line-clamp-2">{product.name}</div>
+                                <div className="flex items-center justify-between mt-2">
+                                  <div>
+                                    <div className="text-[#2C6D90] font-bold text-sm">
+                                      {getCurrencySymbol()}{convertCurrency(product.price).toLocaleString()}
+                                    </div>
+                                    {product.originalPrice && (
+                                      <div className="text-[11px] line-through text-[#F9F3EF]/70">
+                                        {getCurrencySymbol()}{convertCurrency(product.originalPrice).toLocaleString()}
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    <div className={`w-2 h-2 rounded-full ${getStockColor(product.stock)}`}></div>
+                                    <span className="text-xs text-[#F9F3EF]/80">{getStockStatus(product.stock)}</span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="self-start">
+                                <button
+                                  onClick={() => handleDelete(product.id)}
+                                  className="p-2 text-red-500 hover:text-white hover:bg-red-500 rounded-lg transition-colors duration-300"
+                                  title="حذف"
+                                >
+                                  <Trash size={16} />
+                                </button>
+                              </div>
+                            </div>
+                            {(discountPercentage > 0 || product.discountPercentage > 0) && (
+                              <div className="mt-2">
+                                <span className="bg-red-500 text-white px-2 py-0.5 rounded-md text-[11px] font-semibold">
+                                  -{product.discountPercentage || discountPercentage}%
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Search,
   Filter,
@@ -43,7 +43,9 @@ export default function AllBrands() {
   // eslint-disable-next-line no-unused-vars
   const updateBrandMutation = useUpdateBrand();
   const deleteBrandMutation = useDeleteBrand();
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   // Filter and sort brands
   const filteredAndSortedBrands = React.useMemo(() => {
     let filtered = brands;
@@ -124,8 +126,8 @@ export default function AllBrands() {
         isOpen={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Confirm Deletion"
-        message="Are you sure you want to delete this banner? This action cannot be undone."
+        title="تأكيد الحذف"
+        message="هل أنت متأكد من حذف هذه الماركة؟ لا يمكن التراجع عن هذا الإجراء."
       />
       {/* Header */}
       <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
@@ -201,15 +203,7 @@ export default function AllBrands() {
 
             {/* Filter Controls */}
             <div className="flex flex-wrap gap-2 sm:gap-3 lg:gap-4">
-              {/* Sort By */}
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 sm:px-4 py-2 sm:py-3 bg-slate-800/50 border border-slate-700/50 rounded-lg sm:rounded-xl text-white focus:outline-none focus:border-[#2C6D90] focus:ring-2 focus:ring-[#2C6D90]/20 transition-all duration-300 text-sm sm:text-base"
-              >
-                <option value="name">الاسم</option>
-                <option value="date">تاريخ الإنشاء</option>
-              </select>
+
 
               {/* Sort Order */}
               <button
@@ -258,7 +252,7 @@ export default function AllBrands() {
       </div>
 
       {/* Brands Grid/List */}
-      <div className="px-4 sm:px-6 lg:px-8 pb-6 sm:pb-8">
+      <div className=" px-8 pb-6 sm:pb-8">
         {filteredAndSortedBrands.length === 0 ? (
           <div className="text-center py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-slate-800/80 to-slate-900/80 rounded-xl sm:rounded-2xl border border-white/10">
             <Search size={32} className="text-[#2C6D90] mx-auto mb-3 sm:mb-4 sm:w-12 sm:h-12 lg:w-12 lg:h-12" />
@@ -281,16 +275,10 @@ export default function AllBrands() {
             {filteredAndSortedBrands.map((brand) => {
               return (
                 <div key={brand.id} className="group relative">
-               
+
                   {/* Main Card */}
                   <div className="relative bg-gradient-to-br from-white/8 to-white/3 backdrop-blur-sm border border-white/10 rounded-xl sm:rounded-2xl overflow-hidden hover:border-[#2C6D90]/50 hover:shadow-2xl hover:shadow-[#2C6D90]/20 transition-all duration-500 group-hover:transform group-hover:scale-[1.02] group-hover:bg-gradient-to-br group-hover:from-white/12 group-hover:to-white/6">
 
-                    {/* Brand Badge */}
-                    <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-20">
-                      <div className="px-2 sm:px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-[#2C6D90] to-[#749BC2] text-white group-hover:from-[#3A7BA8] group-hover:to-[#8BB3D9] transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg group-hover:shadow-[#2C6D90]/30">
-                        ماركة
-                      </div>
-                    </div>
 
                     {/* Image Container */}
                     <div className="relative overflow-hidden aspect-[4/3]">
@@ -298,21 +286,16 @@ export default function AllBrands() {
                         <img
                           src={brand.logo}
                           alt={brand.name}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 brightness-90 group-hover:brightness-100"
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 "
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-[#2C6D90] to-[#749BC2] flex items-center justify-center group-hover:from-[#3A7BA8] group-hover:to-[#8BB3D9] transition-all duration-500">
                           <Package className="w-12 h-12 sm:w-16 sm:h-16 text-white/50 group-hover:text-white/70 transition-colors duration-300" />
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent group-hover:from-black/40 transition-all duration-500"></div>
 
-                      {/* Icon Overlay */}
-                      <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4">
-                        <div className="p-2 sm:p-3 bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-xl border border-white/20 group-hover:bg-[#b5a28b]/40 group-hover:border-[#2C6D90]/40 group-hover:scale-110 transition-all duration-300">
-                          <Package className="w-4 h-4 sm:w-6 sm:h-6 text-white group-hover:text-white transition-colors duration-300" />
-                        </div>
-                      </div>
+
+
                     </div>
 
                     {/* Content */}

@@ -101,7 +101,7 @@ export default function LuxuryDashboard() {
         gradient: "from-[#2C6D90] to-[#1a1a2e]"
       },
       {
-        title: "عدد زوار الموقع",
+        title: "  زوار الموقع",
         value: (visitors).toLocaleString(),
         change: `${visitorsGrowth}%`,
         trend: visitorsGrowth > 0 ? "up" : visitorsGrowth < 0 ? "down" : "equal",

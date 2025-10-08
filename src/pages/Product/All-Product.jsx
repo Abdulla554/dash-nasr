@@ -340,10 +340,10 @@ export default function LuxuryProductsPage() {
             </button>
           </div>
         ) : (
-          <div className="relative rounded-2xl sm:overflow-hidden overflow-visible">
+          <div className="relative rounded-2xl overflow-hidden">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#0C0C0E] via-[#0F1B24] to-[#11212D]"></div>
-            <div className="relative backdrop-blur-sm border rounded-2xl sm:overflow-hidden overflow-visible bg-[#F9F3EF]/5 border-[#2C6D90]/20">
-              <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 py-2 touch-pan-x overscroll-x-contain scrollbar-thin">
+            <div className="relative backdrop-blur-sm border rounded-2xl overflow-hidden bg-[#F9F3EF]/5 border-[#2C6D90]/20">
+              <div className="overflow-x-auto py-2 scrollbar-thin">
                 {/* Desktop/Table View */}
                 <table className="w-full min-w-[600px] sm:min-w-[800px] whitespace-nowrap hidden sm:table">
                   <thead>
@@ -516,7 +516,7 @@ export default function LuxuryProductsPage() {
                   {sortedProducts.length === 0 ? (
                     <div className="text-center py-8 text-[#F9F3EF]/60 text-sm">لا توجد منتجات</div>
                   ) : (
-                    <div className="space-y-3 px-2 py-2">
+                    <div className="space-y-3 p-4">
                       {sortedProducts.map((product) => {
                         const discountPercentage = getDiscountPercentage(product.originalPrice, product.price);
                         return (

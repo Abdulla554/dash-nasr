@@ -25,15 +25,14 @@ import {
 } from "lucide-react";
 import { toast } from "react-toastify";
 import ConfirmationModal from "../../components/ConfirmationModal";
-import ExchangeRateModal from "../../components/ExchangeRateModal";
-import { useCurrency } from "../../contexts/CurrencyContext.jsx";
 import { useTheme } from "../../contexts/ThemeContext.jsx";
 import { useOrder, useUpdateOrder } from "../../hooks/useOrdersQuery.js";
 
 export default function OrderDetails() {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { convertCurrency, getCurrencySymbol, getCurrencyCode, toggleCurrency, showExchangeModal, setShowExchangeModal, exchangeRate, updateExchangeRate } = useCurrency();
+
+
     const { isDark } = useTheme();
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -264,7 +263,40 @@ export default function OrderDetails() {
     };
 
     const handlePrint = () => {
-        window.print();
+        // إنشاء بيانات الطلب للطباعة مع جميع البيانات
+        const printData = {
+            id: order.id,
+            orderNumber: order.orderNumber,
+            createdAt: order.createdAt,
+            orderDate: order.orderDate,
+            customerName: order.customerName,
+            customerPhone: order.customerPhone,
+            customerEmail: order.customerEmail,
+            location: order.location,
+            items: order.items || [],
+            totalAmount: order.totalAmount || order.total || 0,
+            subtotal: order.subtotal || order.totalAmount || 0,
+            status: order.status,
+            paymentMethod: order.paymentMethod,
+            paymentStatus: order.paymentStatus,
+            notes: order.notes,
+            trackingNumber: order.trackingNumber
+        };
+
+        console.log('Print data:', printData); // للتأكد من البيانات
+
+        // إنشاء نافذة جديدة للطباعة
+        const printWindow = window.open('/print-invoice.html', '_blank', 'width=800,height=600');
+
+        // انتظار تحميل الصفحة ثم تمرير البيانات
+        printWindow.onload = () => {
+            console.log('Window loaded, passing data...');
+            if (printWindow.fillInvoiceData) {
+                printWindow.fillInvoiceData(printData);
+            } else {
+                console.error('fillInvoiceData function not found');
+            }
+        };
     };
 
     const handleDelete = () => {
@@ -280,7 +312,184 @@ export default function OrderDetails() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0A0A0A]" dir="rtl">
+        <div className="min-h-screen bg-[#0A0A0A] print-container" dir="rtl">
+            {/* علامة مائية للطباعة */}
+            <div className="print-watermark print-only">نصر للتجارة الحاسبات والالكترونيات</div>
+            {/* Print Styles */}
+            <style jsx>{`
+                @media print {
+                    @page {
+                        size: A4;
+                        margin: 15mm;
+                    }
+                    
+                    * {
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                        color-adjust: exact !important;
+                    }
+                    
+                    body {
+                        background: white !important;
+                        color: black !important;
+                        position: relative;
+                    }
+                    
+                    /* علامة مائية */
+                    body::before {
+                        content: "نصر للتجارة الحاسبات والالكترونيات" !important;
+                        position: fixed !important;
+                        top: 50% !important;
+                        left: 50% !important;
+                        transform: translate(-50%, -50%) rotate(-45deg) !important;
+                        font-size: 120px !important;
+                        font-weight: bold !important;
+                        color: rgba(44, 109, 144, 0.08) !important;
+                        z-index: -1 !important;
+                        white-space: nowrap !important;
+                        pointer-events: none !important;
+                        font-family: 'Cairo', sans-serif !important;
+                    }
+                    
+                    .print-watermark {
+                        position: fixed !important;
+                        top: 50% !important;
+                        left: 50% !important;
+                        transform: translate(-50%, -50%) rotate(-45deg) !important;
+                        font-size: 100px !important;
+                        font-weight: bold !important;
+                        color: rgba(44, 109, 144, 0.06) !important;
+                        z-index: 0 !important;
+                        white-space: nowrap !important;
+                        pointer-events: none !important;
+                        font-family: 'Cairo', sans-serif !important;
+                    }
+                    
+                    .print-container {
+                        position: relative !important;
+                        z-index: 1 !important;
+                    }
+                    
+                    .print-header {
+                        background: linear-gradient(135deg, #2C6D90, #4A90E2) !important;
+                        color: white !important;
+                        padding: 25px !important;
+                        margin-bottom: 25px !important;
+                        border-radius: 15px !important;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+                    }
+                    
+                    .print-logo {
+                        width: 80px !important;
+                        height: 80px !important;
+                        background: white !important;
+                        border-radius: 15px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+                    }
+                    
+                    .print-logo svg {
+                        width: 50px !important;
+                        height: 50px !important;
+                        color: #2C6D90 !important;
+                    }
+                    
+                    .print-table {
+                        width: 100% !important;
+                        border-collapse: collapse !important;
+                        margin: 25px 0 !important;
+                        background: white !important;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+                        border-radius: 10px !important;
+                        overflow: hidden !important;
+                    }
+                    
+                    .print-table th {
+                        background: linear-gradient(135deg, #2C6D90, #4A90E2) !important;
+                        color: white !important;
+                        padding: 15px !important;
+                        text-align: right !important;
+                        font-weight: bold !important;
+                        font-size: 14px !important;
+                    }
+                    
+                    .print-table td {
+                        border: 1px solid #e5e7eb !important;
+                        padding: 12px 15px !important;
+                        text-align: right !important;
+                        color: #1f2937 !important;
+                        background: white !important;
+                    }
+                    
+                    .print-table tbody tr:nth-child(even) {
+                        background: #f9fafb !important;
+                    }
+                    
+                    .print-summary {
+                        background: linear-gradient(135deg, #f0f9ff, #e0f2fe) !important;
+                        padding: 25px !important;
+                        border-radius: 15px !important;
+                        margin: 25px 0 !important;
+                        border: 2px solid #2C6D90 !important;
+                        box-shadow: 0 2px 8px rgba(44, 109, 144, 0.15) !important;
+                    }
+                    
+                    .print-summary-header {
+                        background: linear-gradient(135deg, #2C6D90, #4A90E2) !important;
+                        color: white !important;
+                        padding: 15px !important;
+                        border-radius: 10px !important;
+                        margin-bottom: 20px !important;
+                        text-align: center !important;
+                        font-weight: bold !important;
+                        font-size: 18px !important;
+                    }
+                    
+                    .print-info-box {
+                        background: white !important;
+                        border: 2px solid #2C6D90 !important;
+                        border-radius: 10px !important;
+                        padding: 15px !important;
+                        margin: 15px 0 !important;
+                    }
+                    
+                    .print-footer {
+                        margin-top: 40px !important;
+                        padding: 25px !important;
+                        background: linear-gradient(135deg, #2C6D90, #4A90E2) !important;
+                        border-radius: 15px !important;
+                        color: white !important;
+                        text-align: center !important;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+                    }
+                    
+                    .print-footer-logo {
+                        width: 50px !important;
+                        height: 50px !important;
+                        background: white !important;
+                        border-radius: 10px !important;
+                        display: inline-flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        margin-bottom: 10px !important;
+                    }
+                    
+                    .no-print {
+                        display: none !important;
+                    }
+                    
+                    .print-only {
+                        display: block !important;
+                    }
+                }
+                
+                .print-watermark,
+                .print-only {
+                    display: none;
+                }
+            `}</style>
             <ConfirmationModal
                 isOpen={deleteModalOpen}
                 onClose={() => setDeleteModalOpen(false)}
@@ -289,52 +498,93 @@ export default function OrderDetails() {
                 message="هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء."
             />
 
-            <ExchangeRateModal
-                isOpen={showExchangeModal}
-                onClose={() => setShowExchangeModal(false)}
-                onUpdateRate={updateExchangeRate}
-                currentRate={exchangeRate}
-            />
+            {/* Print Header - Hidden in normal view */}
+            <div className="print-header print-only">
+                <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                        <div className="print-logo">
+                            <Package className="w-12 h-12 text-[#2C6D90]" />
+                        </div>
+                        <div>
+                            <h1 className="text-3xl font-bold text-white">فاتورة الطلب</h1>
+                            <p className="text-lg text-white/90">رقم الطلب: #{order?.orderNumber || order?.id}</p>
+                            <p className="text-sm text-white/80">نصر للتجارة الحاسبات والالكترونيات</p>
+                        </div>
+                    </div>
+                    <div className="text-right text-white">
+                        <div className="text-sm opacity-90">تاريخ الطباعة</div>
+                        <div className="font-semibold">{new Date().toLocaleDateString('ar-SA')}</div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-6 text-sm mb-6">
+                    <div className="print-info-box">
+                        <div className="text-gray-600 text-xs mb-1">تاريخ الطلب</div>
+                        <div className="text-gray-800 font-semibold">{new Date(order.createdAt || order.orderDate).toLocaleDateString('ar-SA')}</div>
+                    </div>
+                    <div className="print-info-box">
+                        <div className="text-gray-600 text-xs mb-1">حالة الطلب</div>
+                        <div className="text-gray-800 font-semibold">{getStatusText(order.status)}</div>
+                    </div>
+                    <div className="print-info-box">
+                        <div className="text-gray-600 text-xs mb-1">طريقة الدفع</div>
+                        <div className="text-gray-800 font-semibold">{getPaymentMethodText(order.paymentMethod) || 'غير محدد'}</div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6 text-sm">
+                    <div className="print-info-box">
+                        <div className="text-gray-600 text-xs mb-2">معلومات العميل</div>
+                        <div className="text-gray-800 font-semibold text-lg">{order.customerName || 'غير محدد'}</div>
+                        <div className="text-gray-600">{order.customerPhone || 'غير محدد'}</div>
+                        <div className="text-gray-500 text-sm">{order.customerEmail || 'غير محدد'}</div>
+                    </div>
+                    <div className="print-info-box">
+                        <div className="text-gray-600 text-xs mb-2">المبلغ الإجمالي</div>
+                        <div className="text-[#2C6D90] font-bold text-2xl">د.ع {(order.totalAmount || order.total || 0).toLocaleString()}</div>
+                        <div className="text-green-600 text-sm font-semibold">شامل التوصيل المجاني</div>
+                    </div>
+                </div>
+            </div>
 
             {/* Header */}
-            <div className="relative backdrop-blur-sm border-b bg-[#1A1A2E]/30 border-[#2C6D90]/20">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 to-[#2C6D90]/10"></div>
-                <div className="relative px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <div className="relative backdrop-blur-sm border-b bg-gradient-to-r from-[#1A1A2E] via-[#2C6D90]/20 to-[#1A1A2E] border-[#2C6D90]/30 no-print">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#2C6D90]/10 via-[#4A90E2]/5 to-[#2C6D90]/10"></div>
+                <div className="relative px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 sm:p-4 bg-gradient-to-r from-[#2C6D90] to-[#2C6D90] rounded-xl sm:rounded-2xl">
-                                <Package className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
+                        <div className="flex items-center gap-6">
+                            <div className="relative">
+                                <div className="p-4 sm:p-5 bg-gradient-to-br from-[#2C6D90] to-[#4A90E2] rounded-2xl sm:rounded-3xl shadow-xl">
+                                    <Package className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-white" />
+                                </div>
+                                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white animate-pulse"></div>
                             </div>
                             <div>
-                                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#F9F3EF]">تفاصيل الطلب #{order?.orderNumber || order?.id}</h1>
-                                <p className="text-[#F9F3EF]/70 mt-1 sm:mt-2 text-sm sm:text-base lg:text-lg">عرض تفاصيل الطلب الكاملة</p>
+                                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F9F3EF] mb-2">
+                                    تفاصيل الطلب {order.id ? `#${order.id.slice(-6)}` : (order.orderNumber ? `#${order.orderNumber.slice(-6)}` : '—')}
+                                </h1>
+                                <p className="text-[#F9F3EF]/80 text-lg sm:text-xl">نصر للتجارة الحاسبات والالكترونيات</p>
+                                <p className="text-[#F9F3EF]/60 mt-1 text-sm sm:text-base">عرض تفاصيل الطلب الكاملة</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 w-full lg:w-auto">
+                        <div className="flex items-center gap-3 sm:gap-4">
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => window.location.href = '/orders'}
-                                className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-[#2C6D90] hover:bg-[#2C6D90]/90 text-[#F9F3EF] shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40 hover:scale-105 w-full lg:w-auto"
+                                className="group relative inline-flex items-center gap-2 sm:gap-3 overflow-hidden rounded-xl sm:rounded-2xl px-4 sm:px-6 py-3 sm:py-4 bg-[#2C6D90] hover:bg-[#2C6D90]/90 text-[#F9F3EF] shadow-lg shadow-[#2C6D90]/25 transition-all duration-500 hover:shadow-xl hover:shadow-[#2C6D90]/40"
                             >
-                                <span className="font-semibold text-sm sm:text-base lg:text-lg">العودة للطلبات</span>
+                                <ArrowLeft size={18} className="group-hover:translate-x-[-2px] transition-transform duration-300" />
+                                <span className="font-semibold text-sm sm:text-base">العودة للطلبات</span>
                             </motion.button>
-                            <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
-                                <motion.button
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.9 }}
-                                    onClick={toggleCurrency}
-                                    className="p-2 rounded-xl transition-all duration-300 flex items-center gap-2 bg-[#2C6D90]/20 border border-[#2C6D90]/30 text-[#F9F3EF] hover:bg-[#2C6D90]/30"
-                                >
-                                    <DollarSign size={20} />
-                                    <span className="text-sm font-semibold">{getCurrencyCode()}</span>
-                                </motion.button>
 
+                            <div className="flex items-center gap-2 sm:gap-3">
                                 <motion.button
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={handlePrint}
-                                    className="p-2 rounded-xl transition-all duration-300 bg-[#F9F3EF]/5 border border-[#2C6D90]/20 text-[#F9F3EF] hover:bg-[#F9F3EF]/10"
+                                    className="p-3 rounded-xl transition-all duration-300 bg-[#F9F3EF]/10 border border-[#2C6D90]/30 text-[#F9F3EF] hover:bg-[#F9F3EF]/20 hover:border-[#2C6D90]/50"
+                                    title="طباعة الفاتورة"
                                 >
                                     <Printer size={20} />
                                 </motion.button>
@@ -343,7 +593,8 @@ export default function OrderDetails() {
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={handleShare}
-                                    className="p-2 rounded-xl transition-all duration-300 bg-[#F9F3EF]/5 border border-[#2C6D90]/20 text-[#F9F3EF] hover:bg-[#F9F3EF]/10"
+                                    className="p-3 rounded-xl transition-all duration-300 bg-[#F9F3EF]/10 border border-[#2C6D90]/30 text-[#F9F3EF] hover:bg-[#F9F3EF]/20 hover:border-[#2C6D90]/50"
+                                    title="مشاركة الطلب"
                                 >
                                     <Share2 size={20} />
                                 </motion.button>
@@ -474,7 +725,48 @@ export default function OrderDetails() {
                                 <h2 className="text-2xl font-bold text-nsr-primary">منتجات الطلب</h2>
                             </div>
 
-                            <div className="space-y-4">
+                            {/* Print Table */}
+                            <div className="print-only">
+                                {order.items && order.items.length > 0 && (
+                                    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                                        <div className="print-summary-header">
+                                            تفاصيل المنتجات
+                                        </div>
+                                        <table className="print-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>المنتج</th>
+                                                    <th>الكمية</th>
+                                                    <th>السعر</th>
+                                                    <th>المجموع</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {order.items.map((item, index) => (
+                                                    <tr key={index}>
+                                                        <td className="py-4">
+                                                            <div>
+                                                                <div className="font-bold text-gray-800 text-lg">
+                                                                    {item.product?.name || `منتج #${item.productId?.slice(-6) || 'غير محدد'}`}
+                                                                </div>
+                                                                <div className="text-sm text-gray-600 mt-1">
+                                                                    {item.product?.brand?.name || 'غير محدد'} • {item.product?.category?.name || 'غير محدد'}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td className="text-center font-semibold text-lg">{item.quantity}</td>
+                                                        <td className="text-left font-semibold text-lg">د.ع {(item.price || 0).toLocaleString()}</td>
+                                                        <td className="text-left font-bold text-lg text-[#2C6D90]">د.ع {((item.price || 0) * item.quantity).toLocaleString()}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Normal View */}
+                            <div className="space-y-4 print:hidden">
                                 {order.items && order.items.length > 0 ? (
                                     order.items.map((item, index) => (
                                         <div key={index} className="flex gap-4 p-4 bg-nsr-primary/5 rounded-xl">
@@ -493,7 +785,7 @@ export default function OrderDetails() {
                                                     </div>
                                                     <div className="text-right">
                                                         <p className="text-lg font-bold text-nsr-accent">
-                                                            {getCurrencySymbol()}{convertCurrency(item.price || 0).toLocaleString()}
+                                                            {(item.price || 0).toLocaleString()}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -504,7 +796,7 @@ export default function OrderDetails() {
                                                     </div>
                                                     <div className="text-sm text-nsr-neutral">
                                                         المجموع: <span className="font-bold text-nsr-accent">
-                                                            {getCurrencySymbol()}{convertCurrency((item.price || 0) * item.quantity).toLocaleString()}
+                                                            {((item.price || 0) * item.quantity).toLocaleString()}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -589,25 +881,65 @@ export default function OrderDetails() {
                         <div className="bg-nsr-secondary/30 rounded-2xl p-6">
                             <h3 className="text-xl font-bold text-nsr-primary mb-4">ملخص الطلب</h3>
 
-                            <div className="space-y-3">
+                            {/* Print Summary */}
+                            <div className="print-summary print-only">
+                                <div className="print-summary-header">
+                                    ملخص الفاتورة
+                                </div>
+                                <div className="space-y-3">
+                                    <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                                        <span className="font-semibold text-gray-700">المجموع الفرعي:</span>
+                                        <span className="font-bold text-lg">د.ع {(order.subtotal || order.totalAmount || 0).toLocaleString()}</span>
+                                    </div>
+
+                                    <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                                        <span className="font-semibold text-gray-700">الشحن:</span>
+                                        <span className="font-bold text-green-600 text-lg">مجاني دائماً</span>
+                                    </div>
+
+                                    {order.discount && order.discount > 0 && (
+                                        <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                                            <span className="font-semibold text-gray-700">الخصم:</span>
+                                            <span className="font-bold text-red-600 text-lg">-د.ع {order.discount.toLocaleString()}</span>
+                                        </div>
+                                    )}
+
+                                    {order.tax && order.tax > 0 && (
+                                        <div className="flex justify-between items-center py-2 border-b border-gray-200">
+                                            <span className="font-semibold text-gray-700">الضريبة:</span>
+                                            <span className="font-bold text-lg">د.ع {order.tax.toLocaleString()}</span>
+                                        </div>
+                                    )}
+
+                                    <div className="mt-4 pt-4 border-t-2 border-[#2C6D90]">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-2xl font-bold text-[#2C6D90]">المجموع الكلي:</span>
+                                            <span className="text-3xl font-bold text-[#2C6D90]">د.ع {(order.totalAmount || order.total || 0).toLocaleString()}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Normal View */}
+                            <div className="space-y-3 print:hidden">
                                 <div className="flex justify-between">
                                     <span className="text-nsr-neutral">المجموع الفرعي</span>
                                     <span className="text-nsr-primary">
-                                        {getCurrencySymbol()}{convertCurrency(order.subtotal || order.totalAmount || 0).toLocaleString()}
+                                        د.ع {(order.subtotal || order.totalAmount || 0).toLocaleString()}
                                     </span>
                                 </div>
 
                                 {order.discount && order.discount > 0 && (
                                     <div className="flex justify-between text-green-400">
                                         <span>الخصم</span>
-                                        <span>-{getCurrencySymbol()}{convertCurrency(order.discount).toLocaleString()}</span>
+                                        <span>-د.ع {order.discount.toLocaleString()}</span>
                                     </div>
                                 )}
 
                                 <div className="flex justify-between">
                                     <span className="text-nsr-neutral">الشحن</span>
-                                    <span className="text-nsr-primary">
-                                        {order.shipping === 0 ? 'مجاني' : `${getCurrencySymbol()}${convertCurrency(order.shipping || 0).toLocaleString()}`}
+                                    <span className="text-green-400 font-semibold">
+                                        مجاني دائماً
                                     </span>
                                 </div>
 
@@ -615,7 +947,7 @@ export default function OrderDetails() {
                                     <div className="flex justify-between">
                                         <span className="text-nsr-neutral">الضريبة</span>
                                         <span className="text-nsr-primary">
-                                            {getCurrencySymbol()}{convertCurrency(order.tax).toLocaleString()}
+                                            د.ع {order.tax.toLocaleString()}
                                         </span>
                                     </div>
                                 )}
@@ -624,37 +956,29 @@ export default function OrderDetails() {
                                     <div className="flex justify-between text-lg font-bold">
                                         <span className="text-nsr-primary">المجموع الكلي</span>
                                         <span className="text-nsr-accent">
-                                            {getCurrencySymbol()}{convertCurrency(order.totalAmount || order.total || 0).toLocaleString()}
+                                            د.ع {(order.totalAmount || order.total || 0).toLocaleString()}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Shipping Information */}
-                        <div className="bg-nsr-secondary/30 rounded-2xl p-6">
-                            <div className="flex items-center gap-3 mb-4">
-                                <MapPin size={20} className="text-nsr-accent" />
-                                <h3 className="text-lg font-bold text-nsr-primary">عنوان الشحن</h3>
-                            </div>
-
-                            <div className="space-y-2 text-sm">
-                                <p className="text-nsr-primary">{order.shippingAddress?.street || 'غير محدد'}</p>
-                                <p className="text-nsr-primary">{order.shippingAddress?.city || 'غير محدد'}, {order.shippingAddress?.region || 'غير محدد'}</p>
-                                <p className="text-nsr-primary">{order.shippingAddress?.postalCode || 'غير محدد'}</p>
-                                <p className="text-nsr-primary">{order.shippingAddress?.country || 'غير محدد'}</p>
-                            </div>
-
-                            {order.trackingNumber && (
-                                <div className="mt-4 pt-4 border-t border-nsr-primary/20">
-                                    <div className="flex items-center gap-2 mb-2">
+                        {/* Tracking Information */}
+                        {order.trackingNumber && (
+                            <div className="bg-nsr-secondary/30 rounded-2xl p-6">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <Truck size={20} className="text-nsr-accent" />
+                                    <h3 className="text-lg font-bold text-nsr-primary">معلومات التتبع</h3>
+                                </div>
+                                <div className="space-y-2 text-sm">
+                                    <div className="flex items-center gap-2">
                                         <Truck size={16} className="text-nsr-accent" />
                                         <span className="text-sm font-semibold text-nsr-primary">رقم التتبع</span>
                                     </div>
-                                    <p className="text-sm text-nsr-neutral font-mono">{order.trackingNumber}</p>
+                                    <p className="text-sm text-nsr-neutral font-mono bg-nsr-primary/5 p-2 rounded-lg">{order.trackingNumber}</p>
                                 </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
 
                         {/* Payment Information */}
                         <div className="bg-nsr-secondary/30 rounded-2xl p-6">
@@ -762,6 +1086,37 @@ export default function OrderDetails() {
                             </div>
                         )}
                     </div>
+                </div>
+            </div>
+
+            {/* Print Footer */}
+            <div className="print-footer print-only">
+                <div className="text-center mb-4">
+                    <div className="flex items-center justify-center gap-3 mb-3">
+                        <div className="print-footer-logo">
+                            <Package className="w-6 h-6 text-[#2C6D90]" />
+                        </div>
+                        <h3 className="text-xl font-bold">ناصر للتجارة والتوزيع</h3>
+                    </div>
+                    <p className="text-lg font-semibold">شكراً لاختياركم خدماتنا</p>
+                    <p className="text-sm opacity-90 mt-2">نلتزم بتقديم أفضل المنتجات والخدمات</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="text-center">
+                        <div className="font-semibold mb-1">هذه فاتورة إلكترونية</div>
+                        <div className="opacity-80">لا تحتاج إلى توقيع</div>
+                    </div>
+                    <div className="text-center">
+                        <div className="font-semibold mb-1">تاريخ الطباعة</div>
+                        <div className="opacity-80">{new Date().toLocaleDateString('ar-SA')}</div>
+                    </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-white/20 text-center">
+                    <p className="text-xs opacity-80">
+                        للاستفسارات: info@nasr-trading.com | هاتف: +964-XXX-XXX-XXXX
+                    </p>
                 </div>
             </div>
         </div>

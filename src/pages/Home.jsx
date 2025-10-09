@@ -101,7 +101,7 @@ export default function LuxuryDashboard() {
         gradient: "from-[#2C6D90] to-[#1a1a2e]"
       },
       {
-        title: "  زوار الموقع",
+        title: "عدد زوار الموقع",
         value: (visitors).toLocaleString(),
         change: `${visitorsGrowth}%`,
         trend: visitorsGrowth > 0 ? "up" : visitorsGrowth < 0 ? "down" : "equal",
@@ -118,7 +118,7 @@ export default function LuxuryDashboard() {
     return ordersData.map(order => ({
       orderNumber: order.id || order.orderNumber,
       customer: order.customer?.name || order.customerName || "عميل غير محدد",
-      total: `${(order.total || 0).toLocaleString()} د.ع`,
+      total: `${(order.totalAmount || 0).toLocaleString()} د.ع`,
       paid: order.paymentStatus === 'paid' || order.isPaid,
       status: order.status === 'pending' ? 'مفتوح' : order.status === 'completed' ? 'مغلق' : order.status,
       priority: order.priority === 'high' ? 'عالي' : order.priority === 'medium' ? 'متوسط' : 'منخفض'
@@ -139,14 +139,14 @@ export default function LuxuryDashboard() {
       if (customerMap.has(customerName)) {
         const existing = customerMap.get(customerName);
         existing.orders += 1;
-        existing.totalSpent += order.total || 0;
+        existing.totalSpent += order.totalAmount || 0;
       } else {
         customerMap.set(customerName, {
           customer: customerName,
           company: customerEmail || "غير محدد",
           rating: 5, // تقييم افتراضي
           orders: 1,
-          totalSpent: order.total || 0
+          totalSpent: order.totalAmount || 0
         });
       }
     });

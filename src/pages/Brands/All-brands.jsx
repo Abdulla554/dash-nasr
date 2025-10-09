@@ -29,6 +29,7 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import ClipLoader from "react-spinners/ClipLoader";
 export default function AllBrands() {
   const [searchTerm, setSearchTerm] = useState("");
+  // eslint-disable-next-line no-unused-vars
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
   const [viewMode, setViewMode] = useState("grid");
@@ -313,7 +314,7 @@ export default function AllBrands() {
                             <span className="text-slate-300 group-hover:text-white transition-colors duration-300">0 منتج</span>
                           </div>
                           <div className="text-slate-500 group-hover:text-slate-400 transition-colors duration-300">
-                            {new Date(brand.createdAt).toLocaleDateString('ar')}
+                            {new Date(brand.createdAt).toLocaleDateString('en-US')}
                           </div>
                         </div>
                       </div>
@@ -415,13 +416,13 @@ export default function AllBrands() {
                   <div>
                     <label className="text-sm text-slate-400 block mb-2">تاريخ الإنشاء</label>
                     <div className="p-4 bg-slate-800/50 border border-slate-700/50 rounded-xl">
-                      <p className="text-slate-300">{new Date(selectedBrand.createdAt).toLocaleDateString('ar-SA')}</p>
+                      <p className="text-slate-300">{new Date(selectedBrand.createdAt).toLocaleDateString('en-US')}</p>
                     </div>
                   </div>
                   <div>
                     <label className="text-sm text-slate-400 block mb-2">آخر تحديث</label>
                     <div className="p-4 bg-slate-800/50 border border-slate-700/50 rounded-xl">
-                      <p className="text-slate-300">{new Date(selectedBrand.updatedAt || selectedBrand.createdAt).toLocaleDateString('ar-SA')}</p>
+                      <p className="text-slate-300">{new Date(selectedBrand.updatedAt || selectedBrand.createdAt).toLocaleDateString('en-US')}</p>
                     </div>
                   </div>
                 </div>

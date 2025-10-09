@@ -363,7 +363,7 @@ export default function OrderDetails() {
                                 {order.orderNumber}
                             </h1>
                             <p className={`transition-colors duration-300 ${isDark ? 'text-nsr-light-200' : 'text-nsr-dark-600'}`}>
-                                تم إنشاء الطلب في {new Date(order.createdAt || order.orderDate).toLocaleDateString('ar-SA', {
+                                تم إنشاء الطلب في {new Date(order.createdAt || order.orderDate).toLocaleDateString('en-US', {
                                     year: 'numeric',
                                     month: 'long',
                                     day: 'numeric',
@@ -560,7 +560,7 @@ export default function OrderDetails() {
                                                     </div>
                                                     {step.date && (
                                                         <span className="text-xs text-nsr-neutral">
-                                                            {new Date(step.date).toLocaleDateString('ar-SA', {
+                                                            {new Date(step.date).toLocaleDateString('en-US', {
                                                                 month: 'short',
                                                                 day: 'numeric',
                                                                 hour: '2-digit',

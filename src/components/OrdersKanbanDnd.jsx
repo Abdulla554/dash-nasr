@@ -1039,20 +1039,7 @@ export default function OrdersKanbanDnd() {
                                                         </div>
                                                     </td>
                                                     <td className="py-3 px-2">
-                                                        <div className="space-y-2">
-                                                            {/* القائمة المنسدلة */}
-                                                            <StatusDropdown
-                                                                order={order}
-                                                                onStatusChange={handleStatusUpdate}
-                                                                isUpdating={isUpdating}
-                                                            />
-                                                            {/* الأزرار السريعة */}
-                                                            <QuickStatusButtons
-                                                                order={order}
-                                                                onStatusChange={handleStatusUpdate}
-                                                                isUpdating={isUpdating}
-                                                            />
-                                                        </div>
+                                                       {ORDER_STATUSES[order.status].label}
                                                     </td>
                                                     <td className="py-3 px-2">
                                                         <div className="text-xs text-white/70">

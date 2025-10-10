@@ -1056,13 +1056,13 @@ export default function OrdersKanbanDnd() {
                                                                 <Settings size={12} className="text-green-300" />
                                                                 <span className="text-xs text-green-300">تغيير</span>
                                                             </button>
-                                                            <Link
-                                                                to={`/orders/${order.id}`}
-                                                                className="inline-flex items-center gap-1 px-2 py-1 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg transition-all duration-300"
-                                                            >
-                                                                <Eye size={12} className="text-blue-300" />
-                                                                <span className="text-xs text-blue-300">عرض</span>
-                                                            </Link>
+                                                        <Link
+                                                            to={`/orders/${order.id}`}
+                                                            className="inline-flex items-center gap-1 px-2 py-1 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 rounded-lg transition-all duration-300"
+                                                        >
+                                                            <Eye size={12} className="text-blue-300" />
+                                                            <span className="text-xs text-blue-300">عرض</span>
+                                                        </Link>
                                                         </div>
                                                     </td>
                                                 </tr>

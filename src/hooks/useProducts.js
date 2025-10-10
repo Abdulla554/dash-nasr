@@ -24,7 +24,7 @@ export const useProducts = (params = {}) => {
 
   useEffect(() => {
     fetchProducts();
-  }, [fetchProducts]);
+  }, []); // جلب المنتجات مرة واحدة فقط
 
   const createProduct = async (productData) => {
     const response = await api.createProduct(productData);

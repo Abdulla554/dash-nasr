@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-toastify";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import EditOrderModal from "../../components/EditOrderModal";
 import { useTheme } from "../../contexts/ThemeContext.jsx";
 import { useOrder, useUpdateOrder } from "../../hooks/useOrdersQuery.js";
 
@@ -35,6 +36,7 @@ export default function OrderDetails() {
 
     const { isDark } = useTheme();
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [editModalOpen, setEditModalOpen] = useState(false);
 
     // Fetch order data from API
     const { data: orderData, isLoading, error, refetch } = useOrder(id);
@@ -139,73 +141,9 @@ export default function OrderDetails() {
         }
     };
 
-    // ترتيب حالات الطلب للتراجع
-    const statusOrder = ['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'COMPLETED'];
+    
 
-    // الحصول على الحالة السابقة
-    const getPreviousStatus = (currentStatus) => {
-        const currentIndex = statusOrder.indexOf(currentStatus);
-        if (currentIndex > 0) {
-            return statusOrder[currentIndex - 1];
-        }
-        return null;
-    };
-
-
-    // إرجاع خطوة
-    const handleRevertStatus = async () => {
-        const previousStatus = getPreviousStatus(order.status);
-        if (!previousStatus) {
-            toast.error('لا يمكن إرجاع هذه الحالة', {
-                position: "top-right",
-                autoClose: 3000,
-            });
-            return;
-        }
-
-        try {
-            await updateOrderMutation.mutateAsync({
-                id: order.id,
-                data: { status: previousStatus }
-            });
-
-            toast.success(`تم إرجاع حالة الطلب إلى ${getStatusText(previousStatus)}`, {
-                position: "top-right",
-                autoClose: 3000,
-            });
-
-            refetch();
-        } catch (error) {
-            console.error('Error reverting order status:', error);
-            toast.error('حدث خطأ في إرجاع حالة الطلب', {
-                position: "top-right",
-                autoClose: 3000,
-            });
-        }
-    };
-
-    // تحديث الحالة
-    const handleUpdateStatus = async (newStatus) => {
-        try {
-            await updateOrderMutation.mutateAsync({
-                id: order.id,
-                data: { status: newStatus }
-            });
-
-            toast.success(`تم تحديث حالة الطلب إلى ${getStatusText(newStatus)}`, {
-                position: "top-right",
-                autoClose: 3000,
-            });
-
-            refetch();
-        } catch (error) {
-            console.error('Error updating order status:', error);
-            toast.error('حدث خطأ في تحديث حالة الطلب', {
-                position: "top-right",
-                autoClose: 3000,
-            });
-        }
-    };
+   
 
     const getPaymentMethodText = (method) => {
         switch (method) {
@@ -297,6 +235,51 @@ export default function OrderDetails() {
                 console.error('fillInvoiceData function not found');
             }
         };
+    };
+
+    const handleEdit = () => {
+        setEditModalOpen(true);
+    };
+
+    const handleSaveEdit = async (formData) => {
+        try {
+            // تنظيف البيانات قبل الإرسال
+            const cleanData = {
+                ...formData,
+                // التأكد من أن الحالة صحيحة
+                status: formData.status === 'PROCESSING' ? 'CONFIRMED' : formData.status,
+                // تنظيف العناصر
+                items: (formData.items || []).map(item => ({
+                    productId: item.productId || item.product?.id,
+                    quantity: parseInt(item.quantity) || 1,
+                    price: parseFloat(item.price) || 0,
+                    notes: item.notes || ''
+                }))
+            };
+
+            console.log('Sending cleaned order data:', cleanData); // للتأكد من البيانات
+
+            // إرسال جميع البيانات في طلب واحد
+            await updateOrderMutation.mutateAsync({
+                id: order.id,
+                data: cleanData
+            });
+
+            toast.success("تم تحديث الطلب بنجاح", {
+                position: "top-right",
+                autoClose: 3000,
+            });
+
+            setEditModalOpen(false);
+            refetch();
+        } catch (error) {
+            console.error('Error updating order:', error);
+            console.error('Error response:', error.response?.data); // عرض تفاصيل الخطأ
+            toast.error('حدث خطأ في تحديث الطلب', {
+                position: "top-right",
+                autoClose: 3000,
+            });
+        }
     };
 
     const handleDelete = () => {
@@ -498,6 +481,13 @@ export default function OrderDetails() {
                 message="هل أنت متأكد من حذف هذا الطلب؟ لا يمكن التراجع عن هذا الإجراء."
             />
 
+            <EditOrderModal
+                isOpen={editModalOpen}
+                onClose={() => setEditModalOpen(false)}
+                order={order}
+                onSave={handleSaveEdit}
+            />
+
             {/* Print Header - Hidden in normal view */}
             <div className="print-header print-only">
                 <div className="flex items-center justify-between mb-6">
@@ -635,45 +625,12 @@ export default function OrderDetails() {
                             <div className={`px-4 py-2 rounded-xl border ${getPaymentStatusColor(order.paymentStatus)}`}>
                                 <div className="flex items-center gap-2">
                                     <CreditCard size={16} />
-                                    <span className="font-semibold">{getPaymentStatusText(order.paymentStatus)}</span>
+                                    <span className="font-semibold">الدفع عند الاستلام</span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* أزرار إدارة الحالة */}
-                        <div className="flex flex-wrap gap-2 mt-4">
-                            {/* زر إرجاع خطوة */}
-                            {getPreviousStatus(order.status) && (
-                                <motion.button
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    onClick={handleRevertStatus}
-                                    className="px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 rounded-xl font-semibold hover:bg-yellow-500/30 transition-all duration-300 flex items-center gap-2"
-                                >
-                                    <ArrowLeft size={16} />
-                                    <span>إرجاع خطوة</span>
-                                </motion.button>
-                            )}
 
-                            {/* أزرار الحالات المتاحة */}
-                            {statusOrder.map((status) => {
-                                if (status !== order.status && statusOrder.indexOf(status) > statusOrder.indexOf(order.status)) {
-                                    return (
-                                        <motion.button
-                                            key={status}
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            onClick={() => handleUpdateStatus(status)}
-                                            className="px-4 py-2 bg-blue-500/20 border border-blue-500/30 text-blue-300 rounded-xl font-semibold hover:bg-blue-500/30 transition-all duration-300 flex items-center gap-2"
-                                        >
-                                            <CheckCircle size={16} />
-                                            <span>{getStatusText(status)}</span>
-                                        </motion.button>
-                                    );
-                                }
-                                return null;
-                            })}
-                        </div>
                     </div>
                 </div>
 
@@ -785,7 +742,7 @@ export default function OrderDetails() {
                                                     </div>
                                                     <div className="text-right">
                                                         <p className="text-lg font-bold text-nsr-accent">
-                                                            {(item.price || 0).toLocaleString()}
+                                                            {(item.price || 0).toLocaleString() + ' د.ع'}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -794,17 +751,13 @@ export default function OrderDetails() {
                                                     <div className="text-sm text-nsr-neutral">
                                                         الكمية: <span className="font-semibold text-nsr-primary">{item.quantity}</span>
                                                     </div>
-                                                    <div className="text-sm text-nsr-neutral">
-                                                        المجموع: <span className="font-bold text-nsr-accent">
-                                                            {((item.price || 0) * item.quantity).toLocaleString()}
-                                                        </span>
-                                                    </div>
+                                                  
                                                 </div>
 
                                                 {item.product?.specifications && (
-                                                    <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                                                    <div dir="ltr" className="mt-3 grid grid-cols-2 gap-2 text-xs">
                                                         {Object.entries(item.product.specifications).slice(0, 4).map(([key, value]) => (
-                                                            <div key={key} className="flex justify-between">
+                                                            <div key={key} className="flex ">
                                                                 <span className="text-nsr-neutral">{key}:</span>
                                                                 <span className="text-nsr-primary font-medium">{value}</span>
                                                             </div>
@@ -824,7 +777,7 @@ export default function OrderDetails() {
                         </div>
 
                         {/* Order Timeline */}
-                        <div className="bg-nsr-secondary/30 rounded-2xl p-6">
+                        {/* <div className="bg-nsr-secondary/30 rounded-2xl p-6">
                             <div className="flex items-center gap-3 mb-6">
                                 <Calendar size={24} className="text-nsr-accent" />
                                 <h2 className="text-2xl font-bold text-nsr-primary">مسار الطلب</h2>
@@ -872,7 +825,7 @@ export default function OrderDetails() {
                                     </div>
                                 )}
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     {/* Sidebar */}
@@ -889,12 +842,23 @@ export default function OrderDetails() {
                                 <div className="space-y-3">
                                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                                         <span className="font-semibold text-gray-700">المجموع الفرعي:</span>
-                                        <span className="font-bold text-lg">د.ع {(order.subtotal || order.totalAmount || 0).toLocaleString()}</span>
+                                        <span className="font-bold text-lg">د.ع {(() => {
+                                            const subtotal = (order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+                                            return subtotal.toLocaleString();
+                                        })()}</span>
                                     </div>
 
                                     <div className="flex justify-between items-center py-2 border-b border-gray-200">
                                         <span className="font-semibold text-gray-700">الشحن:</span>
-                                        <span className="font-bold text-green-600 text-lg">مجاني دائماً</span>
+                                        <span className={`font-bold text-lg ${(() => {
+                                            const subtotal = (order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+                                            return subtotal >= 25000 ? 'text-green-600' : 'text-orange-600';
+                                        })()}`}>
+                                            {(() => {
+                                                const subtotal = (order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+                                                return subtotal >= 25000 ? 'مجاني' : '5,000 د.ع';
+                                            })()}
+                                        </span>
                                     </div>
 
                                     {order.discount && order.discount > 0 && (
@@ -914,7 +878,13 @@ export default function OrderDetails() {
                                     <div className="mt-4 pt-4 border-t-2 border-[#2C6D90]">
                                         <div className="flex justify-between items-center">
                                             <span className="text-2xl font-bold text-[#2C6D90]">المجموع الكلي:</span>
-                                            <span className="text-3xl font-bold text-[#2C6D90]">د.ع {(order.totalAmount || order.total || 0).toLocaleString()}</span>
+                                            <span className="text-3xl font-bold text-[#2C6D90]">
+                                                د.ع {(() => {
+                                                    const subtotal = (order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+                                                    const shippingCost = subtotal >= 25000 ? 0 : 5000;
+                                                    return (subtotal + shippingCost).toLocaleString();
+                                                })()}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -925,7 +895,10 @@ export default function OrderDetails() {
                                 <div className="flex justify-between">
                                     <span className="text-nsr-neutral">المجموع الفرعي</span>
                                     <span className="text-nsr-primary">
-                                        د.ع {(order.subtotal || order.totalAmount || 0).toLocaleString()}
+                                        د.ع {(() => {
+                                            const subtotal = (order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+                                            return subtotal.toLocaleString();
+                                        })()}
                                     </span>
                                 </div>
 
@@ -938,8 +911,14 @@ export default function OrderDetails() {
 
                                 <div className="flex justify-between">
                                     <span className="text-nsr-neutral">الشحن</span>
-                                    <span className="text-green-400 font-semibold">
-                                        مجاني دائماً
+                                    <span className={`font-semibold ${(() => {
+                                        const subtotal = (order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+                                        return subtotal >= 25000 ? 'text-green-400' : 'text-orange-400';
+                                    })()}`}>
+                                        {(() => {
+                                            const subtotal = (order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+                                            return subtotal >= 25000 ? 'مجاني' : '5,000 د.ع';
+                                        })()}
                                     </span>
                                 </div>
 
@@ -956,7 +935,11 @@ export default function OrderDetails() {
                                     <div className="flex justify-between text-lg font-bold">
                                         <span className="text-nsr-primary">المجموع الكلي</span>
                                         <span className="text-nsr-accent">
-                                            د.ع {(order.totalAmount || order.total || 0).toLocaleString()}
+                                            د.ع {(() => {
+                                                const subtotal = (order.items || []).reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
+                                                const shippingCost = subtotal >= 25000 ? 0 : 5000;
+                                                return (subtotal + shippingCost).toLocaleString();
+                                            })()}
                                         </span>
                                     </div>
                                 </div>
@@ -990,64 +973,18 @@ export default function OrderDetails() {
                             <div className="space-y-2 text-sm">
                                 <div className="flex justify-between">
                                     <span className="text-nsr-neutral">طريقة الدفع</span>
-                                    <span className="text-nsr-primary">{getPaymentMethodText(order.paymentMethod) || 'غير محدد'}</span>
+                                    <span className="text-nsr-primary"> الدفع عند الاستلام</span>
                                 </div>
                                 <div className="flex justify-between">
                                     <span className="text-nsr-neutral">حالة الدفع</span>
-                                    <span className={`px-2 py-1 rounded-lg text-xs border ${getPaymentStatusColor(order.paymentStatus)}`}>
-                                        {getPaymentStatusText(order.paymentStatus) || 'غير محدد'}
+                                    <span className={`px-2 py-1 rounded-lg text-xs border ${getPaymentStatusColor(order.status === 'DELIVERED' ? 'paid' : order.paymentStatus)}`}>
+                                        {order.status === 'DELIVERED' ? 'مدفوع' : (getPaymentStatusText(order.paymentStatus) || 'الدفع عند الاستلام')}
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* إدارة حالة الطلب */}
-                        <div className="bg-nsr-secondary/30 rounded-2xl p-6">
-                            <h3 className="text-lg font-bold text-nsr-primary mb-4">إدارة الحالة</h3>
-
-                            <div className="space-y-3">
-                                {/* الحالة الحالية */}
-                                <div className="p-3 bg-nsr-primary/5 rounded-xl border border-nsr-primary/20">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <div className={`w-3 h-3 rounded-full ${getStatusColor(order.status).split(' ')[0]}`}></div>
-                                        <span className="text-sm font-semibold text-nsr-primary">الحالة الحالية</span>
-                                    </div>
-                                    <p className="text-nsr-primary font-bold">{getStatusText(order.status)}</p>
-                                </div>
-
-                                {/* إرجاع خطوة */}
-                                {getPreviousStatus(order.status) && (
-                                    <motion.button
-                                        whileHover={{ scale: 1.02 }}
-                                        whileTap={{ scale: 0.98 }}
-                                        onClick={handleRevertStatus}
-                                        className="w-full bg-yellow-500/20 border border-yellow-500/30 text-yellow-300 py-3 px-4 rounded-xl font-semibold hover:bg-yellow-500/30 transition-all duration-300 flex items-center justify-center gap-2"
-                                    >
-                                        <ArrowLeft size={20} />
-                                        <span>إرجاع إلى {getStatusText(getPreviousStatus(order.status))}</span>
-                                    </motion.button>
-                                )}
-
-                                {/* الحالات المتاحة */}
-                                {statusOrder.map((status) => {
-                                    if (status !== order.status && statusOrder.indexOf(status) > statusOrder.indexOf(order.status)) {
-                                        return (
-                                            <motion.button
-                                                key={status}
-                                                whileHover={{ scale: 1.02 }}
-                                                whileTap={{ scale: 0.98 }}
-                                                onClick={() => handleUpdateStatus(status)}
-                                                className="w-full bg-blue-500/20 border border-blue-500/30 text-blue-300 py-3 px-4 rounded-xl font-semibold hover:bg-blue-500/30 transition-all duration-300 flex items-center justify-center gap-2"
-                                            >
-                                                <CheckCircle size={20} />
-                                                <span>تحديث إلى {getStatusText(status)}</span>
-                                            </motion.button>
-                                        );
-                                    }
-                                    return null;
-                                })}
-                            </div>
-                        </div>
+                  
 
                         {/* Admin Actions */}
                         <div className="bg-nsr-secondary/30 rounded-2xl p-6">
@@ -1057,6 +994,7 @@ export default function OrderDetails() {
                                 <motion.button
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
+                                    onClick={handleEdit}
                                     className="w-full bg-nsr-accent text-white py-3 px-4 rounded-xl font-semibold hover:bg-nsr-accent/90 transition-all duration-300 flex items-center justify-center gap-2"
                                 >
                                     <Edit size={20} />
